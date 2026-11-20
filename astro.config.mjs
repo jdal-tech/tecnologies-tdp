@@ -26,7 +26,7 @@ export default defineConfig({
           [
             {
               label: "4t d'ESO",
-              link: '/4eso/',
+              link: '/tecnologies-tdp/4eso/',
               icon: 'laptop',
               items: [
                 {
@@ -37,7 +37,7 @@ export default defineConfig({
             },
             {
               label: '1r de Batxillerat',
-              link: '/1batx/',
+              link: '/tecnologies-tdp/1batx/',
               icon: 'rocket',
               items: [
                 { label: 'Presentació del curs', link: '/1batx/' },
@@ -75,7 +75,7 @@ export default defineConfig({
             },
             {
               label: '2n de Batxillerat',
-              link: '/2batx/',
+              link: '/tecnologies-tdp/2batx/',
               icon: 'setting',
               items: [
                 {
