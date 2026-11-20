@@ -1,0 +1,158 @@
+---
+title: "4t d'ESO — Tecnologies i Digitalització"
+description: "Continguts, projectes i activitats de 4t d'ESO de l'Institut Torre del Palau."
+---
+
+<div class="construction-card">
+  <div class="construction-svg">
+    <svg viewBox="0 0 220 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="esoGrad" x1="0" y1="0" x2="220" y2="180" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#0082C1" />
+          <stop offset="100%" stop-color="#38bdf8" />
+        </linearGradient>
+      </defs>
+      
+      {/* Ones de senyal Wi-Fi / IA */}
+      <path d="M85 45 Q110 25 135 45" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" class="wave-1" />
+      <path d="M72 33 Q110 5 148 33" stroke="#0082C1" stroke-width="2" stroke-linecap="round" class="wave-2" />
+      
+      {/* Antena */}
+      <line x1="110" y1="52" x2="110" y2="70" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" />
+      <circle cx="110" cy="49" r="4" fill="#38bdf8" class="pulse-led" />
+
+      {/* Cap del robot / mòdul digital */}
+      <rect x="65" y="70" width="90" height="68" rx="14" fill="#0f172a" stroke="url(#esoGrad)" stroke-width="3" />
+      <rect x="76" y="82" width="68" height="34" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1" opacity="0.8" />
+      
+      {/* Ulls digitals animats */}
+      <circle cx="95" cy="99" r="6" fill="#38bdf8" class="blink-eye" />
+      <circle cx="125" cy="99" r="6" fill="#38bdf8" class="blink-eye" />
+      
+      {/* Barra de progrés inferior */}
+      <rect x="85" y="124" width="50" height="5" rx="2.5" fill="#1e293b" />
+      <rect x="85" y="124" width="28" height="5" rx="2.5" fill="#38bdf8" class="loading-bar" />
+
+      {/* Connectors laterals */}
+      <rect x="55" y="92" width="10" height="22" rx="3" fill="#0082C1" />
+      <rect x="155" y="92" width="10" height="22" rx="3" fill="#0082C1" />
+    </svg>
+  </div>
+
+  <span class="status-badge">MÒDUL EN CONSTRUCCIÓ</span>
+  <h2>Estem muntant les activitats de 4t d'ESO</h2>
+  <p>
+    Properament hi trobaràs els apunts interactius, activitats i reptes de <strong>Hardware, Àudio, Imatge, Fulls de càlcul, Intel·ligència Artificial i Disseny Web</strong>.
+  </p>
+
+  <div class="action-links">
+    <a href="/tecnologies-tdp/" class="btn-secondary">← Tornar a l'inici</a>
+    <a href="/tecnologies-tdp/1batx/" class="btn-primary">Explorar 1r de Batxillerat →</a>
+  </div>
+</div>
+
+<style>{`
+  .construction-card {
+    margin-top: 1.5rem;
+    padding: 2.5rem 2rem;
+    border-radius: 16px;
+    border: 1px solid rgba(0, 130, 193, 0.3);
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(8px);
+    text-align: center;
+    max-width: 680px;
+  }
+  :root[data-theme='light'] .construction-card {
+    background: rgba(248, 250, 252, 0.9);
+  }
+  .construction-svg {
+    width: 200px;
+    margin: 0 auto 1rem auto;
+    filter: drop-shadow(0 0 16px rgba(56, 189, 248, 0.25));
+  }
+  .status-badge {
+    display: inline-block;
+    padding: 0.3rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    background: rgba(0, 130, 193, 0.2);
+    color: #38bdf8;
+    border: 1px solid rgba(56, 189, 248, 0.4);
+  }
+  :root[data-theme='light'] .status-badge {
+    color: #0082C1;
+    background: rgba(0, 130, 193, 0.1);
+  }
+  .construction-card h2 {
+    margin-top: 1rem !important;
+    margin-bottom: 0.75rem !important;
+    font-size: 1.5rem;
+  }
+  .construction-card p {
+    color: #94a3b8;
+    line-height: 1.6;
+    margin-bottom: 1.75rem;
+  }
+  :root[data-theme='light'] .construction-card p {
+    color: #475569;
+  }
+  .action-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .btn-primary, .btn-secondary {
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .btn-primary {
+    background: #0082C1;
+    color: #ffffff !important;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 130, 193, 0.4);
+  }
+  .btn-secondary {
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    color: #e2e8f0 !important;
+  }
+  :root[data-theme='light'] .btn-secondary {
+    color: #1e293b !important;
+  }
+  .btn-secondary:hover {
+    transform: translateY(-2px);
+    border-color: #38bdf8;
+  }
+
+  /* Animacions SVG */
+  .wave-1 { animation: wavePulse 2s infinite ease-in-out; }
+  .wave-2 { animation: wavePulse 2s infinite ease-in-out 0.4s; }
+  .pulse-led { animation: ledGlow 1.5s infinite alternate; }
+  .blink-eye { transform-origin: center; animation: eyeBlink 4s infinite; }
+  .loading-bar { animation: barSlide 2.5s infinite ease-in-out alternate; }
+
+  @keyframes wavePulse {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 1; }
+  }
+  @keyframes ledGlow {
+    from { opacity: 0.4; }
+    to { opacity: 1; }
+  }
+  @keyframes eyeBlink {
+    0%, 94%, 100% { transform: scaleY(1); }
+    97% { transform: scaleY(0.1); }
+  }
+  @keyframes barSlide {
+    from { transform: translateX(0px); }
+    to { transform: translateX(22px); }
+  }
+`}</style>

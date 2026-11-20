@@ -1,0 +1,144 @@
+---
+title: "2n de Batxillerat — Tecnologia i Enginyeria II"
+description: "Continguts, simuladors i reptes de 2n de Batxillerat de l'Institut Torre del Palau."
+---
+
+<div class="construction-card">
+  <div class="construction-svg">
+    <svg viewBox="0 0 220 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="batxGrad" x1="0" y1="0" x2="220" y2="180" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#0082C1" />
+          <stop offset="100%" stop-color="#38bdf8" />
+        </linearGradient>
+      </defs>
+
+      {/* Marc tècnic de plànol */}
+      <rect x="25" y="15" width="170" height="150" rx="14" fill="#0f172a" stroke="url(#batxGrad)" stroke-width="2.5" />
+      
+      {/* Engranatge gran esquerre */}
+      <g class="gear-cw">
+        <circle cx="88" cy="82" r="28" stroke="#38bdf8" stroke-width="4" stroke-dasharray="10 6" />
+        <circle cx="88" cy="82" r="18" fill="#1e293b" stroke="#0082C1" stroke-width="2.5" />
+        <circle cx="88" cy="82" r="6" fill="#38bdf8" />
+      </g>
+
+      {/* Engranatge petit dret sincronitzat */}
+      <g class="gear-ccw">
+        <circle cx="136" cy="112" r="19" stroke="#0082C1" stroke-width="3.5" stroke-dasharray="7 5" />
+        <circle cx="136" cy="112" r="11" fill="#1e293b" stroke="#38bdf8" stroke-width="2" />
+        <circle cx="136" cy="112" r="4" fill="#0082C1" />
+      </g>
+
+      {/* Línies de cota tècnica */}
+      <line x1="45" y1="145" x2="175" y2="145" stroke="#38bdf8" stroke-width="1" stroke-dasharray="4 4" opacity="0.5" />
+    </svg>
+  </div>
+
+  <span class="status-badge">SISTEMA EN CALIBRACIÓ</span>
+  <h2>Preparant els recursos de 2n de Batxillerat</h2>
+  <p>
+    Aquest espai està en desenvolupament. Properament hi trobaràs els simuladors, esquemes i problemes de <strong>Pneumàtica, Automatismes, Materials i Sistemes de Control</strong>.
+  </p>
+
+  <div class="action-links">
+    <a href="/tecnologies-tdp/" class="btn-secondary">← Tornar a l'inici</a>
+    <a href="/tecnologies-tdp/1batx/" class="btn-primary">Explorar 1r de Batxillerat →</a>
+  </div>
+</div>
+
+<style>{`
+  .construction-card {
+    margin-top: 1.5rem;
+    padding: 2.5rem 2rem;
+    border-radius: 16px;
+    border: 1px solid rgba(0, 130, 193, 0.3);
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(8px);
+    text-align: center;
+    max-width: 680px;
+  }
+  :root[data-theme='light'] .construction-card {
+    background: rgba(248, 250, 252, 0.9);
+  }
+  .construction-svg {
+    width: 200px;
+    margin: 0 auto 1rem auto;
+    filter: drop-shadow(0 0 16px rgba(0, 130, 193, 0.3));
+  }
+  .status-badge {
+    display: inline-block;
+    padding: 0.3rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    background: rgba(0, 130, 193, 0.2);
+    color: #38bdf8;
+    border: 1px solid rgba(56, 189, 248, 0.4);
+  }
+  :root[data-theme='light'] .status-badge {
+    color: #0082C1;
+    background: rgba(0, 130, 193, 0.1);
+  }
+  .construction-card h2 {
+    margin-top: 1rem !important;
+    margin-bottom: 0.75rem !important;
+    font-size: 1.5rem;
+  }
+  .construction-card p {
+    color: #94a3b8;
+    line-height: 1.6;
+    margin-bottom: 1.75rem;
+  }
+  :root[data-theme='light'] .construction-card p {
+    color: #475569;
+  }
+  .action-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .btn-primary, .btn-secondary {
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .btn-primary {
+    background: #0082C1;
+    color: #ffffff !important;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 130, 193, 0.4);
+  }
+  .btn-secondary {
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    color: #e2e8f0 !important;
+  }
+  :root[data-theme='light'] .btn-secondary {
+    color: #1e293b !important;
+  }
+  .btn-secondary:hover {
+    transform: translateY(-2px);
+    border-color: #38bdf8;
+  }
+
+  /* Animacions dels engranatges */
+  .gear-cw {
+    transform-origin: 88px 82px;
+    animation: spinGear 14s linear infinite;
+  }
+  .gear-ccw {
+    transform-origin: 136px 112px;
+    animation: spinGear 9s linear infinite reverse;
+  }
+  @keyframes spinGear {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+`}</style>
