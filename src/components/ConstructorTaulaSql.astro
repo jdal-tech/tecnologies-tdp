@@ -1,0 +1,349 @@
+---
+// src/components/ConstructorTaulaSql.astro
+---
+
+<div class="sql-wrapper not-content">
+  <div class="sql-header">
+    <div>
+      <span class="badge-lab">LABORATORI PHPMYADMIN</span>
+      <h3>Disseny de la base de dades: <code>formulari_materia</code></h3>
+    </div>
+  </div>
+
+  <div class="sql-guide">
+    <p><strong>Guia d'ús:</strong></p>
+    <ol>
+      <li>Fes clic sobre cada columna de la taula <strong><code>materies</code></strong> per veure quin tipus de dada (<code>INT</code> o <code>VARCHAR</code>) has de configurar a phpMyAdmin.</li>
+      <li>Comprova que els noms de les columnes coincideixen <strong>lletra per lletra</strong> amb el codi PHP que escriuràs més endavant.</li>
+      <li>Prem <strong>"Veure codi SQL equivalent"</strong> si vols comprovar la sentència interna que executa phpMyAdmin.</li>
+    </ol>
+  </div>
+
+  <div class="db-banner">
+    <span class="db-label">Base de dades:</span>
+    <code>formulari_materia</code>
+    <span class="db-sep">→</span>
+    <span class="db-label">Taula:</span>
+    <code>materies</code>
+  </div>
+
+  <div class="cols-grid" id="sql-cols-grid">
+    <button type="button" class="col-card active" data-col="id">
+      <div class="col-top">
+        <span class="col-name">id</span>
+        <span class="col-type">INT (PK · A_I)</span>
+      </div>
+      <span class="col-hint">Identificador únic automàtic</span>
+    </button>
+
+    <button type="button" class="col-card" data-col="nom">
+      <div class="col-top">
+        <span class="col-name">nom</span>
+        <span class="col-type">VARCHAR(50)</span>
+      </div>
+      <span class="col-hint">Nom de l'alumne/a</span>
+    </button>
+
+    <button type="button" class="col-card" data-col="cognoms">
+      <div class="col-top">
+        <span class="col-name">cognoms</span>
+        <span class="col-type">VARCHAR(100)</span>
+      </div>
+      <span class="col-hint">Cognoms de l'alumne/a</span>
+    </button>
+
+    <button type="button" class="col-card" data-col="mail">
+      <div class="col-top">
+        <span class="col-name">mail</span>
+        <span class="col-type">VARCHAR(100)</span>
+      </div>
+      <span class="col-hint">Correu electrònic</span>
+    </button>
+
+    <button type="button" class="col-card" data-col="materia">
+      <div class="col-top">
+        <span class="col-name">materia</span>
+        <span class="col-type">VARCHAR(50)</span>
+      </div>
+      <span class="col-hint">Optativa seleccionada</span>
+    </button>
+  </div>
+
+  <div class="inspector-box" id="col-inspector">
+    <!-- S'omple via JS -->
+  </div>
+
+  <details class="sql-details">
+    <summary>Veure codi SQL equivalent (opcional)</summary>
+    <pre class="sql-code"><code>CREATE DATABASE formulari_materia;
+USE formulari_materia;
+
+CREATE TABLE materies (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nom VARCHAR(50) NOT NULL,
+  cognoms VARCHAR(100) NOT NULL,
+  mail VARCHAR(100) NOT NULL,
+  materia VARCHAR(50) NOT NULL
+);</code></pre>
+  </details>
+</div>
+
+<style>
+  .sql-wrapper {
+    box-sizing: border-box;
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    color: #f8fafc;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+
+  .sql-wrapper *,
+  .sql-wrapper *::before,
+  .sql-wrapper *::after {
+    box-sizing: border-box;
+  }
+
+  .sql-header {
+    margin-bottom: 1rem;
+  }
+
+  .badge-lab {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #0f172a;
+    background-color: #facc15;
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    margin-bottom: 0.4rem;
+  }
+
+  .sql-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #f8fafc;
+  }
+
+  .sql-guide {
+    background-color: #1e293b;
+    border-left: 4px solid #38bdf8;
+    border-radius: 6px;
+    padding: 0.85rem 1rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+    color: #cbd5e1;
+  }
+
+  .sql-guide p {
+    margin: 0 0 0.35rem 0;
+    color: #f8fafc;
+  }
+
+  .sql-guide ol {
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+
+  .sql-guide li {
+    margin-bottom: 0.2rem;
+  }
+
+  .db-banner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+  }
+
+  .db-label {
+    color: #cbd5e1;
+  }
+
+  .db-sep {
+    color: #38bdf8;
+    font-weight: 700;
+    margin: 0 0.25rem;
+  }
+
+  .cols-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.65rem;
+    margin-bottom: 1rem;
+  }
+
+  @media (max-width: 900px) {
+    .cols-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 520px) {
+    .cols-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .col-card {
+    min-width: 0;
+    text-align: left;
+    background-color: #1e293b;
+    border: 2px solid #334155;
+    border-radius: 8px;
+    padding: 0.75rem;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    transition: border-color 0.2s ease, transform 0.15s ease;
+    color: #f8fafc;
+  }
+
+  .col-card:hover {
+    border-color: #64748b;
+  }
+
+  .col-card.active {
+    border-color: #38bdf8;
+    background-color: rgba(56, 189, 248, 0.1);
+  }
+
+  .col-top {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .col-name {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #facc15;
+  }
+
+  .col-type {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.74rem;
+    color: #38bdf8;
+  }
+
+  .col-hint {
+    font-size: 0.78rem;
+    color: #cbd5e1;
+    line-height: 1.3;
+  }
+
+  .inspector-box {
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #cbd5e1;
+  }
+
+  .inspector-box :global(strong) {
+    color: #f8fafc;
+  }
+
+  .inspector-box :global(.pill) {
+    display: inline-block;
+    background-color: #0f172a;
+    border: 1px solid #475569;
+    color: #38bdf8;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.8rem;
+    padding: 0.1rem 0.45rem;
+    border-radius: 4px;
+    margin-right: 0.35rem;
+  }
+
+  .sql-details {
+    background-color: #1e293b;
+    border-radius: 8px;
+    padding: 0.7rem 1rem;
+    border: 1px solid #334155;
+  }
+
+  .sql-details summary {
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #38bdf8;
+  }
+
+  .sql-code {
+    margin: 0.75rem 0 0 0;
+    background-color: #0f172a;
+    padding: 0.8rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    color: #cbd5e1;
+    overflow-x: auto;
+  }
+
+  .sql-wrapper code {
+    background-color: rgba(15, 23, 42, 0.85);
+    color: #facc15;
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-size: 0.85em;
+  }
+</style>
+
+<script>
+  function initConstructorSql() {
+    const grid = document.getElementById('sql-cols-grid');
+    const inspector = document.getElementById('col-inspector');
+    if (!grid || !inspector) return;
+
+    const info: Record<string, string> = {
+      id: `<strong>Columna <code>id</code> (Opcional però molt recomanable):</strong><br/>
+           <span class="pill">Tipus: INT</span> <span class="pill">Índex: PRIMARY</span> <span class="pill">Marca: A_I (Auto Increment)</span><br/>
+           Serveix perquè MySQL assigni automàticament un número únic (1, 2, 3...) a cada inscripció, encara que dos alumnes tinguin el mateix nom.`,
+      nom: `<strong>Columna <code>nom</code>:</strong><br/>
+            <span class="pill">Tipus: VARCHAR</span> <span class="pill">Longitud: 50</span><br/>
+            Desarà el text escrit a l'<code>&lt;input name="nom"&gt;</code>. <code>VARCHAR(50)</code> permet cadenes de text de fins a 50 caràcters.`,
+      cognoms: `<strong>Columna <code>cognoms</code>:</strong><br/>
+                <span class="pill">Tipus: VARCHAR</span> <span class="pill">Longitud: 100</span><br/>
+                Desarà el text escrit a l'<code>&lt;input name="cognoms"&gt;</code>. Li donem 100 caràcters de marge perquè hi càpiguen dos cognoms compostos.`,
+      mail: `<strong>Columna <code>mail</code>:</strong><br/>
+             <span class="pill">Tipus: VARCHAR</span> <span class="pill">Longitud: 100</span><br/>
+             Desarà l'adreça electrònica de l'<code>&lt;input name="mail"&gt;</code>.`,
+      materia: `<strong>Columna <code>materia</code>:</strong><br/>
+                <span class="pill">Tipus: VARCHAR</span> <span class="pill">Longitud: 50</span><br/>
+                Desarà el valor seleccionat al desplegable <code>&lt;select name="materia"&gt;</code> (<code>programacio</code>, <code>robotica</code>, etc.).`
+    };
+
+    function selectCol(key: string) {
+      grid!.querySelectorAll('.col-card').forEach((btn) => {
+        btn.classList.toggle('active', btn.getAttribute('data-col') === key);
+      });
+      inspector!.innerHTML = info[key] || '';
+    }
+
+    grid.querySelectorAll('.col-card').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const key = btn.getAttribute('data-col') || 'id';
+        selectCol(key);
+      });
+    });
+
+    selectCol('id');
+  }
+
+  initConstructorSql();
+  document.addEventListener('astro:after-swap', initConstructorSql);
+</script>

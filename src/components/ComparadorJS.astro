@@ -1,0 +1,220 @@
+---
+// src/components/ComparadorJS.astro
+---
+<div class="js-widget not-content">
+  <div class="widget-header">
+    <span class="badge">Laboratori interactiu</span>
+    <h4>Compara valors i tipus: <code>==</code> vs <code>===</code></h4>
+  </div>
+
+  <div class="controls">
+    <div class="operand">
+      <label for="valA">Valor A</label>
+      <select id="valA">
+        <option value='5|number'>5 (number)</option>
+        <option value='"5"|string'>"5" (string)</option>
+        <option value='true|boolean'>true (boolean)</option>
+        <option value='1|number'>1 (number)</option>
+        <option value='0|number'>0 (number)</option>
+        <option value='false|boolean'>false (boolean)</option>
+      </select>
+    </div>
+
+    <div class="operator">
+      <label for="op">Operador</label>
+      <select id="op">
+        <option value="==">== (Només valor)</option>
+        <option value="===" selected>=== (Valor i tipus)</option>
+      </select>
+    </div>
+
+    <div class="operand">
+      <label for="valB">Valor B</label>
+      <select id="valB">
+        <option value='5|number'>5 (number)</option>
+        <option value='"5"|string' selected>"5" (string)</option>
+        <option value='true|boolean'>true (boolean)</option>
+        <option value='1|number'>1 (number)</option>
+        <option value='0|number'>0 (number)</option>
+        <option value='false|boolean'>false (boolean)</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="resultat-box" class="result false">
+    <div class="result-top">
+      <code id="expressio">5 === "5"</code>
+      <span id="sortida" class="pill">false</span>
+    </div>
+    <p id="explicacio">Retorna false perquè els tipus són diferents (number vs string).</p>
+  </div>
+</div>
+
+<script>
+  const selA = document.getElementById('valA') as HTMLSelectElement;
+  const selB = document.getElementById('valB') as HTMLSelectElement;
+  const selOp = document.getElementById('op') as HTMLSelectElement;
+  const box = document.getElementById('resultat-box')!;
+  const expr = document.getElementById('expressio')!;
+  const sortida = document.getElementById('sortida')!;
+  const explicacio = document.getElementById('explicacio')!;
+
+  function parseVal(raw: string) {
+    const [text, type] = raw.split('|');
+    if (type === 'number') return { val: Number(text), text, type };
+    if (type === 'boolean') return { val: text === 'true', text, type };
+    return { val: text.replace(/"/g, ''), text, type };
+  }
+
+  function actualitzar() {
+    const a = parseVal(selA.value);
+    const b = parseVal(selB.value);
+    const op = selOp.value;
+
+    const res = op === '==' ? (a.val == b.val) : (a.val === b.val);
+    expr.textContent = `${a.text} ${op} ${b.text}`;
+    sortida.textContent = String(res);
+    box.className = `result ${res ? 'true' : 'false'}`;
+
+    if (op === '===' && a.type !== b.type) {
+      explicacio.textContent = `Retorna false perquè els tipus són diferents (${a.type} vs ${b.type}).`;
+    } else if (op === '==' && a.type !== b.type && res) {
+      explicacio.textContent = `JS converteix els tipus automàticament (tipat dèbil) i els considera iguals.`;
+    } else if (res) {
+      explicacio.textContent = `Coincideixen tant en valor com en tipus (${a.type}).`;
+    } else {
+      explicacio.textContent = `Els valors no coincideixen.`;
+    }
+  }
+
+  [selA, selB, selOp].forEach(el => el.addEventListener('change', actualitzar));
+  actualitzar();
+</script>
+
+<style>
+  .js-widget {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    border-radius: 12px;
+    background: #0f172a;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+  }
+  .widget-header {
+    margin-bottom: 1.25rem;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #facc15;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+  }
+  .widget-header h4 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #f8fafc;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .widget-header code {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    font-size: 1.05rem;
+  }
+  .controls {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    align-items: end;
+  }
+  @media (max-width: 640px) {
+    .controls {
+      grid-template-columns: 1fr;
+    }
+  }
+  .operand, .operator {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #94a3b8;
+    margin: 0;
+  }
+  select {
+    width: 100%;
+    height: 42px;
+    padding: 0 0.75rem;
+    border-radius: 8px;
+    background: #1e293b;
+    color: #f8fafc;
+    border: 1px solid #334155;
+    font-family: monospace;
+    font-size: 0.95rem;
+    cursor: pointer;
+  }
+  select:focus {
+    outline: none;
+    border-color: #38bdf8;
+  }
+  .result {
+    padding: 1rem 1.25rem;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+  }
+  .result.true {
+    background: rgba(34, 197, 94, 0.12);
+    border: 1px solid rgba(34, 197, 94, 0.5);
+  }
+  .result.false {
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.5);
+  }
+  .result-top {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .result code {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #f8fafc;
+    background: rgba(15, 23, 42, 0.6);
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+  }
+  .pill {
+    padding: 0.2rem 0.7rem;
+    border-radius: 999px;
+    font-family: monospace;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: lowercase;
+  }
+  .true .pill {
+    background: #22c55e;
+    color: #052e16;
+  }
+  .false .pill {
+    background: #ef4444;
+    color: #ffffff;
+  }
+  .result p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #cbd5e1;
+  }
+</style>

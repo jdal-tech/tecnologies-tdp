@@ -1,0 +1,334 @@
+---
+// src/components/ManipulacioDOM.astro
+---
+<div class="js-widget not-content">
+  <div class="widget-header">
+    <span class="badge">Laboratori interactiu</span>
+    <h4>Com modifica JavaScript una pàgina HTML?</h4>
+    <p class="guide">
+      Canvia el text, el color o la visibilitat als controls de l'esquerra i observa com <strong>JavaScript localitza l'etiqueta HTML pel seu <code>id</code></strong> i la transforma en directe a la dreta.
+    </p>
+  </div>
+
+  <div class="lab-layout">
+    <!-- BLOC 1: CONTROLS DE L'ALUMNE -->
+    <div class="controls-panel">
+      <div class="panel-title">1. Experimenta amb les propietats</div>
+
+      <div class="control-item">
+        <label for="in-titol">Canvia <code>.textContent</code> de <code>#titol</code>:</label>
+        <input type="text" id="in-titol" value="Benvinguts a 1r Batxillerat" />
+      </div>
+
+      <div class="control-item">
+        <label>Canvia <code>.style.backgroundColor</code> de <code>#caixa</code>:</label>
+        <div class="color-swatches">
+          <button type="button" class="swatch active" data-color="#1e293b" title="Fosc inicial"></button>
+          <button type="button" class="swatch" data-color="#1d4ed8" title="Blau"></button>
+          <button type="button" class="swatch" data-color="#047857" title="Verd"></button>
+          <button type="button" class="swatch" data-color="#b45309" title="Taronja"></button>
+          <button type="button" class="swatch" data-color="#be123c" title="Vermell"></button>
+        </div>
+      </div>
+
+      <div class="control-item">
+        <label>Canvia <code>.style.display</code> de <code>#missatge</code>:</label>
+        <div class="toggle-btns">
+          <button type="button" id="btn-show" class="t-btn active">Visible ("block")</button>
+          <button type="button" id="btn-hide" class="t-btn">Amagat ("none")</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOC 2: HTML + VISTA PRÈVIA -->
+    <div class="visual-panel">
+      <div class="panel-title">2. Què passa a l'HTML i a la pantalla?</div>
+
+      <!-- Codi HTML viu -->
+      <pre class="live-html"><code><span id="hl-caixa" class="code-line">&lt;div id="caixa"&gt;</span>
+<span id="hl-titol" class="code-line">  &lt;h3 id="titol"&gt;<span id="html-titol-txt">Benvinguts a 1r Batxillerat</span>&lt;/h3&gt;</span>
+<span id="hl-msg" class="code-line">  &lt;p id="missatge"&gt;Aquest paràgraf es pot amagar.&lt;/p&gt;</span>
+<span class="code-line">&lt;/div&gt;</span></code></pre>
+
+      <!-- Resultat visual -->
+      <div id="dom-caixa" class="preview-card">
+        <h3 id="dom-titol">Benvinguts a 1r Batxillerat</h3>
+        <p id="dom-missatge">Aquest paràgraf es pot amagar.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOC 3: CODI JS GENERAT -->
+  <div class="js-output">
+    <span class="js-lbl">3. Codi JavaScript que has d'escriure per fer aquest canvi:</span>
+    <pre><code id="js-snippet">const titol = document.querySelector("#titol");
+titol.textContent = "Benvinguts a 1r Batxillerat";</code></pre>
+  </div>
+</div>
+
+<script>
+  const inTitol = document.getElementById('in-titol') as HTMLInputElement;
+  const swatches = document.querySelectorAll('.swatch');
+  const btnShow = document.getElementById('btn-show')!;
+  const btnHide = document.getElementById('btn-hide')!;
+
+  const htmlTitolTxt = document.getElementById('html-titol-txt')!;
+  const domCaixa = document.getElementById('dom-caixa')!;
+  const domTitol = document.getElementById('dom-titol')!;
+  const domMissatge = document.getElementById('dom-missatge')!;
+  const jsSnippet = document.getElementById('js-snippet')!;
+
+  const hlCaixa = document.getElementById('hl-caixa')!;
+  const hlTitol = document.getElementById('hl-titol')!;
+  const hlMsg = document.getElementById('hl-msg')!;
+
+  function highlightLine(target: HTMLElement) {
+    [hlCaixa, hlTitol, hlMsg].forEach(el => el.classList.remove('active-line'));
+    target.classList.add('active-line');
+  }
+
+  // 1. Canvi de text
+  inTitol.addEventListener('input', () => {
+    const val = inTitol.value;
+    domTitol.textContent = val;
+    htmlTitolTxt.textContent = val;
+    highlightLine(hlTitol);
+    jsSnippet.textContent = `const titol = document.querySelector("#titol");\ntitol.textContent = "${val}";`;
+  });
+
+  // 2. Canvi de color
+  swatches.forEach(btn => {
+    btn.addEventListener('click', () => {
+      swatches.forEach(s => s.classList.remove('active'));
+      btn.classList.add('active');
+      const color = (btn as HTMLElement).dataset.color!;
+      domCaixa.style.backgroundColor = color;
+      highlightLine(hlCaixa);
+      jsSnippet.textContent = `const caixa = document.querySelector("#caixa");\ncaixa.style.backgroundColor = "${color}";`;
+    });
+  });
+
+  // 3. Mostrar / Amagar
+  btnShow.addEventListener('click', () => {
+    btnShow.classList.add('active');
+    btnHide.classList.remove('active');
+    domMissatge.style.display = 'block';
+    hlMsg.style.opacity = '1';
+    highlightLine(hlMsg);
+    jsSnippet.textContent = `const missatge = document.querySelector("#missatge");\nmissatge.style.display = "block";`;
+  });
+
+  btnHide.addEventListener('click', () => {
+    btnHide.classList.add('active');
+    btnShow.classList.remove('active');
+    domMissatge.style.display = 'none';
+    hlMsg.style.opacity = '0.45';
+    highlightLine(hlMsg);
+    jsSnippet.textContent = `const missatge = document.querySelector("#missatge");\nmissatge.style.display = "none";`;
+  });
+</script>
+
+<style>
+  .js-widget,
+  .js-widget * {
+    box-sizing: border-box;
+  }
+  .js-widget {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    border-radius: 12px;
+    background: #0f172a;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    max-width: 100%;
+    overflow: hidden;
+  }
+  .widget-header { margin-bottom: 1.25rem; }
+  .badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #facc15;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+  }
+  .widget-header h4 { margin: 0 0 0.5rem; font-size: 1.25rem; color: #f8fafc; }
+  .guide { margin: 0; font-size: 0.92rem; line-height: 1.5; color: #cbd5e1; }
+  .guide strong { color: #f8fafc; }
+  .guide code {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+  }
+
+  .lab-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    gap: 1rem;
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+  @media (max-width: 820px) {
+    .lab-layout { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  .controls-panel, .visual-panel {
+    min-width: 0;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.95rem;
+  }
+  .panel-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #38bdf8;
+    border-bottom: 1px solid #334155;
+    padding-bottom: 0.45rem;
+  }
+
+  .control-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .control-item label {
+    font-size: 0.84rem;
+    color: #cbd5e1;
+  }
+  .control-item code {
+    color: #facc15;
+    background: rgba(15, 23, 42, 0.6);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-family: monospace;
+  }
+  input[type="text"] {
+    width: 100%;
+    height: 38px;
+    padding: 0 0.75rem;
+    border-radius: 8px;
+    background: #0f172a;
+    color: #f8fafc;
+    border: 1px solid #475569;
+    font-size: 0.9rem;
+  }
+
+  .color-swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .swatch {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: 2px solid #475569;
+    cursor: pointer;
+    transition: transform 0.15s, border-color 0.15s;
+  }
+  .swatch[data-color="#1e293b"] { background: #1e293b; }
+  .swatch[data-color="#1d4ed8"] { background: #1d4ed8; }
+  .swatch[data-color="#047857"] { background: #047857; }
+  .swatch[data-color="#b45309"] { background: #b45309; }
+  .swatch[data-color="#be123c"] { background: #be123c; }
+  .swatch.active {
+    border-color: #facc15;
+    transform: scale(1.1);
+  }
+
+  .toggle-btns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+  .t-btn {
+    padding: 0.45rem 0.5rem;
+    border-radius: 8px;
+    background: #0f172a;
+    color: #94a3b8;
+    border: 1px solid #475569;
+    font-size: 0.8rem;
+    font-family: monospace;
+    cursor: pointer;
+  }
+  .t-btn.active {
+    background: rgba(56, 189, 248, 0.2);
+    border-color: #38bdf8;
+    color: #f8fafc;
+    font-weight: 700;
+  }
+
+  .live-html {
+    margin: 0;
+    padding: 0.75rem;
+    background: #020617;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 0.8rem;
+    line-height: 1.55;
+    color: #94a3b8;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  .code-line {
+    display: block;
+    padding: 0.1rem 0.4rem;
+    border-left: 3px solid transparent;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+  .code-line.active-line {
+    background: rgba(250, 204, 21, 0.15);
+    color: #fef08a;
+    border-left-color: #facc15;
+  }
+
+  .preview-card {
+    background-color: #1e293b;
+    border: 1px solid #475569;
+    border-radius: 8px;
+    padding: 1rem;
+    transition: background-color 0.25s ease;
+    word-break: break-word;
+  }
+  .preview-card h3 {
+    margin: 0 0 0.35rem;
+    font-size: 1.05rem;
+    color: #f8fafc;
+  }
+  .preview-card p {
+    margin: 0;
+    font-size: 0.88rem;
+    color: #e2e8f0;
+  }
+
+  .js-output {
+    background: #020617;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 0.9rem 1.1rem;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  .js-lbl {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #94a3b8;
+    margin-bottom: 0.4rem;
+  }
+  .js-output pre {
+    margin: 0;
+    font-family: monospace;
+    font-size: 0.88rem;
+    color: #4ade80;
+    overflow-x: auto;
+  }
+</style>

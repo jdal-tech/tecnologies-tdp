@@ -1,0 +1,265 @@
+---
+// src/components/ConstructorInsertSql.astro
+---
+
+<div class="ins-wrapper not-content">
+  <div class="ins-header">
+    <div>
+      <span class="badge-lab">LABORATORI PHP → MYSQL</span>
+      <h3>Com PHP fabrica la consulta <code>INSERT INTO</code></h3>
+    </div>
+  </div>
+
+  <div class="ins-guide">
+    <p><strong>Guia d'ús:</strong></p>
+    <ol>
+      <li>Modifica els valors de les variables PHP que arriben des del formulari (<code>$nom</code>, <code>$cognoms</code>, <code>$mail</code>, <code>$materia</code>).</li>
+      <li>Observa com aquestes variables s'incrusten dins de la cadena de text <code>$sql</code> entre cometes simples (<code>'$nom'</code>).</li>
+      <li>Fixa't que l'ordre de les columnes al parèntesi inicial ha de coincidir exactament amb l'ordre de les variables a <code>VALUES</code>.</li>
+    </ol>
+  </div>
+
+  <div class="ins-grid">
+    <!-- PANELL ESQUERRE: VARIABLES PHP -->
+    <div class="panel-card">
+      <h4>1. Variables rebudes a <code>formulari.php</code></h4>
+      <div class="vars-form">
+        <div class="var-row">
+          <label for="ins-nom"><code>$nom = $_POST['nom'];</code></label>
+          <input type="text" id="ins-nom" value="Laia" maxlength="25" />
+        </div>
+        <div class="var-row">
+          <label for="ins-cognoms"><code>$cognoms = $_POST['cognoms'];</code></label>
+          <input type="text" id="ins-cognoms" value="Puig Ferrer" maxlength="35" />
+        </div>
+        <div class="var-row">
+          <label for="ins-mail"><code>$mail = $_POST['mail'];</code></label>
+          <input type="text" id="ins-mail" value="laia@institut.cat" maxlength="35" />
+        </div>
+        <div class="var-row">
+          <label for="ins-materia"><code>$materia = $_POST['materia'];</code></label>
+          <select id="ins-materia">
+            <option value="programacio">programacio</option>
+            <option value="robotica" selected>robotica</option>
+            <option value="biomedicia">biomedicia</option>
+            <option value="reptes">reptes</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANELL DRET: SENTÈNCIA SQL RESULTANT -->
+    <div class="panel-card">
+      <h4>2. Consulta <code>$sql</code> enviada a MySQL</h4>
+      <p class="panel-desc">Aquesta és l'ordre exacta que rep el servidor de bases de dades quan s'executa <code>mysqli_query($conectar, $sql)</code>:</p>
+
+      <pre class="sql-live" id="sql-live-output"><code></code></pre>
+
+      <div class="warn-box">
+        <strong>Per què van entre cometes simples?</strong> En SQL, els valors de tipus text (<code>VARCHAR</code>) sempre s'han d'escriure entre cometes simples (<code>'Laia'</code>). Si treus les cometes, MySQL pensarà que és el nom d'una columna i donarà un error de sintaxi.
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .ins-wrapper {
+    box-sizing: border-box;
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    color: #f8fafc;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+
+  .ins-wrapper *,
+  .ins-wrapper *::before,
+  .ins-wrapper *::after {
+    box-sizing: border-box;
+  }
+
+  .ins-header {
+    margin-bottom: 1rem;
+  }
+
+  .badge-lab {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #0f172a;
+    background-color: #facc15;
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    margin-bottom: 0.4rem;
+  }
+
+  .ins-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #f8fafc;
+  }
+
+  .ins-guide {
+    background-color: #1e293b;
+    border-left: 4px solid #38bdf8;
+    border-radius: 6px;
+    padding: 0.85rem 1rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+    color: #cbd5e1;
+  }
+
+  .ins-guide p {
+    margin: 0 0 0.35rem 0;
+    color: #f8fafc;
+  }
+
+  .ins-guide ol {
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+
+  .ins-guide li {
+    margin-bottom: 0.2rem;
+  }
+
+  .ins-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 780px) {
+    .ins-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .panel-card {
+    min-width: 0;
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .panel-card h4 {
+    margin: 0;
+    font-size: 1.02rem;
+    color: #f8fafc;
+  }
+
+  .panel-desc {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #cbd5e1;
+  }
+
+  .vars-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .var-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .var-row label {
+    font-size: 0.82rem;
+    color: #cbd5e1;
+  }
+
+  .var-row input,
+  .var-row select {
+    width: 100%;
+    background-color: #0f172a;
+    border: 1px solid #475569;
+    border-radius: 6px;
+    padding: 0.45rem 0.65rem;
+    color: #f8fafc;
+    font-size: 0.9rem;
+  }
+
+  .var-row input:focus,
+  .var-row select:focus {
+    outline: none;
+    border-color: #38bdf8;
+  }
+
+  .sql-live {
+    margin: 0;
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 0.95rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.84rem;
+    line-height: 1.6;
+    color: #38bdf8;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .warn-box {
+    background-color: rgba(250, 204, 21, 0.08);
+    border: 1px solid rgba(250, 204, 21, 0.3);
+    border-radius: 6px;
+    padding: 0.7rem 0.85rem;
+    font-size: 0.83rem;
+    color: #cbd5e1;
+    line-height: 1.45;
+  }
+
+  .warn-box strong {
+    color: #facc15;
+  }
+
+  .ins-wrapper code {
+    background-color: rgba(15, 23, 42, 0.85);
+    color: #facc15;
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-size: 0.85em;
+  }
+</style>
+
+<script>
+  function initConstructorInsert() {
+    const nom = document.getElementById('ins-nom') as HTMLInputElement | null;
+    const cognoms = document.getElementById('ins-cognoms') as HTMLInputElement | null;
+    const mail = document.getElementById('ins-mail') as HTMLInputElement | null;
+    const materia = document.getElementById('ins-materia') as HTMLSelectElement | null;
+    const output = document.getElementById('sql-live-output');
+
+    if (!nom || !cognoms || !mail || !materia || !output) return;
+
+    function updateSql() {
+      const n = nom!.value.replace(/'/g, "\\'");
+      const c = cognoms!.value.replace(/'/g, "\\'");
+      const m = mail!.value.replace(/'/g, "\\'");
+      const mat = materia!.value;
+
+      output!.textContent =
+        `INSERT INTO materies (nom, cognoms, mail, materia)\n` +
+        `VALUES ('${n}', '${c}', '${m}', '${mat}')`;
+    }
+
+    [nom, cognoms, mail].forEach((el) => el.addEventListener('input', updateSql));
+    materia.addEventListener('change', updateSql);
+
+    updateSql();
+  }
+
+  initConstructorInsert();
+  document.addEventListener('astro:after-swap', initConstructorInsert);
+</script>

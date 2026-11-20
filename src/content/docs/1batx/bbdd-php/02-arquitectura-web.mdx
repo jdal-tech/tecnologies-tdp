@@ -1,0 +1,51 @@
+---
+title: 1. Com funciona una web dinàmica?
+description: Diferència entre web estàtica i dinàmica, el paper de PHP, les bases de dades i per què necessitem un servidor local com XAMPP.
+---
+
+import SimuladorPeticioWeb from '../../../../components/SimuladorPeticioWeb.astro';
+
+Fins ara has creat pàgines web amb **HTML** (estructura) i **CSS** (estil). Quan obres un fitxer `.html` fent doble clic des de l'explorador de fitxers, el navegador el llegeix directament i el dibuixa. Això és una **web estàtica**: sempre mostra el mateix contingut i, si omples un formulari, les dades es perden en tancar la pestanya.
+
+Per fer aplicacions reals (com un sistema d'inscripció a matèries optatives, una xarxa social o una botiga online), necessitem que la web **recordi informació** i **reaccioni** al que fa l'usuari. Aquí entren en joc tres peces noves.
+
+<SimuladorPeticioWeb />
+
+## Les 3 peces d'una aplicació web dinàmica
+
+### 1. La Base de Dades (MySQL)
+És el **magatzem permanent** de la informació. Si guardéssim les inscripcions de l'alumnat dins d'una variable de JavaScript, en refrescar la pàgina desapareixerien. Una base de dades relacional (com **MySQL** o **MariaDB**) organitza la informació en **taules** amb files i columnes, de manera molt semblant a un full de càlcul, però preparada per fer cerques instantànies i segures.
+
+### 2. El llenguatge de servidor (PHP)
+El navegador web (Chrome, Firefox, Edge) **només entén HTML, CSS i JavaScript**; no sap llegir ni executar fitxers `.php`, ni té permís per connectar-se directament a la base de dades per seguretat.
+
+**PHP** actua com a **intermediari (cambrer)** entre el formulari HTML i la base de dades:
+1. Rep les dades que l'usuari ha escrit al formulari.
+2. Es connecta a la base de dades amb un usuari i una contrasenya.
+3. Escriu o llegeix les dades fent servir consultes **SQL** (`INSERT`, `SELECT`...).
+4. Fabrica una resposta en **HTML pur** i l'envia de tornada al navegador.
+
+### 3. El Servidor Web (Apache / XAMPP)
+Com que el navegador no pot executar PHP per si sol, necessitem un programa que faci de servidor al nostre propi ordinador mentre desenvolupem el projecte. Aquest paquet s'anomena **XAMPP** i instal·la tres eines clau d'una sola vegada:
+* **Apache:** El servidor web que escolta les peticions del navegador (a través de l'adreça `http://localhost`).
+* **PHP:** El motor que interpreta el nostre codi `.php`.
+* **MySQL / MariaDB:** El gestor de bases de dades (que administrarem visualment amb **phpMyAdmin**).
+
+:::caution[Error clàssic que has d'evitar]
+Si obres un fitxer PHP fent doble clic i a la barra d'adreces del navegador hi veus `file:///C:/...`, **no funcionarà** (el navegador et mostrarà el codi PHP escrit en text pla o el descarregarà). Sempre has d'accedir-hi escrivint `http://localhost/...` perquè passi pel servidor Apache.
+:::
+
+## Esquema del nostre projecte
+
+Al llarg d'aquest mòdul construiràs una aplicació completa d'inscripció a matèries dividida en 4 fitxers:
+
+| Fitxer | On s'executa? | Funció principal |
+| :--- | :--- | :--- |
+| `formulari.html` + `formulari.css` | **Navegador (Client)** | Mostra la interfície visual perquè l'alumne introdueixi nom, cognoms, correu i matèria. |
+| `db.php` | **Servidor (PHP)** | Guarda les credencials (`localhost`, `root`...) per connectar-se a la base de dades `formulari_materia`. |
+| `formulari.php` | **Servidor (PHP)** | Rep les dades del formulari (`$_POST`) i les insereix a la taula `materies` de MySQL. |
+| `resultats.php` | **Servidor (PHP)** | Llegeix totes les files desades a MySQL (`SELECT *`) i genera una taula HTML per mostrar-les. |
+
+---
+
+Quan tinguis clar com es comuniquen aquestes tres capes, passa a la lliçó següent per instal·lar **XAMPP** i crear la base de dades a **phpMyAdmin**.

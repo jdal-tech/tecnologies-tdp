@@ -1,0 +1,150 @@
+---
+title: "ACT_3: Conversor d'Unitats"
+description: "Aplicació pràctica d'operadors matemàtics, formularis HTML, esdeveniments i validació de dades"
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import SimuladorJS from '/src/components/SimuladorJS.astro';
+import FluxConversor from '../../../../components/FluxConversor.astro';
+
+En aquesta activitat construiràs un conversor de temperatures pas a pas: primer mitjançant finestres emergents i després integrat en una interfície HTML amb validació d'errors.
+
+---
+
+<FluxConversor />
+
+#### 3.1 Conversor simple amb `prompt()` i `alert()` <Badge text="CONV_01" variant="caution" />
+
+1. Demana a l'usuari una temperatura en graus Celsius (`ºC`) utilitzant `prompt()` i converteix-la a número amb `Number()`.
+2. Calcula l'equivalència en graus Fahrenheit aplicant la fórmula: `(celsius * 9 / 5) + 32`.
+3. Mostra el resultat final a l'usuari utilitzant un `alert()` i imprimeix-lo també per consola.
+
+<SimuladorJS 
+  codi={[
+    'let celsius = Number(prompt("Introdueix els graus ºC:"));',
+    'let fahrenheit = (celsius * 9 / 5) + 32;',
+    '',
+    'alert(celsius + " ºC equivalen a " + fahrenheit + " ºF");',
+    'console.log("Resultat:", fahrenheit, "ºF");'
+  ]}
+  htmlInicial={`<div style="color:#94a3b8; font-size:0.85rem;">index.html carregat</div>`}
+  htmlIntermig={`<div style="border:1px solid #94a3b8; padding:10px; border-radius:6px; background:#ffffff; box-shadow:0 4px 10px rgba(0,0,0,0.12);">
+  <div style="font-size:0.75rem; color:#64748b; margin-bottom:4px;">💬 Finestra prompt():</div>
+  <div style="font-size:0.85rem; margin-bottom:6px;">Introdueix els graus ºC:</div>
+  <div style="border:2px solid #0082C1; padding:4px 8px; background:#f8fafc; border-radius:4px; font-family:monospace; font-weight:bold; color:#0f172a;">25<span style="color:#0082C1;">|</span></div>
+</div>`}
+  htmlFinal={`<div style="border:1px solid #cbd5e1; padding:10px; border-radius:6px; background:#f0f9ff; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+  <div style="font-size:0.75rem; color:#0082C1; font-weight:bold; margin-bottom:4px;">🔔 Finestra alert():</div>
+  <div><strong>25 ºC</strong> equivalen a <strong>77 ºF</strong></div>
+</div>`}
+  sortida={[
+    { text: 'Resultat: 77 ºF' }
+  ]}
+/>
+
+---
+
+#### 3.2 Conversor múltiple amb interfície HTML <Badge text="CONV_02" variant="caution" />
+
+1. Crea a l'HTML un camp numèric `<input type="number" id="graus">`, un botó `<button id="btnConvertir">Convertir</button>` i un paràgraf `<p id="resultat"></p>`.
+2. Quan l'usuari premi el botó (`addEventListener`), llegeix el valor de l'input amb `Number(input.value)`.
+3. Calcula simultàniament la conversió a **Kelvin** (`celsius + 273.15`) i a **Fahrenheit** (`(celsius * 9 / 5) + 32`).
+4. Mostra totes dues conversions concatenades dins del paràgraf `<p id="resultat">`.
+
+<SimuladorJS 
+  codi={[
+    'const input = document.getElementById("graus");',
+    'const boto = document.getElementById("btnConvertir");',
+    'const resultat = document.getElementById("resultat");',
+    '',
+    'boto.addEventListener("click", function () {',
+    '  let celsius = Number(input.value);',
+    '  let kelvin = celsius + 273.15;',
+    '  let fahrenheit = (celsius * 9 / 5) + 32;',
+    '',
+    '  resultat.textContent = celsius + " ºC = " + kelvin + " K | " + fahrenheit + " ºF";',
+    '});'
+  ]}
+  htmlInicial={`<div>
+  <div style="display:flex; gap:6px; margin-bottom:8px;">
+    <div style="flex:1; border:1px solid #cbd5e1; padding:4px 8px; border-radius:4px; color:#94a3b8; font-size:0.8rem;">Graus ºC...</div>
+    <button style="background:#0082C1; color:white; border:none; padding:4px 10px; border-radius:4px; font-size:0.8rem;">Convertir</button>
+  </div>
+  <p style="margin:0; font-size:0.85rem; color:#64748b;">Aquí apareixerà la conversió...</p>
+</div>`}
+  htmlIntermig={`<div>
+  <div style="display:flex; gap:6px; margin-bottom:8px;">
+    <div style="flex:1; border:2px solid #0082C1; padding:4px 8px; border-radius:4px; color:#0f172a; font-size:0.8rem; background:#f8fafc; font-weight:bold;">20<span style="color:#0082C1;">|</span></div>
+    <button style="background:#006ba1; color:white; border:none; padding:4px 10px; border-radius:4px; font-size:0.8rem; box-shadow:0 0 0 2px #bae6fd;">🖱️ Convertir</button>
+  </div>
+  <p style="margin:0; font-size:0.85rem; color:#64748b;">Aquí apareixerà la conversió...</p>
+</div>`}
+  htmlFinal={`<div>
+  <div style="display:flex; gap:6px; margin-bottom:8px;">
+    <div style="flex:1; border:1px solid #cbd5e1; padding:4px 8px; border-radius:4px; color:#0f172a; font-size:0.8rem;">20</div>
+    <button style="background:#0082C1; color:white; border:none; padding:4px 10px; border-radius:4px; font-size:0.8rem;">Convertir</button>
+  </div>
+  <div style="padding:8px; border:1px solid #0082C1; background:#f0f9ff; border-radius:4px; color:#0f172a; font-weight:bold; font-size:0.85rem;">
+    20 ºC = 293.15 K | 68 ºF
+  </div>
+</div>`}
+/>
+
+---
+
+#### 3.3 Validació de camps buits amb `if / else` <Badge text="CONV_03" variant="caution" />
+
+1. Millora el codi de l'exercici anterior per evitar que calculi `0 ºC` si l'usuari prem el botó amb la casella buida.
+2. Abans de fer els càlculs, comprova amb un `if (input.value === "")` si el camp està buit.
+3. Si està buit, mostra un missatge d'avís en vermell dins de `resultat` (Ex: `"⚠️ Escriu un valor numèric"`). En cas contrari (`else`), executa la conversió normalment.
+
+<SimuladorJS 
+  codi={[
+    'boto.addEventListener("click", function () {',
+    '  if (input.value === "") {',
+    '    resultat.textContent = "⚠️ Escriu un valor numèric";',
+    '    resultat.style.color = "red";',
+    '  } else {',
+    '    let celsius = Number(input.value);',
+    '    let kelvin = celsius + 273.15;',
+    '    resultat.style.color = "black";',
+    '    resultat.textContent = celsius + " ºC = " + kelvin + " K";',
+    '  }',
+    '});'
+  ]}
+  htmlInicial={`<div>
+  <div style="display:flex; gap:6px; margin-bottom:8px;">
+    <div style="flex:1; border:1px solid #cbd5e1; padding:4px 8px; border-radius:4px; color:#94a3b8; font-size:0.8rem;">Graus ºC...</div>
+    <button style="background:#0082C1; color:white; border:none; padding:4px 10px; border-radius:4px; font-size:0.8rem;">Convertir</button>
+  </div>
+  <p style="margin:0; font-size:0.85rem; color:#64748b;">Esperant dades...</p>
+</div>`}
+  htmlIntermig={`<div>
+  <div style="display:flex; gap:6px; margin-bottom:8px;">
+    <div style="flex:1; border:1px solid #ef4444; padding:4px 8px; border-radius:4px; color:#94a3b8; font-size:0.8rem; background:#fef2f2;">(camp buit)</div>
+    <button style="background:#006ba1; color:white; border:none; padding:4px 10px; border-radius:4px; font-size:0.8rem; box-shadow:0 0 0 2px #bae6fd;">🖱️ Convertir</button>
+  </div>
+  <p style="margin:0; font-size:0.85rem; color:#64748b;">Esperant dades...</p>
+</div>`}
+  htmlFinal={`<div>
+  <div style="display:flex; gap:6px; margin-bottom:8px;">
+    <div style="flex:1; border:1px solid #ef4444; padding:4px 8px; border-radius:4px; color:#94a3b8; font-size:0.8rem;">Graus ºC...</div>
+    <button style="background:#0082C1; color:white; border:none; padding:4px 10px; border-radius:4px; font-size:0.8rem;">Convertir</button>
+  </div>
+  <p style="margin:0; font-size:0.85rem; font-weight:bold; color:#dc2626;">⚠️ Escriu un valor numèric</p>
+</div>`}
+/>
+
+---
+
+<details style="border: 1px solid #3f3f46; padding: 12px; background: #09090b; border-radius: 6px;">
+<summary style="color: #ef4444; font-weight: bold; cursor: pointer;">[ + VEURE PISTES DE L'ACTIVITAT ]</summary>
+
+<div style="margin-top: 10px; color: #d4d4d8;">
+
+- **Conversió numèrica:** Tant `prompt()` com `input.value` retornen text. Embolcalla-ho amb `Number(...)` abans de sumar `273.15` perquè no et concateni els números com a text.
+- **Decimals:** Si surten molts decimals (ex: `293.15000000000003`), pots arrodonir el resultat final fent servir `kelvin.toFixed(2)`.
+- **Validació:** Comprova `input.value === ""` **abans** de convertir-lo amb `Number()`, perquè `Number("")` retorna `0` i el programa es pensaria que l'usuari ha escrit zero graus.
+
+</div>
+</details>

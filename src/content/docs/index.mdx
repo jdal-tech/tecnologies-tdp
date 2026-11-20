@@ -1,40 +1,326 @@
 ---
-title: Welcome to Starlight
-description: Get started building your docs site with Starlight.
-template: splash # Remove or comment out this line to display the site sidebar on this page.
+title: "Tecnologies-TdP"
+description: "Portal de recursos, programació i enginyeria de l'Institut Torre del Palau."
+template: splash
 hero:
-  tagline: Congrats on setting up a new Starlight project!
+  tagline: Benvinguts al portal interactiu del Departament de Tecnologies de l'<strong>Institut Torre del Palau</strong>.<br />Selecciona el teu curs per accedir als apunts, simuladors i reptes pràctics.
   image:
-    file: ../../assets/houston.webp
-  actions:
-    - text: Example Guide
-      link: /guides/example/
-      icon: right-arrow
-    - text: Read the Starlight docs
-      link: https://starlight.astro.build
-      icon: external
-      variant: minimal
+    html: |
+      <div class="tech-hero-graphic">
+        <svg viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="glowGrad" x1="0" y1="0" x2="260" y2="260" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#0082C1" />
+              <stop offset="100%" stop-color="#38bdf8" />
+            </linearGradient>
+          </defs>
+          <!-- Anells orbitals -->
+          <circle cx="130" cy="130" r="112" stroke="url(#glowGrad)" stroke-width="1.5" stroke-dasharray="8 8" class="spin-slow" opacity="0.45" />
+          <circle cx="130" cy="130" r="88" stroke="#38bdf8" stroke-width="1" stroke-dasharray="20 10" class="spin-reverse" opacity="0.35" />
+          
+          <!-- Pistes de circuit -->
+          <path d="M130 42 V75 M130 185 V218 M42 130 H75 M185 130 H218" stroke="#0082C1" stroke-width="2.5" stroke-linecap="round" />
+          <path d="M72 72 L92 92 M188 72 L168 92 M72 188 L92 168 M188 188 L168 168" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" opacity="0.7" />
+          
+          <!-- Nodes brillants -->
+          <circle cx="130" cy="42" r="5" fill="#38bdf8" class="pulse-node" />
+          <circle cx="130" cy="218" r="5" fill="#38bdf8" class="pulse-node" />
+          <circle cx="42" cy="130" r="5" fill="#0082C1" class="pulse-node" />
+          <circle cx="218" cy="130" r="5" fill="#0082C1" class="pulse-node" />
+
+          <!-- Xip central -->
+          <rect x="80" y="80" width="100" height="100" rx="16" fill="#0f172a" stroke="url(#glowGrad)" stroke-width="3" />
+          <rect x="92" y="92" width="76" height="76" rx="10" fill="#1e293b" stroke="#38bdf8" stroke-width="1" opacity="0.6" />
+          
+          <!-- Símbol de codi </> -->
+          <text x="130" y="138" text-anchor="middle" fill="#38bdf8" font-family="monospace" font-weight="bold" font-size="28">&lt;/&gt;</text>
+        </svg>
+      </div>
+  #actions:
+    #- text: Entrar a 1r de Batxillerat
+    #  link: /1batx/
+    #  icon: right-arrow
+    #  variant: primary
+    #- text: Veure pràctiques de JS
+    #  link: /1batx/act-01/
+    #  icon: laptop
+    #  variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Card, CardGrid, Badge } from '@astrojs/starlight/components';
 
-## Next steps
+<div class="cursos-wrapper">
+  <CardGrid>
+    <Card title="4t d'ESO" icon="laptop">
+      <Badge text="Properament" variant="note" />
+      <p>Hardware, Àudio, Imatge, Fulls de càlcul, Intel·ligència Artificial i disseny WEB.</p>
+      <span class="link-inactiu">En construcció...</span>
+    </Card>
 
-<CardGrid stagger>
-	<Card title="Update content" icon="pencil">
-		Edit `src/content/docs/index.mdx` to see this page change.
-	</Card>
-	<Card title="Change page layout" icon="document">
-		Delete `template: splash` in `src/content/docs/index.mdx` to display a
-		sidebar on this page.
-	</Card>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
-	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
-	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
-	</Card>
-</CardGrid>
+    <Card title="1r de Batxillerat" icon="rocket">
+      <Badge text="Curs Actiu" variant="success" />
+      <p>Programació interactiva amb HTML, CSS, JavaScript, PHP, Python, Bases de Dades i Node.js.</p>
+      <a href="/1batx/" class="link-actiu">Accedir als continguts i simuladors →</a>
+    </Card>
+
+    <Card title="2n de Batxillerat" icon="setting">
+      <Badge text="Properament" variant="note" />
+      <p>Tecnologia i Enginyeria II: Pneumàtica, automatismes, materials i sistemes de control.</p>
+      <span class="link-inactiu">En construcció...</span>
+    </Card>
+  </CardGrid>
+</div>
+
+<div class="tech-showcase">
+  <div class="stats-bar">
+    <div class="stat-item">
+      <span class="stat-num">3</span>
+      <span class="stat-label">Nivells Educatius</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-num">25+</span>
+      <span class="stat-label">Simuladors Interactius</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-num">100%</span>
+      <span class="stat-label">Aprenentatge Pràctic</span>
+    </div>
+  </div>
+
+  <p class="tech-title">TECNOLOGIES I EINES DEL DEPARTAMENT</p>
+
+  <div class="tech-pills">
+    <div class="tech-pill">
+      <span class="dot html"></span> HTML5 & CSS3
+    </div>
+    <div class="tech-pill">
+      <span class="dot js"></span> JavaScript
+    </div>
+    <div class="tech-pill">
+      <span class="dot python"></span> Python
+    </div>
+    <div class="tech-pill">
+      <span class="dot node"></span> Node.js & PHP
+    </div>
+    <div class="tech-pill">
+      <span class="dot db"></span> Bases de Dades
+    </div>
+    <div class="tech-pill">
+      <span class="dot arduino"></span> Arduino & Automatització
+    </div>
+  </div>
+</div>
+
+<style>{`
+  /* Fons amb quadrícula tecnològica subtil */
+  .page {
+    background-image: radial-gradient(rgba(0, 130, 193, 0.16) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  /* Degradat tecnològic al títol principal */
+  .hero h1 {
+    background: linear-gradient(120deg, #ffffff 30%, #38bdf8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  :root[data-theme='light'] .hero h1 {
+    background: linear-gradient(120deg, #0f172a 20%, #0082C1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Animacions del gràfic SVG del Hero */
+  .tech-hero-graphic {
+    width: 240px;
+    height: 240px;
+    margin: 0 auto;
+    filter: drop-shadow(0 0 22px rgba(0, 130, 193, 0.35));
+  }
+  .spin-slow {
+    transform-origin: 130px 130px;
+    animation: girar 28s linear infinite;
+  }
+  .spin-reverse {
+    transform-origin: 130px 130px;
+    animation: girar 18s linear infinite reverse;
+  }
+  .pulse-node {
+    animation: bategar 2.4s ease-in-out infinite alternate;
+  }
+
+  @keyframes girar {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  @keyframes bategar {
+    0% { opacity: 0.4; r: 4; }
+    100% { opacity: 1; r: 6.5; }
+  }
+
+  /* Millora visual de les targetes dels cursos */
+  .cursos-wrapper .card {
+    border-radius: 12px;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    backdrop-filter: blur(6px);
+  }
+  .cursos-wrapper .card:hover {
+    transform: translateY(-5px);
+    border-color: #0082C1;
+    box-shadow: 0 10px 25px -5px rgba(0, 130, 193, 0.25);
+  }
+  .cursos-wrapper p {
+    margin: 0.75rem 0 1rem 0;
+    font-size: 0.92rem;
+  }
+  .link-actiu {
+    display: inline-block;
+    font-weight: 700;
+    color: #38bdf8 !important;
+    text-decoration: none;
+  }
+  :root[data-theme='light'] .link-actiu {
+    color: #0082C1 !important;
+  }
+  .link-actiu:hover {
+    text-decoration: underline;
+  }
+  .link-inactiu {
+    font-size: 0.85rem;
+    color: #71717a;
+    font-style: italic;
+  }
+
+/* Franja d'estadístiques i tecnologies */
+  .tech-showcase {
+    margin-top: 3rem;
+    padding: 2rem 1.5rem;
+    border-radius: 16px;
+    border: 1px solid rgba(0, 130, 193, 0.25);
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(8px);
+    text-align: center;
+  }
+  :root[data-theme='light'] .tech-showcase {
+    background: rgba(248, 250, 252, 0.85);
+    border-color: rgba(0, 130, 193, 0.2);
+  }
+
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .stat-num {
+    font-size: 1.85rem;
+    font-weight: 800;
+    font-family: monospace;
+    color: #38bdf8;
+    line-height: 1.1;
+  }
+  :root[data-theme='light'] .stat-num {
+    color: #0082C1;
+  }
+  .stat-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #94a3b8;
+    margin-top: 0.25rem;
+  }
+  :root[data-theme='light'] .stat-label {
+    color: #475569;
+  }
+  .stat-divider {
+    width: 1px;
+    height: 36px;
+    background: rgba(148, 163, 184, 0.25);
+  }
+
+  .tech-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: #64748b;
+    margin: 0 0 1rem 0 !important;
+  }
+
+  .tech-pills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.65rem;
+  }
+  .tech-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.95rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    background: rgba(30, 41, 59, 0.6);
+    color: #e2e8f0;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+  :root[data-theme='light'] .tech-pill {
+    background: #ffffff;
+    color: #1e293b;
+    border-color: #cbd5e1;
+  }
+  .tech-pill:hover {
+    transform: translateY(-2px);
+    border-color: #38bdf8;
+  }
+
+  /* Punts de color identificatius de cada tecnologia */
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .dot.html { background: #f97316; box-shadow: 0 0 8px #f97316; }
+  .dot.js { background: #eab308; box-shadow: 0 0 8px #eab308; }
+  .dot.python { background: #38bdf8; box-shadow: 0 0 8px #38bdf8; }
+  .dot.node { background: #22c55e; box-shadow: 0 0 8px #22c55e; }
+  .dot.db { background: #a855f7; box-shadow: 0 0 8px #a855f7; }
+  .dot.arduino { background: #06b6d4; box-shadow: 0 0 8px #06b6d4; }
+
+  @media (max-width: 600px) {
+    .stat-divider { display: none; }
+  }
+  .tech-pills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center; /* Evita que s'estirin verticalment */
+    gap: 0.65rem;
+  }
+
+  .tech-pill {
+    margin-top: 0 !important; /* Anul·la el marge automàtic de Starlight */
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.95rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    background: rgba(30, 41, 59, 0.6);
+    color: #e2e8f0;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+`}</style>

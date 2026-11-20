@@ -1,0 +1,147 @@
+---
+title: "ACT_5: Projecte Color Flipper"
+description: "Construcció d'un generador de colors aleatoris combinant arrays, funcions matemàtiques i esdeveniments del DOM"
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import SimuladorJS from '/src/components/SimuladorJS.astro';
+
+En aquest projecte final integraràs tot el que has après fins ara (arrays, funcions, bucles `for` i manipulació del DOM) per crear una aplicació interactiva que canvia el color de fons de la pàgina web cada vegada que l'usuari prem un botó.
+
+---
+
+#### 5.1 Configuració de l'array i selecció d'elements <Badge text="FLIPPER_01" variant="caution" />
+
+1. Dissenya la interfície HTML amb un text informatiu `<p>background color : <span class="color">green</span></p>` i un botó `<button id="btn-color">Canviar color</button>`.
+2. Crea un array anomenat `colors` amb 4 colors diferents (`["green", "red", "#f1f5f8", "rgb(133, 122, 200)"]`).
+3. Selecciona el botó i el `<span>` des de JavaScript i comprova per consola que l'array i els elements s'han capturat correctament.
+
+<SimuladorJS 
+  codi={[
+    '// HTML: <p>background color : <span class="color">green</span></p>',
+    '// HTML: <button id="btn-color">Canviar color</button>',
+    '',
+    'const colors = ["green", "red", "#f1f5f8", "rgb(133, 122, 200)"];',
+    'const btn = document.getElementById("btn-color");',
+    'const colorText = document.querySelector(".color");',
+    '',
+    'console.log("Array colors:", colors);',
+    'console.log("Botó seleccionat:", btn);'
+  ]}
+  htmlInicial={`<div style="padding:12px; color:#64748b; font-size:0.85rem;">
+  <p style="margin:0 0 8px 0;">background color : <span>...</span></p>
+  <button style="padding:4px 10px; font-size:0.8rem;">Canviar color</button>
+</div>`}
+  htmlFinal={`<div style="padding:16px; text-align:center; background:green; border-radius:4px;">
+  <div style="background:#1e293b; color:white; padding:8px 12px; border-radius:6px; font-weight:bold; font-size:0.85rem; margin-bottom:10px;">
+    background color : <span style="color:#4ade80;">green</span>
+  </div>
+  <button style="background:white; border:2px solid #1e293b; color:#1e293b; padding:5px 12px; border-radius:4px; font-weight:bold; font-size:0.8rem;">Canviar color</button>
+</div>`}
+  sortida={[
+    { text: 'Array colors: (4) ["green", "red", "#f1f5f8", "rgb(133, 122, 200)"]' },
+    { text: 'Botó seleccionat: <button id="btn-color">Canviar color</button>' }
+  ]}
+/>
+
+---
+
+#### 5.2 Escolta d'esdeveniments i lògica aleatòria <Badge text="FLIPPER_02" variant="caution" />
+
+1. Afegeix un `addEventListener("click", ...)` al botó per detectar quan l'usuari hi fa clic.
+2. Crea una funció `getRandomNumber()` que retorni un número enter aleatori entre `0` i `colors.length - 1` utilitzant `Math.floor(Math.random() * colors.length)`.
+3. Quan es premi el botó, canvia el fons de la pàgina (`document.body.style.backgroundColor`) i actualitza el text de `.color` amb el color seleccionat.
+
+<SimuladorJS 
+  codi={[
+    'btn.addEventListener("click", function () {',
+    '  const randomNumber = getRandomNumber();',
+    '  document.body.style.backgroundColor = colors[randomNumber];',
+    '  colorText.textContent = colors[randomNumber];',
+    '});',
+    '',
+    'function getRandomNumber() {',
+    '  return Math.floor(Math.random() * colors.length);',
+    '}'
+  ]}
+  htmlInicial={`<div style="padding:16px; text-align:center; background:green; border-radius:4px;">
+  <div style="background:#1e293b; color:white; padding:8px 12px; border-radius:6px; font-weight:bold; font-size:0.85rem; margin-bottom:10px;">
+    background color : <span style="color:#4ade80;">green</span>
+  </div>
+  <button style="background:white; border:2px solid #1e293b; color:#1e293b; padding:5px 12px; border-radius:4px; font-weight:bold; font-size:0.8rem;">Canviar color</button>
+</div>`}
+  htmlIntermig={`<div style="padding:16px; text-align:center; background:green; border-radius:4px;">
+  <div style="background:#1e293b; color:white; padding:8px 12px; border-radius:6px; font-weight:bold; font-size:0.85rem; margin-bottom:10px;">
+    background color : <span style="color:#4ade80;">green</span>
+  </div>
+  <button style="background:#1e293b; border:2px solid #1e293b; color:#ffffff; padding:5px 12px; border-radius:4px; font-weight:bold; font-size:0.8rem; transform:scale(0.95);">🖱️ Canviar color</button>
+</div>`}
+  htmlFinal={`<div style="padding:16px; text-align:center; background:red; border-radius:4px;">
+  <div style="background:#1e293b; color:white; padding:8px 12px; border-radius:6px; font-weight:bold; font-size:0.85rem; margin-bottom:10px;">
+    background color : <span style="color:#f87171;">red</span>
+  </div>
+  <button style="background:white; border:2px solid #1e293b; color:#1e293b; padding:5px 12px; border-radius:4px; font-weight:bold; font-size:0.8rem;">Canviar color</button>
+</div>`}
+  sortida={[
+    { text: 'Índex aleatori generat: 1 → "red"' }
+  ]}
+/>
+
+---
+
+#### 5.3 Repte: Generador de colors Hexadecimals infinits <Badge text="FLIPPER_03" variant="caution" />
+
+1. Crea un array amb tots els 16 dígits possibles d'un color hexadecimal: `const hex = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, "A", "B", "C", "D", "E", "F"];`.
+2. Dins de l'esdeveniment de clic, crea una variable `let hexColor = "#";` i utilitza un bucle `for` de 6 voltes (`i < 6`) per concatenar 6 caràcters aleatoris de l'array `hex`.
+3. Aplica el codi generat (ex: `#F15025`) tant al fons de la pàgina com al text informatiu.
+
+<SimuladorJS 
+  codi={[
+    'const hex = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, "A", "B", "C", "D", "E", "F"];',
+    '',
+    'btn.addEventListener("click", function () {',
+    '  let hexColor = "#";',
+    '  for (let i = 0; i < 6; i++) {',
+    '    let pos = Math.floor(Math.random() * hex.length);',
+    '    hexColor += hex[pos];',
+    '  }',
+    '  document.body.style.backgroundColor = hexColor;',
+    '  colorText.textContent = hexColor;',
+    '});'
+  ]}
+  htmlInicial={`<div style="padding:16px; text-align:center; background:red; border-radius:4px;">
+  <div style="background:#1e293b; color:white; padding:8px 12px; border-radius:6px; font-weight:bold; font-size:0.85rem; margin-bottom:10px;">
+    background color : <span style="color:#f87171;">red</span>
+  </div>
+  <button style="background:white; border:2px solid #1e293b; color:#1e293b; padding:5px 12px; border-radius:4px; font-weight:bold; font-size:0.8rem;">Canviar color</button>
+</div>`}
+  htmlIntermig={`<div style="padding:16px; text-align:center; background:red; border-radius:4px;">
+  <div style="background:#1e293b; color:white; padding:8px 12px; border-radius:6px; font-weight:bold; font-size:0.85rem; margin-bottom:10px;">
+    background color : <span style="color:#f87171;">red</span>
+  </div>
+  <button style="background:#1e293b; border:2px solid #1e293b; color:#ffffff; padding:5px 12px; border-radius:4px; font-weight:bold; font-size:0.8rem; transform:scale(0.95);">🖱️ Canviar color</button>
+</div>`}
+  htmlFinal={`<div style="padding:16px; text-align:center; background:#F15025; border-radius:4px;">
+  <div style="background:#1e293b; color:white; padding:8px 12px; border-radius:6px; font-weight:bold; font-size:0.85rem; margin-bottom:10px;">
+    background color : <span style="color:#fb923c;">#F15025</span>
+  </div>
+  <button style="background:white; border:2px solid #1e293b; color:#1e293b; padding:5px 12px; border-radius:4px; font-weight:bold; font-size:0.8rem;">Canviar color</button>
+</div>`}
+  sortida={[
+    { text: 'Color hexadecimal generat: #F15025' }
+  ]}
+/>
+
+---
+
+<details style="border: 1px solid #3f3f46; padding: 12px; background: #09090b; border-radius: 6px;">
+<summary style="color: #ef4444; font-weight: bold; cursor: pointer;">[ + VEURE PISTES DE L'ACTIVITAT ]</summary>
+
+<div style="margin-top: 10px; color: #d4d4d8;">
+
+- **Nombres aleatoris:** `Math.random()` genera un decimal entre `0` i `0.999...`. En multiplicar-lo per `colors.length` (que val `4`) obtens un número entre `0` i `3.999...`, i `Math.floor()` arrodoneix cap avall per obtenir exactament `0`, `1`, `2` o `3`.
+- **Fons de tota la pàgina:** No cal seleccionar el `<body>` amb `getElementById`; JavaScript permet accedir-hi directament amb `document.body.style.backgroundColor`.
+- **Colors Hexadecimals:** Tots els codis hexadecimals comencen pel símbol `#` seguit de 6 caràcters combinant dígits del `0` al `9` i lletres de la `A` a la `F`.
+
+</div>
+</details>

@@ -1,0 +1,626 @@
+---
+// src/components/PresentacioIntroBbdd.astro
+---
+
+<div class="pres-wrapper not-content" tabindex="0" id="pres-intro-bbdd">
+  <div class="pres-topbar">
+    <div class="pres-title-group">
+      <span class="badge-pres">PRESENTACIÓ D'AULA · 1r BATX</span>
+      <span class="slide-counter" id="pres-counter">Diapositiva 1 de 5</span>
+    </div>
+
+    <div class="pres-actions">
+      <div class="pres-dots" id="pres-dots">
+        <button type="button" class="dot active" data-slide="0" aria-label="Diapositiva 1"></button>
+        <button type="button" class="dot" data-slide="1" aria-label="Diapositiva 2"></button>
+        <button type="button" class="dot" data-slide="2" aria-label="Diapositiva 3"></button>
+        <button type="button" class="dot" data-slide="3" aria-label="Diapositiva 4"></button>
+        <button type="button" class="dot" data-slide="4" aria-label="Diapositiva 5"></button>
+      </div>
+      <button type="button" id="pres-fullscreen" class="fs-btn" title="Veure a pantalla completa">
+        ⛶ Pantalla completa
+      </button>
+    </div>
+  </div>
+
+  <div class="pres-stage">
+    <!-- DIAPOSITIVA 1 -->
+    <div class="slide active" data-index="0">
+      <span class="slide-tag">01 · EL PROBLEMA</span>
+      <h3>Per què HTML i CSS sols no n'hi ha prou?</h3>
+      <p class="slide-lead">Fins ara hem creat <strong>webs estàtiques</strong>: pàgines que mostren text i imatges, però que tenen "memòria de peix".</p>
+      <div class="cards-2">
+        <div class="info-card">
+          <h4>Web Estàtica (Només HTML + CSS)</h4>
+          <ul>
+            <li>El navegador llegeix el fitxer i el dibuixa.</li>
+            <li>Si omples un formulari i recarregues la pàgina, <strong>les dades es perden</strong>.</li>
+            <li>Tots els visitants veuen exactament el mateix contingut.</li>
+          </ul>
+        </div>
+        <div class="info-card highlight">
+          <h4>Web Dinàmica (+ PHP + Base de Dades)</h4>
+          <ul>
+            <li>Les dades enviades es guarden de forma permanent al servidor.</li>
+            <li>Si tanques l'ordinador i tornes demà, la informació continua allà.</li>
+            <li>La pàgina es construeix segons el que hi ha desat (com Instagram o Moodle).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIAPOSITIVA 2 -->
+    <div class="slide" data-index="1">
+      <span class="slide-tag">02 · ELS 3 PROTAGONISTES</span>
+      <h3>Què és un Servidor, PHP i una Base de Dades?</h3>
+      <p class="slide-lead">Per fer una web dinàmica necessitem tres peces treballant en equip:</p>
+      <div class="cards-3">
+        <div class="info-card">
+          <div class="card-icon">🌐</div>
+          <h4>1. El Servidor (Apache)</h4>
+          <p>És l'ordinador (o programa) que està sempre encès esperant peticions des del navegador i enviant les pàgines web com a resposta.</p>
+        </div>
+        <div class="info-card highlight">
+          <div class="card-icon">⚙️</div>
+          <h4>2. El llenguatge PHP</h4>
+          <p>És el <strong>cervell intermediari</strong>. S'executa al servidor (mai es veu al navegador), recull el que escrius al formulari i decideix què fer-ne.</p>
+        </div>
+        <div class="info-card">
+          <div class="card-icon">🗄️</div>
+          <h4>3. Base de Dades (MySQL)</h4>
+          <p>És l'<strong>arxiu permanent</strong>. Organitza la informació en taules (files i columnes, com un full de càlcul gegant) perquè no s'esborri mai.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIAPOSITIVA 3 -->
+    <div class="slide" data-index="2">
+      <span class="slide-tag">03 · PER ENTENDRE-HO RÀPID</span>
+      <h3>L'analogia del Restaurant</h3>
+      <p class="slide-lead">Imagina que entres a un restaurant a demanar un plat. A la web passa exactament el mateix:</p>
+      <div class="flow-row">
+        <div class="flow-step">
+          <span class="role-badge">EL CLIENT</span>
+          <h4>Navegador (HTML / CSS)</h4>
+          <p>És el <strong>comensal</strong> assegut a la taula. Omple la comanda (formulari) i espera que li portin el plat acabat.</p>
+        </div>
+        <div class="flow-arrow">⇄</div>
+        <div class="flow-step highlight">
+          <span class="role-badge">EL CAMBRER</span>
+          <h4>Servidor + PHP</h4>
+          <p>Recull la comanda de la taula, la porta cap a dins i torna amb la resposta servida. El client mai entra a la cuina.</p>
+        </div>
+        <div class="flow-arrow">⇄</div>
+        <div class="flow-step">
+          <span class="role-badge">LA CUINA / REBOST</span>
+          <h4>Base de Dades (MySQL)</h4>
+          <p>On es guarden tots els ingredients i registres. Només el cambrer (PHP) té permís per demanar-li coses.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIAPOSITIVA 4 -->
+    <div class="slide" data-index="3">
+      <span class="slide-tag">04 · PER QUÈ XAMPP?</span>
+      <h3>Què és XAMPP i per què l'instal·lem?</h3>
+      <p class="slide-lead">A la vida real, PHP i MySQL viuen en servidors remots d'Internet. A classe fem servir <strong>XAMPP</strong> per simular-ho al nostre ordinador.</p>
+      <div class="cards-2">
+        <div class="info-card">
+          <h4>Què volen dir les sigles XAMPP?</h4>
+          <ul>
+            <li><strong>X</strong> — Multiplataforma (funciona a Windows, macOS i Linux).</li>
+            <li><strong>A</strong> — <strong>Apache</strong> (el servidor web).</li>
+            <li><strong>M</strong> — <strong>MySQL / MariaDB</strong> (el gestor de bases de dades).</li>
+            <li><strong>P</strong> — <strong>PHP</strong> (el llenguatge de programació del servidor).</li>
+          </ul>
+        </div>
+        <div class="info-card highlight">
+          <h4>La regla d'or de <code>htdocs</code></h4>
+          <p>Si obres un fitxer <code>.php</code> fent doble clic des de l'escriptori, <strong>no funcionarà</strong>.</p>
+          <p>Sempre l'has de guardar dins la carpeta <code>htdocs</code> i obrir-lo escrivint <code>http://localhost/...</code> al navegador perquè passi per Apache.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIAPOSITIVA 5 -->
+    <div class="slide" data-index="4">
+      <span class="slide-tag">05 · ON HO TROBEM I QUÈ FAREM</span>
+      <h3>Quan es fa servir tot això a la vida real?</h3>
+      <p class="slide-lead">Cada vegada que una web recorda qui ets o guarda informació teva, hi ha un servidor i una base de dades darrere:</p>
+      <div class="cards-2">
+        <div class="info-card">
+          <h4>Exemples quotidians</h4>
+          <ul>
+            <li><strong>Xarxes socials:</strong> Desar publicacions, comentaris i "M'agrada".</li>
+            <li><strong>Plataformes educatives (Moodle):</strong> Guardar notes i lliuraments.</li>
+            <li><strong>Botigues online:</strong> Controlar l'estoc de productes i les comandes.</li>
+          </ul>
+        </div>
+        <div class="info-card highlight">
+          <h4>El nostre repte en aquest mòdul</h4>
+          <p>Construirem una aplicació completa d'<strong>inscripció a matèries optatives</strong>:</p>
+          <ul>
+            <li><strong>Avui (Lliçó 1):</strong> Encendrem XAMPP i crearem la BBDD <code>formulari_materia</code>.</li>
+            <li><strong>Lliçons 2-5:</strong> Farem el formulari HTML/CSS i connectarem PHP per desar i llegir alumnes.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pres-controls">
+    <button type="button" id="pres-prev" class="nav-btn" disabled>← Anterior</button>
+    <span class="kbd-hint">Consell: pots fer servir les fletxes ← → del teclat</span>
+    <button type="button" id="pres-next" class="nav-btn primary">Següent →</button>
+  </div>
+</div>
+
+<style>
+  .pres-wrapper {
+    box-sizing: border-box;
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    color: #f8fafc;
+    font-family: system-ui, -apple-system, sans-serif;
+    outline: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pres-wrapper *,
+  .pres-wrapper *::before,
+  .pres-wrapper *::after {
+    box-sizing: border-box;
+  }
+
+  /* ESTILS PER AL MODE PANTALLA COMPLETA */
+  .pres-wrapper:fullscreen,
+  .pres-wrapper.is-fullscreen {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    border-radius: 0;
+    border: none;
+    padding: 2.5rem 4rem;
+    z-index: 9999;
+    justify-content: space-between;
+    overflow-y: auto;
+  }
+
+  .pres-wrapper:fullscreen .pres-stage,
+  .pres-wrapper.is-fullscreen .pres-stage {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pres-wrapper:fullscreen .slide.active,
+  .pres-wrapper.is-fullscreen .slide.active {
+    width: 100%;
+    max-width: 1200px;
+  }
+
+  .pres-wrapper:fullscreen .slide h3,
+  .pres-wrapper.is-fullscreen .slide h3 {
+    font-size: 2.2rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .pres-wrapper:fullscreen .slide-lead,
+  .pres-wrapper.is-fullscreen .slide-lead {
+    font-size: 1.25rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .pres-wrapper:fullscreen .info-card h4,
+  .pres-wrapper.is-fullscreen .info-card h4,
+  .pres-wrapper:fullscreen .flow-step h4,
+  .pres-wrapper.is-fullscreen .flow-step h4 {
+    font-size: 1.25rem;
+  }
+
+  .pres-wrapper:fullscreen .info-card p,
+  .pres-wrapper.is-fullscreen .info-card p,
+  .pres-wrapper:fullscreen .info-card li,
+  .pres-wrapper.is-fullscreen .info-card li,
+  .pres-wrapper:fullscreen .flow-step p,
+  .pres-wrapper.is-fullscreen .flow-step p {
+    font-size: 1.08rem;
+  }
+
+  .pres-topbar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #1e293b;
+    margin-bottom: 1.25rem;
+  }
+
+  .pres-title-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .pres-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .badge-pres {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #0f172a;
+    background-color: #38bdf8;
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+  }
+
+  .slide-counter {
+    font-size: 0.85rem;
+    color: #cbd5e1;
+    font-weight: 600;
+  }
+
+  .pres-dots {
+    display: flex;
+    gap: 0.45rem;
+  }
+
+  .dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    border: none;
+    background-color: #334155;
+    cursor: pointer;
+    padding: 0;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .dot.active {
+    background-color: #facc15;
+    transform: scale(1.2);
+  }
+
+  .fs-btn {
+    background-color: #1e293b;
+    color: #f8fafc;
+    border: 1px solid #475569;
+    border-radius: 6px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .fs-btn:hover {
+    border-color: #facc15;
+    color: #facc15;
+  }
+
+  .pres-stage {
+    min-height: 290px;
+  }
+
+  .slide {
+    display: none;
+    animation: fadeSlide 0.22s ease;
+  }
+
+  .slide.active {
+    display: block;
+  }
+
+  @keyframes fadeSlide {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .slide-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #facc15;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.35rem;
+  }
+
+  .slide h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.4rem;
+    color: #f8fafc;
+  }
+
+  .slide-lead {
+    margin: 0 0 1.25rem 0;
+    font-size: 0.98rem;
+    color: #cbd5e1;
+    line-height: 1.5;
+  }
+
+  .cards-2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .cards-3 {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  @media (max-width: 820px) {
+    .cards-2,
+    .cards-3 {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .info-card {
+    min-width: 0;
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 1.1rem;
+  }
+
+  .info-card.highlight {
+    border-color: #38bdf8;
+    background-color: rgba(56, 189, 248, 0.08);
+  }
+
+  .card-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .info-card h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.02rem;
+    color: #f8fafc;
+  }
+
+  .info-card p {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.88rem;
+    color: #cbd5e1;
+    line-height: 1.45;
+  }
+
+  .info-card p:last-child {
+    margin-bottom: 0;
+  }
+
+  .info-card ul {
+    margin: 0;
+    padding-left: 1.2rem;
+    font-size: 0.88rem;
+    color: #cbd5e1;
+    line-height: 1.5;
+  }
+
+  .info-card li {
+    margin-bottom: 0.3rem;
+  }
+
+  .flow-row {
+    display: flex;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 820px) {
+    .flow-row {
+      flex-direction: column;
+    }
+    .flow-arrow {
+      transform: rotate(90deg);
+      text-align: center;
+    }
+  }
+
+  .flow-step {
+    flex: 1 1 0;
+    min-width: 0;
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 1rem;
+  }
+
+  .flow-step.highlight {
+    border-color: #facc15;
+    background-color: rgba(250, 204, 21, 0.07);
+  }
+
+  .role-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #38bdf8;
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    margin-bottom: 0.4rem;
+  }
+
+  .flow-step h4 {
+    margin: 0 0 0.45rem 0;
+    font-size: 1rem;
+    color: #f8fafc;
+  }
+
+  .flow-step p {
+    margin: 0;
+    font-size: 0.86rem;
+    color: #cbd5e1;
+    line-height: 1.45;
+  }
+
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #38bdf8;
+  }
+
+  .pres-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid #1e293b;
+  }
+
+  .kbd-hint {
+    font-size: 0.8rem;
+    color: #94a3b8;
+  }
+
+  .nav-btn {
+    background-color: #1e293b;
+    color: #f8fafc;
+    border: 1px solid #475569;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .nav-btn:hover:not(:disabled) {
+    border-color: #38bdf8;
+  }
+
+  .nav-btn.primary {
+    background-color: #38bdf8;
+    color: #0f172a;
+    border-color: #38bdf8;
+  }
+
+  .nav-btn.primary:hover:not(:disabled) {
+    background-color: #7dd3fc;
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .pres-wrapper code {
+    background-color: rgba(15, 23, 42, 0.85);
+    color: #facc15;
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-size: 0.85em;
+  }
+</style>
+
+<script>
+  function initPresentacioBbdd() {
+    const wrapper = document.getElementById('pres-intro-bbdd');
+    if (!wrapper) return;
+
+    const slides = wrapper.querySelectorAll('.slide');
+    const dots = wrapper.querySelectorAll('.dot');
+    const counter = document.getElementById('pres-counter');
+    const prevBtn = document.getElementById('pres-prev') as HTMLButtonElement | null;
+    const nextBtn = document.getElementById('pres-next') as HTMLButtonElement | null;
+    const fsBtn = document.getElementById('pres-fullscreen') as HTMLButtonElement | null;
+
+    if (!slides.length || !counter || !prevBtn || !nextBtn || !fsBtn) return;
+
+    let current = 0;
+    const total = slides.length;
+
+    function goToSlide(idx: number) {
+      if (idx < 0 || idx >= total) return;
+      current = idx;
+
+      slides.forEach((s, i) => s.classList.toggle('active', i === current));
+      dots.forEach((d, i) => d.classList.toggle('active', i === current));
+
+      counter!.textContent = `Diapositiva ${current + 1} de${total}`;
+      prevBtn!.disabled = current === 0;
+      nextBtn!.disabled = current === total - 1;
+    }
+
+    function updateFsLabel() {
+      const isFs = Boolean(document.fullscreenElement) || wrapper!.classList.contains('is-fullscreen');
+      fsBtn!.textContent = isFs ? '✕ Sortir de pantalla completa' : '⛶ Pantalla completa';
+    }
+
+    fsBtn.addEventListener('click', async () => {
+      try {
+        if (!document.fullscreenElement && !wrapper.classList.contains('is-fullscreen')) {
+          if (wrapper.requestFullscreen) {
+            await wrapper.requestFullscreen();
+          } else {
+            wrapper.classList.add('is-fullscreen');
+          }
+        } else {
+          if (document.fullscreenElement && document.exitFullscreen) {
+            await document.exitFullscreen();
+          }
+          wrapper.classList.remove('is-fullscreen');
+        }
+      } catch {
+        wrapper.classList.toggle('is-fullscreen');
+      }
+      updateFsLabel();
+      wrapper.focus();
+    });
+
+    document.addEventListener('fullscreenchange', updateFsLabel);
+
+    prevBtn.addEventListener('click', () => goToSlide(current - 1));
+    nextBtn.addEventListener('click', () => goToSlide(current + 1));
+
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const idx = Number(dot.getAttribute('data-slide') || 0);
+        goToSlide(idx);
+      });
+    });
+
+    wrapper.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') goToSlide(current + 1);
+      if (e.key === 'ArrowLeft') goToSlide(current - 1);
+      if (e.key === 'Escape' && wrapper.classList.contains('is-fullscreen')) {
+        wrapper.classList.remove('is-fullscreen');
+        updateFsLabel();
+      }
+    });
+
+    goToSlide(0);
+  }
+
+  initPresentacioBbdd();
+  document.addEventListener('astro:after-swap', initPresentacioBbdd);
+</script>

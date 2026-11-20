@@ -1,0 +1,211 @@
+---
+title: 3. El formulari en HTML i l'estil CSS
+description: Organització de carpetes del projecte dins de htdocs i creació dels fitxers formulari.html i formulari.css.
+---
+
+import InspectorFormulariPost from '../../../../components/InspectorFormulariPost.astro';
+
+Ara que ja tenim el servidor XAMPP encès, la base de dades creada i sabem com viatgen les dades entre el navegador i PHP, construirem la part visual de l'aplicació (el **Frontend**): un formulari per inscriure's a una matèria i un full d'estils que li doni format.
+
+## Pas 1: Organització de carpetes dins de `htdocs`
+
+Quan un projecte combina diferents llenguatges (HTML, CSS i PHP), és imprescindible tenir els fitxers endreçats per carpetes. Dins de la carpeta del teu projecte a `htdocs` (per exemple, `C:\xampp\htdocs\projecte_materies\`), crea tres subcarpetes:
+
+```text
+projecte_materies/
+├── HTML/
+│   └── formulari.html
+├── CSS/
+│   └── formulari.css
+└── PHP/
+    ├── db.php          (el crearem a la lliçó 4)
+    ├── formulari.php   (el crearem a la lliçó 4)
+    └── resultats.php   (el crearem a la lliçó 5)
+```
+
+:::note[Fixa't en les rutes relatives (`../`)]
+Com que `formulari.html` està dins de la carpeta `HTML/`, per enllaçar amb `formulari.css` (que és a `CSS/`) o enviar dades a `formulari.php` (que és a `PHP/`), haurem d'escriure **`../`** per pujar un nivell de carpeta abans d'entrar a la carpeta veïna.
+:::
+
+---
+
+## Pas 2: Creació del formulari (`HTML/formulari.html`)
+
+Crea el fitxer `formulari.html` dins de la carpeta `HTML/`. Perquè aquest formulari pugui parlar amb PHP a la lliçó següent, assegura't que hi inclous aquests **tres elements** indispensables:
+
+1. **`<form action="../PHP/formulari.php" method="post">`:**
+   * **`action`:** Indica quin fitxer del servidor rebrà les dades quan premem el botó *Enviar*.
+   * **`method="post"`:** Envia les dades de manera oculta dins el cos de la petició HTTP (a diferència de `get`, que les posaria visibles a la barra d'adreces URL).
+2. **L'atribut `name="..."` a cada camp:**
+   * Cada `<input>` i `<select>` porta un atribut `name` (`nom`, `cognoms`, `mail`, `materia`). Aquest nom és l'etiqueta exacta que utilitzarà PHP per recuperar el que ha escrit l'usuari.
+3. **Els botons `<button type="submit">` i `<button type="reset">`:**
+   * `submit` dispara l'enviament cap a `formulari.php`.
+   * `reset` buida tots els camps escrits.
+
+<details>
+<summary>Fes clic aquí per veure o comprovar el codi sencer de <code>HTML/formulari.html</code></summary>
+
+```html
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulari</title>
+    <link rel="stylesheet" href="../CSS/formulari.css">
+</head>
+<body>
+    <!-- Crearem un títol central per a la pàgina del formulari -->
+    <div id="titol">
+        <h1>Activitat formulari HTML-CSS-PHP</h1>
+    </div>
+
+    <!-- Creem el formulari i el vinculem a una pàgina PHP per a recollir les dades -->
+    <form action="../PHP/formulari.php" method="post">
+        <div>
+            <label for="nom">Nom</label>
+            <input type="text" id="nom" class="nom" name="nom" required>
+        </div>
+        <div>
+            <label for="cognoms">Cognoms</label>
+            <input type="text" id="cognoms" class="cognoms" name="cognoms" required>
+        </div>
+        <div>
+            <label for="mail">Mail</label>
+            <input type="email" id="mail" class="mail" name="mail" required>
+        </div>
+        <div>
+            <label for="materia">Matèria</label>
+            <select id="materia" name="materia" class="materia" required>
+                <option value="programacio">Programació</option>
+                <option value="robotica">Robòtica</option>
+                <option value="biomedicia">Biomedicina</option>
+                <option value="reptes">Reptes mèdics</option>
+            </select>
+        </div>   
+        <div class="botons">
+            <button type="submit">Enviar</button>
+            <button type="reset">Esborrar</button>
+        </div> 
+    </form>
+
+    <!-- Creem un botó per poder accedir als resultats des de la pàgina principal -->
+    <div class="resultats">
+        <a href="../PHP/resultats.php">Resultats</a>
+    </div>
+</body>
+</html>
+```
+
+</details>
+
+<InspectorFormulariPost />
+
+---
+
+## Pas 3: Donar estil al formulari (`CSS/formulari.css`)
+
+Ara que tenim l'estructura HTML, crearem el fitxer `formulari.css` dins de la carpeta `CSS/`. Aquest mateix full d'estils ens servirà tant per a `formulari.html` com per a la taula de `resultats.php` que farem al final.
+
+### Què has d'observar al CSS?
+* **Com centrem els blocs (`form`, `.resultats`, `table`)?** S'utilitza la combinació clàssica `margin-left: 50%;` (mou la vora esquerra del bloc al centre de la pantalla) seguida de `transform: translate(-50%);` (desplaça el bloc cap a l'esquerra la meitat de la seva pròpia amplada perquè quedi centrat del tot).
+* **Estils preparats per al futur:** Les regles `.fila0`, `table`, `th` i `td` encara no afecten `formulari.html`, però deixen llest el disseny de la taula que generarem dinàmicament a `resultats.php`.
+
+<details>
+<summary>Fes clic aquí per veure o comprovar el codi sencer de <code>CSS/formulari.css</code></summary>
+
+```css
+body {
+    background-color: #D5E2BC;
+}
+
+#titol {
+    text-align: center;
+    padding: 5px;
+    background-color: #D3C0D2;
+    font-size: 18pt;
+    margin-top: 5px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Donem estil al formulari i el centrem a la web */
+form {
+    border-radius: 7px;
+    text-align: center;
+    margin-top: 20px;
+    width: 400px;
+    background-color: #D0FFD6;
+    padding: 20px;
+    margin-left: 50%;
+    transform: translate(-50%);
+}
+
+/* Donem estil a cadascun dels inputs per a unificar */
+input.nom,
+input.cognoms,
+input.mail,
+select.materia {
+    margin-top: 15px;
+    border-radius: 5px;
+    background-color: beige;
+}
+
+/* Estil dels dos botons inferiors del formulari */
+.botons {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+}
+
+button {
+    margin-left: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    background-color: beige;
+}
+
+/* Donem estil al botó d'accés als resultats */
+.resultats {
+    border-radius: 5px;
+    font-size: 14pt;
+    text-align: center;
+    margin-top: 20px;
+    width: 400px;
+    background-color: #8aaff5;
+    padding: 20px;
+    margin-left: 50%;
+    transform: translate(-50%);
+}
+
+/* Estils per a la taula de resultats.php */
+.fila0 {
+    height: 40px;
+    background-color: cornflowerblue;
+}
+
+table {
+    width: 400px;
+    margin-left: 50%;
+    transform: translate(-50%);
+    background-color: rgba(247, 140, 101, 0.838);
+    border-collapse: collapse;
+    border: 1px solid;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+    border-collapse: collapse;
+    border: 1px solid;
+}
+```
+
+</details>
+
+---
+
+## Comprovació abans de continuar
+
+1. Obre el navegador i entra a `http://localhost/projecte_materies/HTML/formulari.html` per verificar que es veuen els colors, els camps centrats i el botó **Resultats** a sota.
+2. Si ara prems **Enviar**, el navegador et donarà un error (*Object not found / 404*), perquè encara no hem creat `PHP/formulari.php`. A la **Lliçó 4** programarem la connexió amb la base de dades i l'enviament de les dades.

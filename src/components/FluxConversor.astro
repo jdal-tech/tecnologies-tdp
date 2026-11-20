@@ -1,0 +1,223 @@
+---
+// src/components/FluxConversor.astro
+---
+<div class="js-widget not-content">
+  <div class="widget-header">
+    <span class="badge">Laboratori interactiu</span>
+    <h4>Com pensa un Conversor: Entrada ➔ Càlcul ➔ Pantalla</h4>
+    <p class="guide">
+      Escriu una xifra en metres, tria la unitat i prem <strong>Convertir</strong> per veure com viatja la dada per dins del teu codi.
+    </p>
+  </div>
+
+  <!-- 1. INTERFÍCIE DE L'USUARI -->
+  <div class="user-bar">
+    <div class="input-group">
+      <label for="m-in">Metres (m)</label>
+      <input type="text" id="m-in" value="2500" />
+    </div>
+
+    <div class="input-group">
+      <label for="u-in">Passar a</label>
+      <select id="u-in">
+        <option value="km">Quilòmetres (km)</option>
+        <option value="cm">Centímetres (cm)</option>
+      </select>
+    </div>
+
+    <button type="button" id="btn-conv">Convertir</button>
+  </div>
+
+  <!-- 2. ELS 3 PASSOS DEL CODI -->
+  <div class="pipeline">
+    <div class="pipe-card">
+      <span class="step-num">PAS 1 · Llegir l'HTML</span>
+      <code id="p1-code">input.value ➔ "2500"</code>
+      <small id="p1-note">Sempre arriba com a <strong>text (string)</strong>.</small>
+    </div>
+
+    <div class="pipe-arrow">⬇</div>
+
+    <div class="pipe-card">
+      <span class="step-num">PAS 2 · Convertir i calcular</span>
+      <code id="p2-code">Number("2500") / 1000 ➔ 2.5</code>
+      <small id="p2-note">Ho passem a <strong>número</strong> i apliquem la fórmula.</small>
+    </div>
+
+    <div class="pipe-arrow">⬇</div>
+
+    <div id="p3-card" class="pipe-card final">
+      <span class="step-num">PAS 3 · Mostrar a la web</span>
+      <div class="screen-box">
+        <span id="p3-result">2.5 km</span>
+      </div>
+      <small id="p3-code"><code>sortida.textContent = "2.5 km"</code></small>
+    </div>
+  </div>
+</div>
+
+<script>
+  const mIn = document.getElementById('m-in') as HTMLInputElement;
+  const uIn = document.getElementById('u-in') as HTMLSelectElement;
+  const btn = document.getElementById('btn-conv')!;
+
+  const p1Code = document.getElementById('p1-code')!;
+  const p1Note = document.getElementById('p1-note')!;
+  const p2Code = document.getElementById('p2-code')!;
+  const p2Note = document.getElementById('p2-note')!;
+  const p3Card = document.getElementById('p3-card')!;
+  const p3Result = document.getElementById('p3-result')!;
+  const p3Code = document.getElementById('p3-code')!;
+
+  function executar() {
+    const text = mIn.value;
+    const unitat = uIn.value;
+    const num = Number(text);
+
+    p1Code.textContent = `input.value ➔ "${text}"`;
+
+    if (text.trim() === '' || Number.isNaN(num)) {
+      p1Note.innerHTML = 'Has escrit un valor que no és un número.';
+      p2Code.textContent = `Number("${text}") ➔ NaN (Error)`;
+      p2Note.innerHTML = 'No es pot calcular amb lletres o buit.';
+      p3Card.className = 'pipe-card final err';
+      p3Result.textContent = '⚠️ Escriu un número vàlid';
+      p3Code.innerHTML = '<code>if (isNaN(num))</code> atura el càlcul';
+      return;
+    }
+
+    p1Note.innerHTML = 'Sempre arriba com a <strong>text (string)</strong>.';
+
+    const resultat = unitat === 'km' ? num / 1000 : num * 100;
+    const opText = unitat === 'km' ? `${num} / 1000` : `${num} * 100`;
+
+    p2Code.textContent = `Number("${text}") ➔ ${opText} = ${resultat}`;
+    p2Note.innerHTML = `Condició <code>unitat === "${unitat}"</code> complerta.`;
+
+    p3Card.className = 'pipe-card final';
+    p3Result.textContent = `${resultat} ${unitat}`;
+    p3Code.innerHTML = `<code>sortida.textContent = "${resultat} ${unitat}"</code>`;
+  }
+
+  btn.addEventListener('click', executar);
+  executar();
+</script>
+
+<style>
+  .js-widget {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    border-radius: 12px;
+    background: #0f172a;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+  }
+  .widget-header { margin-bottom: 1.25rem; }
+  .badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #facc15;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+  }
+  .widget-header h4 { margin: 0 0 0.5rem; font-size: 1.25rem; color: #f8fafc; }
+  .guide { margin: 0; font-size: 0.92rem; color: #cbd5e1; }
+  .guide strong { color: #f8fafc; }
+
+  .user-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: flex-end;
+    background: #1e293b;
+    padding: 1rem;
+    border-radius: 10px;
+    border: 1px solid #334155;
+    margin-bottom: 1.25rem;
+  }
+  .input-group {
+    flex: 1;
+    min-width: 140px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  label { font-size: 0.8rem; font-weight: 600; color: #94a3b8; }
+  input, select {
+    height: 40px;
+    padding: 0 0.75rem;
+    border-radius: 8px;
+    background: #0f172a;
+    color: #f8fafc;
+    border: 1px solid #475569;
+    font-family: monospace;
+    font-size: 0.95rem;
+  }
+  button {
+    height: 40px;
+    padding: 0 1.25rem;
+    border-radius: 8px;
+    background: #38bdf8;
+    color: #082f49;
+    border: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+  }
+  button:hover { opacity: 0.92; }
+
+  .pipeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .pipe-card {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 0.85rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .step-num {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #38bdf8;
+  }
+  .pipe-card code {
+    font-family: monospace;
+    font-size: 1rem;
+    color: #f8fafc;
+    background: transparent;
+  }
+  .pipe-card small { font-size: 0.85rem; color: #94a3b8; }
+  .pipe-arrow {
+    text-align: center;
+    color: #facc15;
+    font-size: 1.1rem;
+    line-height: 1;
+  }
+  .pipe-card.final {
+    background: rgba(34, 197, 94, 0.1);
+    border-color: rgba(34, 197, 94, 0.45);
+  }
+  .pipe-card.final .step-num { color: #4ade80; }
+  .screen-box {
+    background: #0f172a;
+    padding: 0.5rem 0.85rem;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #4ade80;
+  }
+  .pipe-card.final.err {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.45);
+  }
+  .pipe-card.final.err .step-num,
+  .pipe-card.final.err .screen-box { color: #f87171; }
+</style>

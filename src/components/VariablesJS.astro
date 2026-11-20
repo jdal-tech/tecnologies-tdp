@@ -1,0 +1,185 @@
+---
+// src/components/VariablesJS.astro
+---
+<div class="js-widget not-content">
+  <div class="widget-header">
+    <span class="badge">Laboratori interactiu</span>
+    <h4>Comportament de les variables: <code>let</code> vs <code>const</code></h4>
+  </div>
+
+  <div class="boxes-grid">
+    <!-- Caixa LET -->
+    <div class="var-card let-card">
+      <div class="card-top">
+        <span class="tag tag-let">let (Mutable)</span>
+        <code>let punts = <span id="let-val">10</span>;</code>
+      </div>
+      <div class="action-row">
+        <input type="number" id="let-input" value="25" aria-label="Nou valor per a let" />
+        <button type="button" id="btn-let">Reassignar (punts = ...)</button>
+      </div>
+      <p id="let-msg" class="msg ok">✅ Variable modificada correctament a la memòria.</p>
+    </div>
+
+    <!-- Caixa CONST -->
+    <div id="const-box" class="var-card const-card">
+      <div class="card-top">
+        <span class="tag tag-const">const (Constant)</span>
+        <code>const DNI = <span id="const-val">"12345678A"</span>;</code>
+      </div>
+      <div class="action-row">
+        <input type="text" id="const-input" value="87654321B" aria-label="Nou valor per a const" />
+        <button type="button" id="btn-const">Intentar canviar (DNI = ...)</button>
+      </div>
+      <p id="const-msg" class="msg neutral">🔒 Valor protegit: no es pot reassignar un cop declarat.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const letVal = document.getElementById('let-val')!;
+  const letInput = document.getElementById('let-input') as HTMLInputElement;
+  const btnLet = document.getElementById('btn-let')!;
+  const letMsg = document.getElementById('let-msg')!;
+
+  const constBox = document.getElementById('const-box')!;
+  const constInput = document.getElementById('const-input') as HTMLInputElement;
+  const btnConst = document.getElementById('btn-const')!;
+  const constMsg = document.getElementById('const-msg')!;
+
+  btnLet.addEventListener('click', () => {
+    const nou = letInput.value === '' ? '0' : letInput.value;
+    letVal.textContent = nou;
+    letMsg.textContent = `✅ Correcte! Ara "punts" val ${nou}.`;
+    letMsg.className = 'msg ok';
+  });
+
+  btnConst.addEventListener('click', () => {
+    const intent = constInput.value || 'nouValor';
+    constBox.classList.remove('shake');
+    void constBox.offsetWidth; // Reinicia l'animació CSS
+    constBox.classList.add('shake');
+    constMsg.innerHTML = `❌ <strong>TypeError:</strong> Assignment to constant variable (no es pot canviar a "${intent}").`;
+    constMsg.className = 'msg err';
+  });
+</script>
+
+<style>
+  .js-widget {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    border-radius: 12px;
+    background: #0f172a;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+  }
+  .widget-header { margin-bottom: 1.25rem; }
+  .badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #facc15;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+  }
+  .widget-header h4 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #f8fafc;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .widget-header code {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    font-size: 1.05rem;
+  }
+  .boxes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+  .var-card {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+  .card-top {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .tag {
+    align-self: flex-start;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+  }
+  .tag-let { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
+  .tag-const { background: rgba(250, 204, 21, 0.2); color: #facc15; }
+  .card-top code {
+    font-size: 1.05rem;
+    color: #f8fafc;
+    background: #0f172a;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+  }
+  .action-row {
+    display: flex;
+    gap: 0.5rem;
+  }
+  input {
+    flex: 1;
+    min-width: 0;
+    height: 38px;
+    padding: 0 0.65rem;
+    border-radius: 6px;
+    background: #0f172a;
+    color: #f8fafc;
+    border: 1px solid #475569;
+    font-family: monospace;
+  }
+  button {
+    height: 38px;
+    padding: 0 0.85rem;
+    border-radius: 6px;
+    border: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.15s;
+  }
+  button:hover { opacity: 0.9; }
+  #btn-let { background: #38bdf8; color: #082f49; }
+  #btn-const { background: #facc15; color: #422006; }
+  .msg {
+    margin: 0;
+    font-size: 0.85rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+  }
+  .msg.neutral { background: rgba(148, 163, 184, 0.1); color: #94a3b8; }
+  .msg.ok { background: rgba(34, 197, 94, 0.15); color: #86efac; }
+  .msg.err { background: rgba(239, 68, 68, 0.18); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-6px); }
+    40%, 80% { transform: translateX(6px); }
+  }
+  .shake {
+    animation: shake 0.35s ease;
+    border-color: #ef4444;
+  }
+</style>

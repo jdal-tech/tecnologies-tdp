@@ -1,0 +1,209 @@
+---
+// src/components/SumaConcatJS.astro
+---
+<div class="js-widget not-content">
+  <div class="widget-header">
+    <span class="badge">Laboratori interactiu</span>
+    <h4>L'efecte <code>prompt()</code>: Concatenar vs Sumar amb <code>+</code></h4>
+  </div>
+
+  <div class="inputs-row">
+    <div class="field">
+      <label for="num1">Dada 1 (rebuda com a text)</label>
+      <input type="text" id="num1" value="10" />
+    </div>
+    <div class="field">
+      <label for="num2">Dada 2 (rebuda com a text)</label>
+      <input type="text" id="num2" value="5" />
+    </div>
+  </div>
+
+  <div class="modes">
+    <button type="button" class="mode-btn active" data-mode="string">
+      1. Sense convertir (<code>a + b</code>)
+    </button>
+    <button type="button" class="mode-btn" data-mode="number">
+      2. Amb <code>Number(a) + Number(b)</code>
+    </button>
+    <button type="button" class="mode-btn" data-mode="template">
+      3. Plantilla <code>{'`${a} i ${b}`'}</code>
+    </button>
+  </div>
+
+  <div class="console-out">
+    <div class="code-preview" id="code-line"></div>
+    <div class="output-line">
+      <span class="arrow">➔</span>
+      <span id="out-val" class="val"></span>
+      <span id="out-type" class="type-badge"></span>
+    </div>
+    <p id="out-desc"></p>
+  </div>
+</div>
+
+<script>
+  const in1 = document.getElementById('num1') as HTMLInputElement;
+  const in2 = document.getElementById('num2') as HTMLInputElement;
+  const btns = document.querySelectorAll('.mode-btn');
+  const codeLine = document.getElementById('code-line')!;
+  const outVal = document.getElementById('out-val')!;
+  const outType = document.getElementById('out-type')!;
+  const outDesc = document.getElementById('out-desc')!;
+
+  let currentMode = 'string';
+
+  function render() {
+    const a = in1.value;
+    const b = in2.value;
+
+    if (currentMode === 'string') {
+      const res = a + b;
+      codeLine.textContent = `"${a}" + "${b}"`;
+      outVal.textContent = `"${res}"`;
+      outType.textContent = 'string (text)';
+      outType.className = 'type-badge str';
+      outDesc.textContent = 'Com que almenys un dels dos és text, l’operador + enganxa les cadenes en lloc de sumar.';
+    } else if (currentMode === 'number') {
+      const n1 = Number(a);
+      const n2 = Number(b);
+      const res = n1 + n2;
+      codeLine.textContent = `Number("${a}") + Number("${b}")  // ${n1} + ${n2}`;
+      outVal.textContent = String(res);
+      outType.textContent = Number.isNaN(res) ? 'NaN (No és un número)' : 'number';
+      outType.className = Number.isNaN(res) ? 'type-badge err' : 'type-badge num';
+      outDesc.textContent = Number.isNaN(res)
+        ? 'Alguna de les dades conté lletres i Number() no ho pot convertir a número.'
+        : 'Ara tots dos són números reals i l’operador + fa la suma matemàtica.';
+    } else {
+      codeLine.textContent = `\`El resultat de \${a} i \${b} és \${Number(a) + Number(b)}\``;
+      outVal.textContent = `"El resultat de ${a} i ${b} és ${Number(a) + Number(b)}"`;
+      outType.textContent = 'template literal';
+      outType.className = 'type-badge tpl';
+      outDesc.textContent = 'Amb les cometes inclinades (` `) no cal anar posant + ni vigilant els espais.';
+    }
+  }
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentMode = (btn as HTMLElement).dataset.mode!;
+      render();
+    });
+  });
+
+  [in1, in2].forEach(el => el.addEventListener('input', render));
+  render();
+</script>
+
+<style>
+  .js-widget {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    border-radius: 12px;
+    background: #0f172a;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+  }
+  .widget-header { margin-bottom: 1.25rem; }
+  .badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #facc15;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+  }
+  .widget-header h4 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #f8fafc;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .widget-header code {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    font-size: 1.05rem;
+  }
+  .inputs-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .field { display: flex; flex-direction: column; gap: 0.35rem; }
+  label { font-size: 0.85rem; color: #94a3b8; font-weight: 600; }
+  input {
+    height: 40px;
+    padding: 0 0.75rem;
+    border-radius: 8px;
+    background: #1e293b;
+    color: #f8fafc;
+    border: 1px solid #334155;
+    font-family: monospace;
+    font-size: 1rem;
+  }
+  .modes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .mode-btn {
+    padding: 0.5rem 0.85rem;
+    border-radius: 8px;
+    background: #1e293b;
+    color: #cbd5e1;
+    border: 1px solid #334155;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.15s;
+  }
+  .mode-btn code { background: transparent; color: inherit; }
+  .mode-btn.active {
+    background: rgba(56, 189, 248, 0.18);
+    border-color: #38bdf8;
+    color: #f8fafc;
+    font-weight: 600;
+  }
+  .console-out {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .code-preview {
+    font-family: monospace;
+    font-size: 0.95rem;
+    color: #94a3b8;
+  }
+  .output-line {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    flex-wrap: wrap;
+    font-family: monospace;
+  }
+  .arrow { color: #facc15; font-weight: bold; }
+  .val { font-size: 1.15rem; font-weight: 700; color: #f8fafc; }
+  .type-badge {
+    font-size: 0.75rem;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    font-weight: 700;
+  }
+  .type-badge.str { background: rgba(250, 204, 21, 0.2); color: #facc15; }
+  .type-badge.num { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
+  .type-badge.tpl { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
+  .type-badge.err { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+  .console-out p { margin: 0; font-size: 0.9rem; color: #cbd5e1; }
+</style>

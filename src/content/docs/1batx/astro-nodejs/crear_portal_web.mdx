@@ -1,0 +1,118 @@
+---
+title: "Guia d'Instal·lació: Entorn de Treball amb Node.js i Astro Starlight"
+description: "Manual pràctic i teòric per configurar l'entorn de desenvolupament web i entendre el funcionament de Node.js, npm i Astro."
+---
+
+## 🚀 Introducció i Objectius
+
+En aquesta activitat aprendràs a configurar un entorn de desenvolupament web modern. Utilitzarem **Node.js** i **Astro Starlight** per construir un portal de documentació extremadament ràpid, segur i fàcil de mantenir.
+
+:::note[Requisits d'aprenentatge]
+No necessites coneixements de bases de dades (MySQL) ni de llenguatges de servidor tradicionals (com PHP). Només necessites saber navegar per carpetes, utilitzar la consola d'ordres bàsica i tenir ganes d'aprendre **Markdown**.
+:::
+
+---
+
+## 💡 Conceptes Clau: Com Funciona Aquesta Tecnologia?
+
+Abans de començar a instal·lar res, és essencial comprendre quin paper juga cada eina en l'arquitectura web actual.
+
+```text
+┌────────────────────────────────────────────────────────┐
+│               EL TEU ORDINADOR (LOCAL)                 │
+│                                                        │
+│  ┌──────────────────┐          ┌────────────────────┐  │
+│  │   Astro Engine   │ ───────> │   Entorn Node.js   │  │
+│  │ (Starlight Theme)│          │ (Executa JavaScript│  │
+│  └──────────────────┘          │  fora del navegador│  │
+│           │                    └────────────────────┘  │
+│           │                               │            │
+│           ▼                               ▼            │
+│    Fitxers Markdown            npm (Gestor de paquets) │
+│   (El teu contingut)          (Descarrega eines/codi)  │
+└────────────────────────────────────────────────────────┘
+```
+
+### 1. Què és Node.js?
+Originalment, el llenguatge **JavaScript** només es podia executar DINS d'un navegador web (com Chrome, Safari o Firefox) per fer interactives les pàgines web (animacions, desplegables, etc.).
+
+**Node.js** és un entorn d'execució que permet executar codi JavaScript **directament a l'ordinador** (fora del navegador). Gràcies a Node.js, els desenvolupadors poden utilitzar eines de construcció web, automatitzar tasques i executar servidors locals des de la mateixa màquina.
+
+### 2. Què vol dir que "fa de servidor"?
+Quan desenvolupes una pàgina web, necessites provar com queda abans de publicar-la a Internet.
+
+* **Servidor en Producció (Internet):** És un ordinador remot encarregat de servir la web a usuaris de tot el món les 24 hores del dia.
+* **Servidor Local de Desenvolupament (El teu ordinador):** En executar la comanda de desenvolupament, Node.js crea un "mini-servidor" privat al teu ordinador (normalment a `http://localhost:4321`). Aquest servidor detecta quan guardes un fitxer Markdown, reprocessa la pàgina i actualitza el navegador a l'instant.
+
+### 3. Què és npm?
+Juntament amb Node.js s'instal·la **npm** (*Node Package Manager*). És el gestor de paquets de codi més gran del món. Ens permet instal·lar programes, llibreries i eines (com el mateix Astro) amb una sola línia de comandes.
+
+### 4. Què és Astro i per què utilitzem Starlight?
+* **Astro:** És un *framework* dissenyat per crear webs ultra ràpides. La seva filosofia és no enviar codi JavaScript innecessari al navegador de l'usuari final.
+* **Starlight:** És una plantilla oficial d'Astro optimitzada per a **portals educatius, documentació i guies**. Organitza automàticament els fitxers en seccions, genera taules de contingut i inclou un cercador integrat.
+
+---
+
+## 🛠️ 1. Instal·lació del Programari Base
+
+Per poder treballar necessitem dues eines gratuïtes i de codi obert:
+
+| Eina | Tipus | Funció principal | Enllaç |
+| :--- | :--- | :--- | :--- |
+| **Node.js** | Entorn d'execució | Executar eines JavaScript i el servidor local | [nodejs.org](https://nodejs.org/) |
+| **VS Code** | Editor de codi | Crear i editar els fitxers Markdown | [code.visualstudio.com](https://code.visualstudio.com/) |
+
+### Pas 1.1: Instal·lació de Node.js
+1. Accedeix a **[nodejs.org](https://nodejs.org/)**.
+2. Descarrega la versió **LTS** (*Long Term Support*).
+   :::tip[Per què la versió LTS?]
+   La versió LTS és la més estable i provada. La versió *Current* té les últimes novetats però pot contenir errors no resolts.
+   :::
+3. Executa el fitxer descarregat:
+   * **Windows:** Obre el fitxer `.msi` i prem *Next* / *Següent* a totes les pantalles per defecte.
+   * **macOS (Intel / Apple Silicon M1, M2, M3):** Obre el fitxer `.pkg`, prem *Continuar* i autoritza la instal·lació amb la teva contrasenya de sistema o Touch ID.
+
+### Pas 1.2: Instal·lació de Visual Studio Code
+1. Entra a **[code.visualstudio.com](https://code.visualstudio.com/)**.
+2. Descarrega la versió corresponent al teu sistema operatiu (Windows o macOS).
+3. Instal·la l'aplicació i obre-la per comprovar que funciona.
+
+---
+
+## 🔍 2. Verificació de la Instal·lació
+
+Després d'instal·lar el programari, hem de comprovar que el sistema reconeix les eines des de la línia d'ordres.
+
+Obre la terminal del teu sistema operatiu:
+* **En Windows:** Prem la tecla `Win`, escriu `cmd` o `PowerShell` i prem `Enter`.
+* **En macOS:** Prem `Cmd + Espai`, escriu `Terminal` i prem `Enter`.
+
+:::caution[Atenció usuaris de Mac]
+Si tenies la finestra de la Terminal oberta abans o durant la instal·lació de Node.js, tanca-la completament (`Cmd + Q`) i torna-la a obrir perquè es carreguin les noves rutes del sistema.
+:::
+
+Executa les següents comandes per verificar les versions instal·lades:
+
+```bash
+# Comprova la versió de Node.js (hauria de retornar v18.x.x, v20.x.x o superior)
+node -v
+
+# Comprova la versió del gestor de paquets npm
+npm -v
+```
+
+Si ambdues comandes retornen un número de versió (per exemple, `v20.11.0` i `10.2.4`), la instal·lació s'ha completat amb èxit.
+
+---
+
+## 🧪 3. Comprovació Pràctica del Servidor Local
+
+Per comprovar com funciona el servidor local en aquest projecte:
+
+1. Obre la carpeta del projecte a la terminal o utilitza la terminal integrada de **Visual Studio Code** (`Control + ~` o Menú *Terminal > New Terminal*).
+2. Executa la comanda per arrancar el servidor local:
+   ```bash
+   npm run dev
+   ```
+3. Veuràs un missatge a la consola que indica que el servidor està actiu a l'adreça `http://localhost:4321/`.
+4. Obre el teu navegador i entra a aquesta adreça per veure el projecte funcionant en temps real.

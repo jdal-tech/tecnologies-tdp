@@ -1,0 +1,87 @@
+---
+title: 5. Mostrar els resultats des de la BBDD
+description: Creació del fitxer resultats.php per llegir els registres de MySQL amb SELECT i generar una taula HTML dinàmica.
+---
+
+import SimuladorBucleResultats from '../../../../components/SimuladorBucleResultats.astro';
+
+Ja hem comprovat que el nostre formulari desa les dades dins de MySQL. Però un usuari normal de la nostra web no entrarà mai a `phpMyAdmin` per veure qui s'ha inscrit: necessita una pàgina web que llegeixi la base de dades i mostri les inscripcions en una taula ben presentada.
+
+Aquesta és la funció del fitxer **`PHP/resultats.php`** (al qual enllaçava el botó blau *Resultats* de `formulari.html`).
+
+## Pas 1: Creació del fitxer `PHP/resultats.php`
+
+Crea el fitxer `resultats.php` dins de la carpeta `PHP/`. Observa que aquest fitxer barreja **HTML estàtic** (la capçalera de la pàgina i la primera fila `fila0` de la taula) amb un bloc **`<?php ... ?>`** que fabrica tantes files `<tr>` com alumnes hi hagi desats:
+
+1. **`SELECT * FROM materies`:** És la consulta SQL que demana a MySQL **totes les columnes (`*`)** de **totes les files** de la taula `materies`.
+2. **`mysqli_fetch_array($executa)`:** Aquesta funció agafa **una fila** del resultat de la consulta i la converteix en un array associatiu (`$llista['nom']`, `$llista['cognoms']`, etc.). Cada vegada que es crida, avança automàticament a la fila següent.
+3. **El bucle `while (...)`:** Repeteix el bloc d'instruccions `echo` mentre `mysqli_fetch_array` trobi files noves. Quan arriba al final de la taula i no queden més registres, retorna `false` i el bucle s'atura sol.
+
+<details>
+<summary>Fes clic aquí per veure o comprovar el codi sencer de <code>PHP/resultats.php</code></summary>
+
+```php
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultats</title>
+    <link rel="stylesheet" href="../CSS/formulari.css">
+</head>
+<body>
+    <div id="titol">
+        <h1>Dades de la Taula Materies a la Base de dades</h1>
+    </div>
+    
+    <table>
+        <tr class="fila0">
+            <th>Nom</th>
+            <th>Cognoms</th>
+            <th>Mail</th>
+            <th>Matèria</th>
+        </tr>
+        
+        <?php
+        // Realitzem la connexió a la base de dades
+        include_once('db.php');
+        $conectar = conn();
+
+        // Seleccionem la taula i adquirim les dades
+        $sql = "SELECT * FROM materies";
+        $executa = mysqli_query($conectar, $sql);
+
+        // Recorrem fila per fila mentre hi hagi registres a la consulta
+        while ($llista = mysqli_fetch_array($executa)) {
+            echo "<tr>";
+                echo "<td>" . $llista['nom'] . "</td>";
+                echo "<td>" . $llista['cognoms'] . "</td>";
+                echo "<td>" . $llista['mail'] . "</td>";
+                echo "<td>" . $llista['materia'] . "</td>";
+            echo "</tr>";
+        }
+        ?>
+    </table>
+</body>
+</html>
+```
+
+</details>
+
+<SimuladorBucleResultats />
+
+:::tip[Per què fem servir `while` en lloc d'un bucle `for`?]
+Com que no sabem per endavant quants alumnes s'hauran inscrit al formulari (avui en poden ser 3 i demà 45), un bucle **`while`** és ideal: s'adapta automàticament al nombre exacte de files que hi hagi a MySQL en cada moment.
+:::
+
+---
+
+## Prova final del projecte complet
+
+Comprova ara el funcionament de tota l'aplicació de principi a fi:
+
+1. Obre `http://localhost/projecte_materies/HTML/formulari.html` al navegador.
+2. Inscriu un parell d'alumnes nous i prem **Enviar**.
+3. Torna enrere i fes clic al botó **Resultats** (o entra directament a `http://localhost/projecte_materies/PHP/resultats.php`).
+4. Hauries de veure la taula amb els estils de `formulari.css` (capçalera blau fort i files salmó) mostrant tots els registres de la base de dades!

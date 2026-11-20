@@ -1,0 +1,196 @@
+---
+title: "ACT_6: Barra de Càrrega Animada"
+description: "Projecte integrador en 3 fitxers (HTML, CSS i JS) amb temporització dinàmica mitjançant setTimeout()"
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import SimuladorJS from '/src/components/SimuladorJS.astro';
+
+Crea una aplicació interactiva estructurada en **3 fitxers** (`loadingbar.html`, `loadingbar.css` i `loadingbar.js`) per simular la càrrega progressiva d'un sistema del `0%` al `100%`.
+
+---
+
+#### 6.1 Estructura HTML (`loadingbar.html`) <Badge text="BARRA_01" variant="caution" />
+
+1. Enllaça l'arxiu CSS a la capçalera `<head>` i el fitxer JS `loadingbar.js` al final del `<body>`.
+2. Dins d'un contenidor principal amb la classe `container`, crea els 4 elements necessaris:
+   * Un títol o paràgraf amb el text `"Carregant"`.
+   * Un comptador de percentatge definit amb la classe `comptador` (inicialment `0%`).
+   * Una barra inferior `<hr>` amb la classe `barra_inferior`.
+   * Una barra superior `<hr>` amb la classe `barra_superior`.
+
+<SimuladorJS 
+  codi={[
+    '<!-- Fitxer: loadingbar.html -->',
+    '<div class="container">',
+    '  <h2 id="estat">Carregant...</h2>',
+    '  <div class="comptador">0%</div>',
+    '  <hr class="barra_inferior" />',
+    '  <hr class="barra_superior" />',
+    '</div>',
+    '<script src="loadingbar.js"></script>'
+  ]}
+  htmlInicial={`<div style="color:#94a3b8; font-size:0.8rem;">loadingbar.html buit</div>`}
+  htmlFinal={`<div style="font-family:serif; color:#0f172a;">
+  <h3 style="margin:0 0 6px 0; font-size:1.05rem;">Carregant...</h3>
+  <div style="font-size:1.1rem; margin-bottom:6px;">0%</div>
+  <hr style="margin:4px 0;" />
+  <hr style="margin:4px 0;" />
+</div>`}
+/>
+
+---
+
+#### 6.2 Estils CSS (`loadingbar.css`) <Badge text="BARRA_02" variant="caution" />
+
+1. Centra el contingut a la pantalla (`display: flex; justify-content: center; align-items: center; height: 100vh;`), assigna un fons fosc i text clar.
+2. Dóna-li al `.container` una amplada de `350px` i `position: relative;` per acotar les barres.
+3. A `.barra_inferior`, assigna `position: absolute;`, `height: 8px;`, `border: none;`, fons gris fosc i `width: 100%;`.
+4. A `.barra_superior`, aplica el mateix posicionament absolut però amb un color llampant (ex: `#0082C1` o `orangered`) i `width: 0%;` d'inici.
+
+<SimuladorJS 
+  codi={[
+    '/* Fitxer: loadingbar.css */',
+    '.container {',
+    '  width: 350px;',
+    '  position: relative;',
+    '  text-align: center;',
+    '}',
+    '.barra_inferior, .barra_superior {',
+    '  position: absolute;',
+    '  height: 8px;',
+    '  border: none;',
+    '  border-radius: 5px;',
+    '}',
+    '.barra_inferior { width: 100%; background: #334155; }',
+    '.barra_superior { width: 0%; background: #38bdf8; }'
+  ]}
+  htmlInicial={`<div style="font-family:serif; color:#0f172a;">
+  <h3 style="margin:0 0 6px 0; font-size:1.05rem;">Carregant...</h3>
+  <div style="font-size:1.1rem; margin-bottom:6px;">0%</div>
+  <hr style="margin:4px 0;" />
+  <hr style="margin:4px 0;" />
+</div>`}
+  htmlFinal={`<div style="background:#0f172a; color:#f8fafc; padding:22px 16px; border-radius:6px; text-align:center;">
+  <div style="font-weight:bold; font-size:0.95rem; margin-bottom:4px;">Carregant...</div>
+  <div style="font-size:1.4rem; font-weight:bold; margin-bottom:12px;">0%</div>
+  <div style="position:relative; height:8px; width:100%;">
+    <div style="position:absolute; width:100%; height:8px; background:#334155; border-radius:5px;"></div>
+    <div style="position:absolute; width:0%; height:8px; background:#38bdf8; border-radius:5px;"></div>
+  </div>
+</div>`}
+/>
+
+---
+
+#### 6.3 Lògica JavaScript (`loadingbar.js`) <Badge text="BARRA_03" variant="caution" />
+
+1. Selecciona els dos elements a manipular (`.comptador` i `.barra_superior`) utilitzant `document.querySelector()`.
+2. Declara una variable d'índex `let valor = 0;`.
+3. Crea una funció `augmentar_valor()` que actualitzi el text amb `innerText = valor + "%"` i l'ample amb `style.width = valor + "%"`.
+4. Incrementa el valor a cada passada (`valor++`) i utilitza `setTimeout(augmentar_valor, 30)` dins d'un `if (valor <= 100)` per repetir l'execució cada `30ms` fins arribar al `100%`.
+
+<SimuladorJS 
+  codi={[
+    'const comptador = document.querySelector(".comptador");',
+    'const barra = document.querySelector(".barra_superior");',
+    '',
+    'let valor = 0;',
+    '',
+    'function augmentar_valor() {',
+    '  comptador.innerText = valor + "%";',
+    '  barra.style.width = valor + "%";',
+    '  valor++;',
+    '',
+    '  if (valor <= 100) {',
+    '    setTimeout(augmentar_valor, 30);',
+    '  }',
+    '}',
+    '',
+    'augmentar_valor();'
+  ]}
+  htmlInicial={`<div style="background:#0f172a; color:#f8fafc; padding:22px 16px; border-radius:6px; text-align:center;">
+  <div style="font-weight:bold; font-size:0.95rem; margin-bottom:4px;">Carregant...</div>
+  <div style="font-size:1.4rem; font-weight:bold; margin-bottom:12px;">0%</div>
+  <div style="position:relative; height:8px; width:100%;">
+    <div style="position:absolute; width:100%; height:8px; background:#334155; border-radius:5px;"></div>
+    <div style="position:absolute; width:0%; height:8px; background:#38bdf8; border-radius:5px;"></div>
+  </div>
+</div>`}
+  htmlIntermig={`<div style="background:#0f172a; color:#f8fafc; padding:22px 16px; border-radius:6px; text-align:center;">
+  <div style="font-weight:bold; font-size:0.95rem; margin-bottom:4px;">Carregant...</div>
+  <div style="font-size:1.4rem; font-weight:bold; margin-bottom:12px; color:#38bdf8;">54%</div>
+  <div style="position:relative; height:8px; width:100%;">
+    <div style="position:absolute; width:100%; height:8px; background:#334155; border-radius:5px;"></div>
+    <div style="position:absolute; width:54%; height:8px; background:#38bdf8; border-radius:5px;"></div>
+  </div>
+</div>`}
+  htmlFinal={`<div style="background:#0f172a; color:#f8fafc; padding:22px 16px; border-radius:6px; text-align:center;">
+  <div style="font-weight:bold; font-size:0.95rem; margin-bottom:4px;">Carregant...</div>
+  <div style="font-size:1.4rem; font-weight:bold; margin-bottom:12px; color:#4ade80;">100%</div>
+  <div style="position:relative; height:8px; width:100%;">
+    <div style="position:absolute; width:100%; height:8px; background:#334155; border-radius:5px;"></div>
+    <div style="position:absolute; width:100%; height:8px; background:#4ade80; border-radius:5px;"></div>
+  </div>
+</div>`}
+/>
+
+---
+
+#### 6.4 Repte final: Missatge completat i botó de reinici <Badge text="BARRA_04" variant="caution" />
+
+1. Afegeix un botó `<button id="btnReiniciar">Reiniciar</button>` sota de les barres a l'HTML.
+2. Dins de `augmentar_valor()`, afegeix un bloc `else` per canviar el text de `"Carregant..."` a `"✅ Sistema completat!"` quan la barra arribi al `100%`.
+3. Connecta el botó amb `addEventListener("click", ...)` perquè posi `valor = 0`, restableixi el text original i torni a arrencar `augmentar_valor()`.
+
+<SimuladorJS 
+  codi={[
+    'const estat = document.getElementById("estat");',
+    'const btnReiniciar = document.getElementById("btnReiniciar");',
+    '',
+    '// Dins de augmentar_valor():',
+    'if (valor <= 100) {',
+    '  setTimeout(augmentar_valor, 30);',
+    '} else {',
+    '  estat.innerText = "✅ Sistema completat!";',
+    '}',
+    '',
+    'btnReiniciar.addEventListener("click", function () {',
+    '  valor = 0;',
+    '  estat.innerText = "Carregant...";',
+    '  augmentar_valor();',
+    '});'
+  ]}
+  htmlInicial={`<div style="background:#0f172a; color:#f8fafc; padding:18px 16px; border-radius:6px; text-align:center;">
+  <div style="font-weight:bold; font-size:0.95rem; margin-bottom:4px;">Carregant...</div>
+  <div style="font-size:1.3rem; font-weight:bold; margin-bottom:10px; color:#38bdf8;">82%</div>
+  <div style="position:relative; height:8px; width:100%; margin-bottom:14px;">
+    <div style="position:absolute; width:100%; height:8px; background:#334155; border-radius:5px;"></div>
+    <div style="position:absolute; width:82%; height:8px; background:#38bdf8; border-radius:5px;"></div>
+  </div>
+  <button style="background:#1e293b; color:#94a3b8; border:1px solid #334155; padding:4px 12px; border-radius:4px; font-size:0.75rem;">Reiniciar</button>
+</div>`}
+  htmlFinal={`<div style="background:#0f172a; color:#f8fafc; padding:18px 16px; border-radius:6px; text-align:center;">
+  <div style="font-weight:bold; font-size:0.95rem; margin-bottom:4px; color:#4ade80;">✅ Sistema completat!</div>
+  <div style="font-size:1.3rem; font-weight:bold; margin-bottom:10px; color:#4ade80;">100%</div>
+  <div style="position:relative; height:8px; width:100%; margin-bottom:14px;">
+    <div style="position:absolute; width:100%; height:8px; background:#334155; border-radius:5px;"></div>
+    <div style="position:absolute; width:100%; height:8px; background:#4ade80; border-radius:5px;"></div>
+  </div>
+  <button style="background:#0082C1; color:white; border:none; padding:4px 12px; border-radius:4px; font-size:0.75rem; font-weight:bold;">↻ Reiniciar</button>
+</div>`}
+/>
+
+---
+
+<details style="border: 1px solid #3f3f46; padding: 12px; background: #09090b; border-radius: 6px;">
+<summary style="color: #ef4444; font-weight: bold; cursor: pointer;">[ + VEURE PISTES DE L'ACTIVITAT ]</summary>
+
+<div style="margin-top: 10px; color: #d4d4d8;">
+
+- **Etiqueta `<hr>`:** Per defecte els navegadors li posen una vora grisa (`border: inset`) i marges. Afegeix `border: none; margin: 0;` al CSS perquè es vegi com una barra plana i neta.
+- **Superposició de barres:** Perquè `.barra_superior` quedi exactament damunt de `.barra_inferior`, totes dues han de tenir `position: absolute; left: 0;` dins d'un pare amb `position: relative;`.
+- **Temporitzador:** `setTimeout(augmentar_valor, 30)` espera `30` mil·lisegons (`0,03` segons) i torna a cridar la funció. Fixa't que el nom de la funció dins de `setTimeout` s'escriu **sense parèntesis**.
+
+</div>
+</details>

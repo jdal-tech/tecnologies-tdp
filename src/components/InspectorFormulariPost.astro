@@ -1,0 +1,281 @@
+---
+// src/components/InspectorFormulariPost.astro
+---
+
+<div class="insp-wrapper not-content">
+  <div class="insp-header">
+    <div>
+      <span class="badge-lab">LABORATORI HTML → PHP</span>
+      <h3>Anatomia d'un formulari: <code>class</code> vs <code>name</code></h3>
+    </div>
+  </div>
+
+  <div class="insp-guide">
+    <p><strong>Guia d'ús:</strong></p>
+    <ol>
+      <li>Omple els camps del formulari de l'esquerra com si fossis un alumne.</li>
+      <li>Observa a la dreta com <strong>PHP captura cada dada</strong> fent servir exactament el valor de l'atribut <code>name="..."</code>.</li>
+      <li>Fixa't en l'etiqueta <code>&lt;select&gt;</code>: el que rep PHP no és el text visible, sinó l'atribut <code>value="..."</code> de l'opció triada.</li>
+    </ol>
+  </div>
+
+  <div class="insp-grid">
+    <!-- PANELL ESQUERRE: FORMULARI SIMULAT -->
+    <div class="panel-card">
+      <h4>1. Vista del formulari (HTML + CSS)</h4>
+      <div class="form-sim">
+        <div class="field-row">
+          <label for="demo-nom">Nom <span class="attr-tag">name="nom"</span></label>
+          <input type="text" id="demo-nom" value="Pol" />
+        </div>
+        <div class="field-row">
+          <label for="demo-cognoms">Cognoms <span class="attr-tag">name="cognoms"</span></label>
+          <input type="text" id="demo-cognoms" value="Serra Vila" />
+        </div>
+        <div class="field-row">
+          <label for="demo-mail">Mail <span class="attr-tag">name="mail"</span></label>
+          <input type="email" id="demo-mail" value="pol@institut.cat" />
+        </div>
+        <div class="field-row">
+          <label for="demo-materia">Matèria <span class="attr-tag">name="materia"</span></label>
+          <select id="demo-materia">
+            <option value="programacio">Programació</option>
+            <option value="robotica" selected>Robòtica</option>
+            <option value="biomedicia">Biomedicina</option>
+            <option value="reptes">Reptes mèdics</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANELL DRET: PAQUET POST QUE REBRÀ PHP -->
+    <div class="panel-card">
+      <h4>2. Què rebrà <code>formulari.php</code>?</h4>
+      <p class="panel-desc">Quan premis <strong>Enviar</strong>, el navegador empaqueta les dades dins de la variable global <code>$_POST</code>:</p>
+
+      <pre class="php-dump" id="php-dump-output"><code></code></pre>
+
+      <div class="tip-box">
+        <strong>Recorda:</strong> L'atribut <code>class="..."</code> només serveix per donar colors i mides al fitxer <code>formulari.css</code>. Si t'oblides de posar <code>name="..."</code>, PHP no rebrà res!
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .insp-wrapper {
+    box-sizing: border-box;
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    color: #f8fafc;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+
+  .insp-wrapper *,
+  .insp-wrapper *::before,
+  .insp-wrapper *::after {
+    box-sizing: border-box;
+  }
+
+  .insp-header {
+    margin-bottom: 1rem;
+  }
+
+  .badge-lab {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #0f172a;
+    background-color: #38bdf8;
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    margin-bottom: 0.4rem;
+  }
+
+  .insp-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #f8fafc;
+  }
+
+  .insp-guide {
+    background-color: #1e293b;
+    border-left: 4px solid #facc15;
+    border-radius: 6px;
+    padding: 0.85rem 1rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+    color: #cbd5e1;
+  }
+
+  .insp-guide p {
+    margin: 0 0 0.35rem 0;
+    color: #f8fafc;
+  }
+
+  .insp-guide ol {
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+
+  .insp-guide li {
+    margin-bottom: 0.2rem;
+  }
+
+  .insp-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 780px) {
+    .insp-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .panel-card {
+    min-width: 0;
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .panel-card h4 {
+    margin: 0;
+    font-size: 1.02rem;
+    color: #f8fafc;
+  }
+
+  .panel-desc {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #cbd5e1;
+  }
+
+  .form-sim {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .field-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .field-row label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.84rem;
+    color: #f8fafc;
+    font-weight: 500;
+  }
+
+  .attr-tag {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.75rem;
+    color: #facc15;
+    background-color: #0f172a;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    border: 1px solid #334155;
+  }
+
+  .field-row input,
+  .field-row select {
+    width: 100%;
+    background-color: #0f172a;
+    border: 1px solid #475569;
+    border-radius: 6px;
+    padding: 0.45rem 0.65rem;
+    color: #f8fafc;
+    font-size: 0.9rem;
+  }
+
+  .field-row input:focus,
+  .field-row select:focus {
+    outline: none;
+    border-color: #38bdf8;
+  }
+
+  .php-dump {
+    margin: 0;
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 0.85rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.82rem;
+    line-height: 1.55;
+    color: #38bdf8;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .tip-box {
+    background-color: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 6px;
+    padding: 0.7rem 0.85rem;
+    font-size: 0.83rem;
+    color: #cbd5e1;
+    line-height: 1.4;
+  }
+
+  .tip-box strong {
+    color: #38bdf8;
+  }
+
+  .insp-wrapper code {
+    background-color: rgba(15, 23, 42, 0.85);
+    color: #facc15;
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-size: 0.85em;
+  }
+</style>
+
+<script>
+  function initInspectorPost() {
+    const nom = document.getElementById('demo-nom') as HTMLInputElement | null;
+    const cognoms = document.getElementById('demo-cognoms') as HTMLInputElement | null;
+    const mail = document.getElementById('demo-mail') as HTMLInputElement | null;
+    const materia = document.getElementById('demo-materia') as HTMLSelectElement | null;
+    const output = document.getElementById('php-dump-output');
+
+    if (!nom || !cognoms || !mail || !materia || !output) return;
+
+    function updateDump() {
+      const n = nom!.value.replace(/"/g, '\\"');
+      const c = cognoms!.value.replace(/"/g, '\\"');
+      const m = mail!.value.replace(/"/g, '\\"');
+      const mat = materia!.value;
+
+      output!.textContent =
+        `$_POST = [\n` +
+        `  'nom'     => "${n}",\n` + `  'cognoms' => "${c}",\n` +
+        `  'mail'    => "${m}",\n` + `  'materia' => "${mat}"\n` +
+        `];`;
+    }
+
+    [nom, cognoms, mail].forEach((el) => el.addEventListener('input', updateDump));
+    materia.addEventListener('change', updateDump);
+
+    updateDump();
+  }
+
+  initInspectorPost();
+  document.addEventListener('astro:after-swap', initInspectorPost);
+</script>

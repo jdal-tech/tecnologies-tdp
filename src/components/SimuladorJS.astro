@@ -1,0 +1,305 @@
+---
+interface Props {
+  codi: string[];
+  sortida?: { text: string; tipus?: 'normal' | 'error' }[];
+  htmlInicial?: string;
+  htmlIntermig?: string;
+  htmlFinal?: string;
+  clau?: string;
+}
+
+const { codi, sortida = [], htmlInicial, htmlIntermig, htmlFinal, clau = '1234' } = Astro.props;
+const idUnic = `sim-${Math.random().toString(36).slice(2, 9)}`;
+const teNavegador = Boolean(htmlInicial && htmlFinal);
+---
+
+<div class="simulador-container" id={idUnic}>
+  <!-- Pantalla de bloqueig inicial -->
+  <div class="bloqueig-overlay">
+    <div class="bloqueig-box">
+      <span class="candau">🔒</span>
+      <p>Solució animada protegida</p>
+      <div class="input-grup">
+        <input type="password" class="input-clau" placeholder="Contrasenya..." />
+        <button type="button" class="btn-desbloquejar">Desbloquejar</button>
+      </div>
+      <span class="missatge-error"></span>
+    </div>
+  </div>
+
+  <!-- Contingut real del simulador -->
+  <div class="contingut-simulador amagat">
+    <div class="simulador-header">
+      <span>⚡ Simulació en directe</span>
+      <button class="btn-play" type="button">▶ Executar</button>
+    </div>
+
+    <div class={`simulador-grid ${teNavegador ? 'amb-navegador' : ''}`}>
+      <!-- 1. Editor de codi -->
+      <div class="panel-codi">
+        <div class="panel-titol">script.js</div>
+        <pre><code class="codi-desti"></code><span class="cursor">|</span></pre>
+      </div>
+
+      <!-- 2. Vista prèvia del Navegador (només per exercicis DOM) -->
+      {teNavegador && (
+        <div class="panel-navegador">
+          <div class="barra-navegador">
+            <span class="punt vermell"></span>
+            <span class="punt groc"></span>
+            <span class="punt verd"></span>
+            <span class="url-simulada">index.html</span>
+          </div>
+          <div class="pantalla-web" set:html={htmlInicial}></div>
+        </div>
+      )}
+
+      <!-- 3. Consola (si hi ha línies de sortida) -->
+      {sortida.length > 0 && (
+        <div class="panel-consola">
+          <div class="panel-titol">Consola (F12)</div>
+          <div class="consola-desti"></div>
+        </div>
+      )}
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ idUnic, codi, sortida, clau, htmlInicial, htmlIntermig, htmlFinal, teNavegador }}>
+  const contenidor = document.getElementById(idUnic);
+  const bloqueig = contenidor.querySelector('.bloqueig-overlay');
+  const contingut = contenidor.querySelector('.contingut-simulador');
+  const inputClau = contenidor.querySelector('.input-clau');
+  const btnDesbloquejar = contenidor.querySelector('.btn-desbloquejar');
+  const msgError = contenidor.querySelector('.missatge-error');
+
+  const btnPlay = contenidor.querySelector('.btn-play');
+  const codiDesti = contenidor.querySelector('.codi-desti');
+  const consolaDesti = contenidor.querySelector('.consola-desti');
+  const pantallaWeb = contenidor.querySelector('.pantalla-web');
+  const cursor = contenidor.querySelector('.cursor');
+
+  let executant = false;
+
+  function comprovarClau() {
+    if (inputClau.value === clau) {
+      bloqueig.classList.add('amagat');
+      contingut.classList.remove('amagat');
+      animarSimulacio();
+    } else {
+      msgError.textContent = '❌ Contrasenya incorrecta';
+      inputClau.value = '';
+      inputClau.focus();
+    }
+  }
+
+  btnDesbloquejar.addEventListener('click', comprovarClau);
+  inputClau.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') comprovarClau();
+  });
+
+  async function animarSimulacio() {
+    if (executant) return;
+    executant = true;
+    btnPlay.disabled = true;
+    btnPlay.textContent = '⏳ Executant...';
+    codiDesti.textContent = '';
+    if (consolaDesti) consolaDesti.innerHTML = '';
+    if (teNavegador && pantallaWeb) {
+      pantallaWeb.innerHTML = htmlInicial;
+      pantallaWeb.classList.remove('actualitzat');
+    }
+    cursor.style.display = 'inline';
+
+    // 1. Escriure codi JS
+    const textComplet = codi.join('\n');
+    for (let i = 0; i < textComplet.length; i++) {
+      codiDesti.textContent += textComplet[i];
+      await new Promise(r => setTimeout(r, 22));
+    }
+
+    cursor.style.display = 'none';
+    await new Promise(r => setTimeout(r, 350));
+
+    // 2. Pas entremig al navegador (per exemple, finestra prompt on l'usuari escriu)
+    if (teNavegador && pantallaWeb && htmlIntermig) {
+      pantallaWeb.innerHTML = htmlIntermig;
+      pantallaWeb.classList.add('actualitzat');
+      await new Promise(r => setTimeout(r, 1400));
+      pantallaWeb.classList.remove('actualitzat');
+      await new Promise(r => setTimeout(r, 50));
+    }
+
+    // 3. Transformació final de la finestra del navegador
+    if (teNavegador && pantallaWeb) {
+      pantallaWeb.innerHTML = htmlFinal;
+      pantallaWeb.classList.add('actualitzat');
+      await new Promise(r => setTimeout(r, 400));
+    }
+
+    // 4. Mostrar consola (si n'hi ha)
+    if (consolaDesti && sortida.length > 0) {
+      for (const linia of sortida) {
+        const div = document.createElement('div');
+        div.className = linia.tipus === 'error' ? 'linia-error' : 'linia-normal';
+        div.textContent = linia.tipus === 'error' ? `❌ ${linia.text}` : `> ${linia.text}`;
+        consolaDesti.appendChild(div);
+        await new Promise(r => setTimeout(r, 450));
+      }
+    }
+
+    btnPlay.disabled = false;
+    btnPlay.textContent = '↻ Repetir animació';
+    executant = false;
+  }
+
+  btnPlay.addEventListener('click', animarSimulacio);
+</script>
+
+<style>
+  .amagat { display: none !important; }
+  .simulador-container {
+    background: #14161a;
+    border: 1px solid #2e323b;
+    border-left: 4px solid #0082C1;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+    overflow: hidden;
+    font-family: system-ui, sans-serif;
+  }
+  .bloqueig-overlay {
+    padding: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #181b20;
+  }
+  .bloqueig-box {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .bloqueig-box p { margin: 0; font-size: 0.9rem; color: #d4d4d4; font-weight: 600; }
+  .candau { font-size: 1.5rem; }
+  .input-grup { display: flex; gap: 0.5rem; margin-top: 0.3rem; }
+  .input-clau {
+    background: #0f1115;
+    border: 1px solid #3f4451;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    outline: none;
+  }
+  .input-clau:focus { border-color: #0082C1; }
+  .btn-desbloquejar, .btn-play {
+    background: #0082C1;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+  .btn-desbloquejar:hover, .btn-play:hover { background: #006ba1; }
+  .btn-play:disabled { opacity: 0.6; cursor: not-allowed; }
+  .missatge-error { color: #f48771; font-size: 0.8rem; min-height: 1.1rem; }
+
+  .simulador-header {
+    background: #1d2026;
+    padding: 0.6rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #2e323b;
+    font-size: 0.85rem;
+    color: #a0a8b8;
+  }
+  .simulador-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  @media (max-width: 750px) {
+    .simulador-grid { grid-template-columns: 1fr; }
+  }
+  .panel-codi, .panel-consola {
+    padding: 1rem;
+    font-family: monospace;
+    font-size: 0.85rem;
+    min-height: 130px;
+  }
+  .panel-codi {
+    border-right: 1px solid #2e323b;
+    color: #9cdcfe;
+  }
+  .panel-titol {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #6c7382;
+    margin-bottom: 0.6rem;
+    letter-spacing: 0.05em;
+  }
+
+  .panel-navegador {
+    background: #ffffff;
+    color: #1e1e1e;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #2e323b;
+  }
+  .barra-navegador {
+    background: #e4e4e7;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 1px solid #d4d4d8;
+  }
+  .punt { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  .vermell { background: #ef4444; }
+  .groc { background: #eab308; }
+  .verd { background: #22c55e; }
+  .url-simulada {
+    background: #ffffff;
+    color: #52525b;
+    font-size: 0.72rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 6px;
+    font-family: monospace;
+  }
+  .pantalla-web {
+    padding: 1rem;
+    font-size: 0.9rem;
+    flex: 1;
+    transition: all 0.3s ease;
+  }
+  .pantalla-web.actualitzat {
+    animation: flaixCanvi 0.5s ease;
+  }
+  @keyframes flaixCanvi {
+    0% { background-color: #e0f2fe; }
+    100% { background-color: #ffffff; }
+  }
+
+  pre { margin: 0; white-space: pre-wrap; background: transparent !important; padding: 0 !important; }
+  .cursor { animation: parpelleig 0.8s infinite; color: #0082C1; font-weight: bold; }
+  @keyframes parpelleig { 50% { opacity: 0; } }
+  .linia-normal { color: #d4d4d4; margin-bottom: 4px; animation: apareixer 0.3s ease; }
+  .linia-error {
+    background: rgba(255, 0, 0, 0.15);
+    color: #f48771;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border-left: 3px solid #f48771;
+    margin-top: 6px;
+    animation: apareixer 0.3s ease;
+  }
+  @keyframes apareixer {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>

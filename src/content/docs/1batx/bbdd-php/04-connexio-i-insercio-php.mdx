@@ -1,0 +1,109 @@
+---
+title: 4. Connexió a la BBDD i inserció amb PHP
+description: Creació dels fitxers db.php i formulari.php per connectar amb MySQL i desar les dades del formulari.
+---
+
+import ConstructorInsertSql from '../../../../components/ConstructorInsertSql.astro';
+
+Ara que ja tenim la base de dades creada a phpMyAdmin (Lliçó 1) i el formulari visual acabat (Lliçó 3), programarem la part del **servidor (Backend)** en **PHP**. La dividirem en dos fitxers dins de la carpeta `PHP/`:
+
+1. **`db.php`**: S'encarrega únicament d'obrir la porta de la base de dades.
+2. **`formulari.php`**: Recull les dades enviades pel formulari i les guarda a la taula `materies`.
+
+## Pas 1: El fitxer de connexió (`PHP/db.php`)
+
+Per no haver d'escriure l'usuari i la contrasenya de la base de dades a cada pàgina del projecte, creem una funció reutilitzable anomenada `conn()` dins de `PHP/db.php`.
+
+### Què significa cada paràmetre?
+* **`$hostname = "localhost";`** — Indica que el servidor MySQL es troba al mateix ordinador on s'executa PHP.
+* **`$usuariodb = "root";`** — És l'usuari administrador per defecte d'XAMPP.
+* **`$passworddb = "";`** — A XAMPP, l'usuari `root` ve sense contrasenya per defecte (cometes buides).
+* **`$dbname = "formulari_materia";`** — El nom exacte de la base de dades que vas crear a phpMyAdmin.
+
+<details>
+<summary>Fes clic aquí per veure o comprovar el codi sencer de <code>PHP/db.php</code></summary>
+
+```php
+<?php
+// En aquest document realitzarem la connexió a la base de dades
+
+function conn(){
+    $hostname = "localhost";
+    $usuariodb = "root";
+    $passworddb = "";
+    $dbname = "formulari_materia";
+
+    // Realitzem la connexió a la BD
+    $conectar = mysqli_connect($hostname, $usuariodb, $passworddb, $dbname);
+    return $conectar;
+}
+```
+
+</details>
+
+---
+
+## Pas 2: El fitxer que desa les dades (`PHP/formulari.php`)
+
+Crea ara el fitxer `formulari.php` dins de la carpeta `PHP/`. Quan l'usuari premi **Enviar** a `formulari.html`, el navegador enviarà les dades aquí.
+
+### Com funciona aquest codi línia per línia?
+1. **`include_once('db.php');`** — Carrega el fitxer anterior per poder fer servir la funció `conn()`.
+2. **`$_POST['...']`** — Captura cada dada que venia del formulari HTML fent servir el seu atribut `name` i la desa en una variable PHP (`$nom`, `$cognoms`, `$mail`, `$materia`).
+3. **`INSERT INTO materies (...) VALUES (...)`** — És la instrucció en llenguatge **SQL** que afegeix una fila nova a la taula `materies`.
+4. **`mysqli_query($conectar, $sql)`** — Envia la consulta SQL a través de la connexió oberta. Si hi ha algun error (per exemple, una columna mal escrita), `mysqli_error` ens mostrarà el motiu exacte en pantalla.
+
+<details>
+<summary>Fes clic aquí per veure o comprovar el codi sencer de <code>PHP/formulari.php</code></summary>
+
+```php
+<?php 
+// Afegim l'arxiu que ens dona la connexió a la base de dades
+include_once('db.php');
+
+// Recepció de les dades des del formulari
+// Cada input té un nom de variable que assignem igual al PHP
+$nom = $_POST['nom'];
+$cognoms = $_POST['cognoms'];
+$mail = $_POST['mail'];
+$materia = $_POST['materia'];
+
+// Imprimim les dades en pantalla per a veure que funciona
+echo "Les dades són les següents: <br>";
+echo "$nom, $cognoms, $mail i la matèria seleccionada és $materia <br><br>";
+
+// Connecta amb la base de dades (a través de l'altre fitxer db.php)
+$conectar = conn(); 
+    
+// Inserim cada valor de la variable del formulari al seu lloc a la base de dades
+$sql = "INSERT INTO materies (nom, cognoms, mail, materia)
+        VALUES ('$nom', '$cognoms', '$mail', '$materia')"; 
+
+$resul = mysqli_query($conectar, $sql) or trigger_error("Query Failed! SQL - Error: ".mysqli_error($conectar), E_USER_ERROR);
+
+echo "Consulta executada: $sql"; 
+?>
+```
+
+</details>
+
+<ConstructorInsertSql />
+
+---
+
+## Pas 3: Prova real i comprovació a phpMyAdmin
+
+Abans de passar a l'última lliçó, comprova que tot el circuit d'escriptura funciona:
+
+1. Assegura't que **Apache** i **MySQL** estan en verd a XAMPP.
+2. Obre el navegador i entra a:
+   ```text
+   http://localhost/projecte_materies/HTML/formulari.html
+   ```
+3. Omple el formulari amb dades de prova i prem **Enviar**.
+4. Hauries de veure en pantalla el missatge de confirmació amb les teves dades i la sentència `INSERT INTO...`.
+5. Entra a **`http://localhost/phpmyadmin`**, fes clic sobre la base de dades `formulari_materia` i després sobre la taula `materies`: **hi veuràs la fila nova desada!**
+
+---
+
+Un cop hagis verificat que les dades es guarden correctament a phpMyAdmin, passa a la **Lliçó 5** per programar `resultats.php` i mostrar aquesta taula directament a la nostra web.

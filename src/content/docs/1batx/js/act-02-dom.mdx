@@ -1,0 +1,247 @@
+---
+title: "ACT_2: Interacció i modificació del DOM"
+description: "Selecció d'elements HTML, canvi d'estils, textContent, esdeveniments de clic i lectura de formularis"
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import SimuladorJS from '/src/components/SimuladorJS.astro';
+import SelectorsDOM from '../../../../components/SelectorsDOM.astro';
+import ManipulacioDOM from '../../../../components/ManipulacioDOM.astro';
+
+Completa els següents 8 apartats pràctics connectant el teu fitxer `index.html` amb el JavaScript per controlar i modificar la pàgina web en temps real.
+
+---
+
+#### 2.1 Entrada de dades amb `prompt()` <Badge text="DOM_01" variant="caution" />
+
+1. Utilitza `prompt()` per demanar a l'usuari el seu nom d'usuari o àlies.
+2. Guarda el resultat que escrigui l'usuari en una variable anomenada `usuari`.
+3. Mostra per la consola del navegador el nom recollit amb `console.log()`.
+
+<SimuladorJS 
+  codi={[
+    'let usuari = prompt("Introdueix el teu àlies:");',
+    'console.log(usuari);'
+  ]}
+  htmlInicial={`<div style="color:#94a3b8; font-size:0.85rem;">index.html carregat</div>`}
+  htmlIntermig={`<div style="border:1px solid #94a3b8; padding:10px; border-radius:6px; background:#ffffff; box-shadow:0 4px 10px rgba(0,0,0,0.12);">
+  <div style="font-size:0.75rem; color:#64748b; margin-bottom:4px;">💬 Finestra prompt():</div>
+  <div style="font-size:0.85rem; margin-bottom:6px;">Introdueix el teu àlies:</div>
+  <div style="border:2px solid #0082C1; padding:4px 8px; background:#f8fafc; border-radius:4px; font-family:monospace; font-weight:bold; color:#0f172a;">Neo<span style="color:#0082C1;">|</span></div>
+</div>`}
+  htmlFinal={`<div style="color:#64748b; font-size:0.85rem;">Dada guardada a la variable <code>usuari</code></div>`}
+  sortida={[
+    { text: 'Neo' }
+  ]}
+/>
+
+---
+
+#### 2.2 Missatges pop-up amb `alert()` <Badge text="DOM_02" variant="caution" />
+
+1. Escriu una finestra pop-up amb `alert()` que doni la benvinguda al sistema.
+2. Combina el `prompt()` de l'apartat anterior amb un `alert()` per mostrar un missatge personalitzat (Ex: “Benvingut al terminal, [nom_usuari]”).
+
+<SimuladorJS 
+  codi={[
+    'alert("Benvingut al sistema");',
+    '',
+    'let usuari = prompt("Com et dius?");',
+    'alert("Benvingut al terminal, " + usuari);'
+  ]}
+  htmlInicial={`<div style="color:#94a3b8; font-size:0.85rem;">index.html carregat</div>`}
+  htmlIntermig={`<div style="border:1px solid #94a3b8; padding:10px; border-radius:6px; background:#ffffff; box-shadow:0 4px 10px rgba(0,0,0,0.12);">
+  <div style="font-size:0.75rem; color:#64748b; margin-bottom:4px;">💬 Finestra prompt():</div>
+  <div style="font-size:0.85rem; margin-bottom:6px;">Com et dius?</div>
+  <div style="border:2px solid #0082C1; padding:4px 8px; background:#f8fafc; border-radius:4px; font-family:monospace; font-weight:bold; color:#0f172a;">Laia<span style="color:#0082C1;">|</span></div>
+</div>`}
+  htmlFinal={`<div style="border:1px solid #cbd5e1; padding:10px; border-radius:6px; background:#f0f9ff; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+  <div style="font-size:0.75rem; color:#0082C1; font-weight:bold; margin-bottom:4px;">🔔 Finestra alert():</div>
+  <div>Benvingut al terminal, <strong>Laia</strong></div>
+</div>`}
+/>
+
+---
+
+#### 2.3 Selecció directa amb `getElementById` i estils <Badge text="DOM_03" variant="caution" />
+
+1. Crea un paràgraf a l'HTML amb un identificador únic: `<p id="missatge">Text original</p>`.
+2. Utilitza `document.getElementById("missatge")` des de JavaScript per seleccionar aquest element.
+3. Canvia el seu color de text a vermell modificant la seva propietat d'estil (`style.color`).
+
+<SimuladorJS 
+  codi={[
+    '// HTML: <p id="missatge">Text original</p>',
+    '',
+    'let text = document.getElementById("missatge");',
+    'text.style.color = "red";'
+  ]}
+  htmlInicial={`<p style="margin:0; font-size:1rem;">Text original</p>`}
+  htmlFinal={`<p style="margin:0; font-size:1rem; color:#dc2626; font-weight:bold;">Text original</p>`}
+/>
+
+<SelectorsDOM/>
+---
+
+#### 2.4 Modificar text de la pàgina amb `.textContent` <Badge text="DOM_04" variant="caution" />
+
+1. Crea una etiqueta `<span>` o `<p>` a l'HTML amb `id="estat"` i el text `"Desconnectat"`.
+2. Selecciona l'element amb `getElementById("estat")` des de JavaScript.
+3. Canvia el text interior a `"Connectat"` utilitzant `.textContent` i pinta el text de color verd (`style.color = "green"`).
+
+<SimuladorJS 
+  codi={[
+    '// HTML: <p>Estat: <span id="estat">Desconnectat</span></p>',
+    '',
+    'let estat = document.getElementById("estat");',
+    'estat.textContent = "Connectat";',
+    'estat.style.color = "green";'
+  ]}
+  htmlInicial={`<p style="margin:0; font-size:0.95rem;">Estat: <span style="color:#64748b; font-weight:bold;">Desconnectat</span></p>`}
+  htmlFinal={`<p style="margin:0; font-size:0.95rem;">Estat: <span style="color:#16a34a; font-weight:bold;">Connectat</span></p>`}
+/>
+
+---
+
+#### 2.5 Selecció per classe amb `getElementsByClassName` <Badge text="DOM_05" variant="caution" />
+
+1. Crea tres paràgrafs a l'HTML i assigna la mateixa classe a dos d'ells (Ex: `class="destacat"`).
+2. Selecciona els elements per la seva classe utilitzant `document.getElementsByClassName("destacat")`.
+3. Aplica un fons de color groc a tots els elements seleccionats fent ús d'un bucle `for` per recórrer la col·lecció d'elements.
+
+<SimuladorJS 
+  codi={[
+    'let elements = document.getElementsByClassName("destacat");',
+    '',
+    'for (let i = 0; i < elements.length; i++) {',
+    '  elements[i].style.backgroundColor = "yellow";',
+    '}'
+  ]}
+  htmlInicial={`<p style="margin:4px 0;">Paràgraf 1 (destacat)</p>
+<p style="margin:4px 0;">Paràgraf 2 (normal)</p>
+<p style="margin:4px 0;">Paràgraf 3 (destacat)</p>`}
+  htmlFinal={`<p style="margin:4px 0; background-color:#fef08a; padding:2px 4px;">Paràgraf 1 (destacat)</p>
+<p style="margin:4px 0;">Paràgraf 2 (normal)</p>
+<p style="margin:4px 0; background-color:#fef08a; padding:2px 4px;">Paràgraf 3 (destacat)</p>`}
+/>
+
+---
+
+#### 2.6 Selecció per etiqueta amb `getElementsByTagName` <Badge text="DOM_06" variant="caution" />
+
+1. Crea una llista desordenada a l'HTML (`<ul>`) amb 4 elements de llista (`<li>`).
+2. Captura totes les etiquetes de llista de la pàgina utilitzant `document.getElementsByTagName("li")`.
+3. Mostra per la consola el resultat obtingut i comprova la longitud total de la col·lecció (`length`).
+
+<SimuladorJS 
+  codi={[
+    'let llista = document.getElementsByTagName("li");',
+    'console.log(llista);',
+    'console.log("Total d\'elements:", llista.length);'
+  ]}
+  htmlInicial={`<ul style="margin:0; padding-left:20px;">
+  <li>Element 1</li>
+  <li>Element 2</li>
+  <li>Element 3</li>
+  <li>Element 4</li>
+</ul>`}
+  htmlFinal={`<ul style="margin:0; padding-left:20px; border-left:3px solid #0082C1;">
+  <li>Element 1</li>
+  <li>Element 2</li>
+  <li>Element 3</li>
+  <li>Element 4</li>
+</ul>`}
+  sortida={[
+    { text: 'HTMLCollection(4) [li, li, li, li]' },
+    { text: "Total d'elements: 4" }
+  ]}
+/>
+
+---
+
+#### 2.7 Escoltar clics amb `addEventListener` <Badge text="DOM_07" variant="caution" />
+
+1. Crea un botó `<button id="btn-tema">Activar Mode Fosc</button>` i una caixa `<div id="caixa">Contingut de prova</div>`.
+2. Afegeix un escoltador d'esdeveniments `addEventListener("click", ...)` al botó.
+3. Quan l'usuari hi faci clic, canvia el color de fons de la caixa a fosc (`#1e293b`) i el color de la lletra a blanc (`white`).
+
+<SimuladorJS 
+  codi={[
+    'const boto = document.getElementById("btn-tema");',
+    'const caixa = document.getElementById("caixa");',
+    '',
+    'boto.addEventListener("click", function () {',
+    '  caixa.style.backgroundColor = "#1e293b";',
+    '  caixa.style.color = "white";',
+    '});'
+  ]}
+  htmlInicial={`<div>
+  <button style="background:#e2e8f0; border:1px solid #94a3b8; padding:4px 10px; border-radius:4px; font-size:0.8rem; margin-bottom:8px;">Activar Mode Fosc</button>
+  <div style="padding:12px; border:1px solid #cbd5e1; border-radius:4px; background:#ffffff; color:#0f172a;">Contingut de prova</div>
+</div>`}
+  htmlIntermig={`<div>
+  <button style="background:#0082C1; color:white; border:1px solid #0082C1; padding:4px 10px; border-radius:4px; font-size:0.8rem; margin-bottom:8px; transform:scale(0.96);">🖱️ Activar Mode Fosc</button>
+  <div style="padding:12px; border:1px solid #cbd5e1; border-radius:4px; background:#ffffff; color:#0f172a;">Contingut de prova</div>
+</div>`}
+  htmlFinal={`<div>
+  <button style="background:#e2e8f0; border:1px solid #94a3b8; padding:4px 10px; border-radius:4px; font-size:0.8rem; margin-bottom:8px;">Activar Mode Fosc</button>
+  <div style="padding:12px; border:1px solid #0f172a; border-radius:4px; background:#1e293b; color:#ffffff;">Contingut de prova</div>
+</div>`}
+/>
+
+<ManipulacioDOM/>
+---
+
+#### 2.8 Llegir un `<input>` de text amb `.value` <Badge text="DOM_08" variant="caution" />
+
+1. Crea un camp de text `<input type="text" id="campNom">`, un botó `<button id="btnSaludar">Saludar</button>` i un paràgraf buit `<p id="salutacio"></p>`.
+2. Quan es premi el botó, llegeix el text que ha escrit l'usuari dins de l'input fent servir `.value`.
+3. Mostra dins del paràgraf `<p id="salutacio">` el missatge `"Hola, [nom]!"` amb `.textContent`.
+
+<SimuladorJS 
+  codi={[
+    'const input = document.getElementById("campNom");',
+    'const boto = document.getElementById("btnSaludar");',
+    'const sortida = document.getElementById("salutacio");',
+    '',
+    'boto.addEventListener("click", function () {',
+    '  sortida.textContent = "Hola, " + input.value + "!";',
+    '});'
+  ]}
+  htmlInicial={`<div>
+  <div style="display:flex; gap:6px; margin-bottom:8px;">
+    <div style="flex:1; border:1px solid #cbd5e1; padding:4px 8px; border-radius:4px; color:#94a3b8; font-size:0.8rem;">Escriu el teu nom...</div>
+    <button style="background:#0082C1; color:white; border:none; padding:4px 10px; border-radius:4px; font-size:0.8rem;">Saludar</button>
+  </div>
+  <p style="margin:0; font-size:0.85rem; color:#64748b;">(Esperant salutació)</p>
+</div>`}
+  htmlIntermig={`<div>
+  <div style="display:flex; gap:6px; margin-bottom:8px;">
+    <div style="flex:1; border:2px solid #0082C1; padding:4px 8px; border-radius:4px; color:#0f172a; font-size:0.8rem; background:#f8fafc;">Alex<span style="color:#0082C1;">|</span></div>
+    <button style="background:#006ba1; color:white; border:none; padding:4px 10px; border-radius:4px; font-size:0.8rem; box-shadow:0 0 0 2px #bae6fd;">🖱️ Saludar</button>
+  </div>
+  <p style="margin:0; font-size:0.85rem; color:#64748b;">(Esperant salutació)</p>
+</div>`}
+  htmlFinal={`<div>
+  <div style="display:flex; gap:6px; margin-bottom:8px;">
+    <div style="flex:1; border:1px solid #cbd5e1; padding:4px 8px; border-radius:4px; color:#0f172a; font-size:0.8rem;">Alex</div>
+    <button style="background:#0082C1; color:white; border:none; padding:4px 10px; border-radius:4px; font-size:0.8rem;">Saludar</button>
+  </div>
+  <p style="margin:0; font-size:0.95rem; font-weight:bold; color:#0082C1;">Hola, Alex!</p>
+</div>`}
+/>
+
+---
+
+<details style="border: 1px solid #3f3f46; padding: 12px; background: #09090b; border-radius: 6px;">
+<summary style="color: #ef4444; font-weight: bold; cursor: pointer;">[ + VEURE PISTES DE L'ACTIVITAT ]</summary>
+
+<div style="margin-top: 10px; color: #d4d4d8;">
+
+- **Selecció única:** `getElementById("nom")` no porta `#` davant de l'identificador.
+- **Canvi de text vs estil:** `.textContent` modifica el text visible; `.style.propetat` modifica el CSS (recorda usar *camelCase* com `backgroundColor`).
+- **Col·leccions:** `getElementsByClassName` i `getElementsByTagName` retornen una llista d'elements, per això necessites un bucle `for` per modificar-los tots.
+- **Formularis:** Per llegir el que s'escriu dins d'un `<input>` es fa servir `.value`, mai `.textContent`.
+
+</div>
+</details>

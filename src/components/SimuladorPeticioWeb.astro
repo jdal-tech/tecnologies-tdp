@@ -1,0 +1,448 @@
+---
+// src/components/SimuladorPeticioWeb.astro
+---
+
+<div class="sim-wrapper not-content">
+  <div class="sim-header">
+    <div>
+      <span class="badge-lab">LABORATORI INTERACTIU</span>
+      <h3>El viatge d'una petició web dinàmica</h3>
+    </div>
+    <button type="button" id="sim-reset" class="btn-secondary">Reiniciar</button>
+  </div>
+
+  <div class="sim-guide">
+    <p><strong>Guia d'ús:</strong></p>
+    <ol>
+      <li>Escriu un nom i tria una matèria al <strong>Navegador (Client)</strong>.</li>
+      <li>Prem <strong>"Següent pas →"</strong> per veure com PHP rep les dades i les desa a MySQL.</li>
+      <li>Observa per què un fitxer <code>.php</code> necessita <strong>XAMPP</strong> i no funciona obrint-lo amb doble clic.</li>
+    </ol>
+  </div>
+
+  <div class="sim-grid">
+    <!-- COLUMNA 1: CLIENT -->
+    <section class="node-card" id="node-client" data-active="true">
+      <div class="node-title">
+        <span class="step-num">1</span>
+        <h4>Navegador (Client)</h4>
+      </div>
+      <p class="node-sub">Renderitza HTML/CSS i envia el formulari via <code>POST</code>.</p>
+
+      <div class="mini-form">
+        <label>
+          <span>Nom (<code>name="nom"</code>)</span>
+          <input type="text" id="sim-nom" value="Laia" maxlength="20" />
+        </label>
+        <label>
+          <span>Matèria (<code>name="materia"</code>)</span>
+          <select id="sim-materia">
+            <option value="programacio">Programació</option>
+            <option value="robotica">Robòtica</option>
+            <option value="biomedicina">Biomedicina</option>
+            <option value="reptes">Reptes mèdics</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="packet-box" id="packet-client">
+        Esperant que premis Enviar...
+      </div>
+    </section>
+
+    <!-- COLUMNA 2: SERVIDOR PHP -->
+    <section class="node-card" id="node-php" data-active="false">
+      <div class="node-title">
+        <span class="step-num">2</span>
+        <h4>Apache + PHP (Servidor)</h4>
+      </div>
+      <p class="node-sub">Executa <code>formulari.php</code> a <code>localhost</code> i prepara l'SQL.</p>
+
+      <pre class="code-preview" id="php-preview"><code>{'// Inactiu fins que arribi la petició POST'}</code></pre>
+    </section>
+
+    <!-- COLUMNA 3: BASE DE DADES MYSQL -->
+    <section class="node-card" id="node-db" data-active="false">
+      <div class="node-title">
+        <span class="step-num">3</span>
+        <h4>MySQL (Base de Dades)</h4>
+      </div>
+      <p class="node-sub">Desa la fila permanentment a <code>formulari_materia.materies</code>.</p>
+
+      <div class="db-table-wrap">
+        <table class="db-table">
+          <thead>
+            <tr>
+              <th>nom</th>
+              <th>materia</th>
+            </tr>
+          </thead>
+          <tbody id="db-tbody">
+            <tr>
+              <td>Marc</td>
+              <td>robotica</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <div class="sim-footer">
+    <div class="status-msg" id="sim-status">
+      <strong>Estat actual:</strong> L'usuari omple <code>formulari.html</code> al seu navegador.
+    </div>
+    <button type="button" id="sim-next" class="btn-primary">1. Enviar formulari (POST) →</button>
+  </div>
+</div>
+
+<style>
+  .sim-wrapper {
+    box-sizing: border-box;
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    color: #f8fafc;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+
+  .sim-wrapper *,
+  .sim-wrapper *::before,
+  .sim-wrapper *::after {
+    box-sizing: border-box;
+  }
+
+  .sim-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .badge-lab {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #0f172a;
+    background-color: #facc15;
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    margin-bottom: 0.4rem;
+  }
+
+  .sim-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #f8fafc;
+  }
+
+  .sim-guide {
+    background-color: #1e293b;
+    border-left: 4px solid #38bdf8;
+    border-radius: 6px;
+    padding: 0.85rem 1rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+    color: #cbd5e1;
+  }
+
+  .sim-guide p {
+    margin: 0 0 0.35rem 0;
+    color: #f8fafc;
+  }
+
+  .sim-guide ol {
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+
+  .sim-guide li {
+    margin-bottom: 0.2rem;
+  }
+
+  .sim-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  @media (max-width: 860px) {
+    .sim-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .node-card {
+    min-width: 0;
+    background-color: #1e293b;
+    border: 2px solid #334155;
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+    opacity: 0.65;
+  }
+
+  .node-card[data-active="true"] {
+    opacity: 1;
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+  }
+
+  .node-title {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+  }
+
+  .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 999px;
+    background-color: #38bdf8;
+    color: #0f172a;
+    font-weight: 800;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+
+  .node-title h4 {
+    margin: 0;
+    font-size: 1rem;
+    color: #f8fafc;
+  }
+
+  .node-sub {
+    margin: 0;
+    font-size: 0.83rem;
+    color: #cbd5e1;
+    line-height: 1.4;
+  }
+
+  .mini-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .mini-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.8rem;
+    color: #cbd5e1;
+  }
+
+  .mini-form input,
+  .mini-form select {
+    width: 100%;
+    background-color: #0f172a;
+    border: 1px solid #475569;
+    border-radius: 6px;
+    padding: 0.45rem 0.6rem;
+    color: #f8fafc;
+    font-size: 0.88rem;
+  }
+
+  .packet-box {
+    background-color: #0f172a;
+    border: 1px dashed #475569;
+    border-radius: 6px;
+    padding: 0.6rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.78rem;
+    color: #facc15;
+    word-break: break-word;
+  }
+
+  .code-preview {
+    margin: 0;
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    padding: 0.7rem;
+    font-size: 0.78rem;
+    line-height: 1.45;
+    color: #38bdf8;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .db-table-wrap {
+    overflow-x: auto;
+    background-color: #0f172a;
+    border-radius: 6px;
+    border: 1px solid #334155;
+  }
+
+  .db-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    text-align: left;
+  }
+
+  .db-table th {
+    background-color: #334155;
+    color: #f8fafc;
+    padding: 0.45rem 0.6rem;
+    font-weight: 600;
+  }
+
+  .db-table td {
+    padding: 0.45rem 0.6rem;
+    border-top: 1px solid #1e293b;
+    color: #cbd5e1;
+  }
+
+  .db-table tr.new-row td {
+    background-color: rgba(250, 204, 21, 0.15);
+    color: #facc15;
+    font-weight: 600;
+  }
+
+  .sim-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    background-color: #1e293b;
+    border-radius: 8px;
+    padding: 0.9rem 1rem;
+  }
+
+  .status-msg {
+    font-size: 0.9rem;
+    color: #cbd5e1;
+    flex: 1 1 260px;
+  }
+
+  .status-msg strong {
+    color: #facc15;
+  }
+
+  .btn-primary {
+    background-color: #38bdf8;
+    color: #0f172a;
+    border: none;
+    border-radius: 6px;
+    padding: 0.6rem 1.1rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .btn-primary:hover {
+    background-color: #7dd3fc;
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    color: #cbd5e1;
+    border: 1px solid #475569;
+    border-radius: 6px;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.82rem;
+    cursor: pointer;
+  }
+
+  .btn-secondary:hover {
+    border-color: #f8fafc;
+    color: #f8fafc;
+  }
+
+  .sim-wrapper code {
+    background-color: rgba(15, 23, 42, 0.8);
+    color: #facc15;
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-size: 0.85em;
+  }
+</style>
+
+<script>
+  function initSimulador() {
+    let step = 0;
+    const nomInput = document.getElementById('sim-nom') as HTMLInputElement | null;
+    const matSelect = document.getElementById('sim-materia') as HTMLSelectElement | null;
+    const nextBtn = document.getElementById('sim-next') as HTMLButtonElement | null;
+    const resetBtn = document.getElementById('sim-reset') as HTMLButtonElement | null;
+
+    const nodeClient = document.getElementById('node-client');
+    const nodePhp = document.getElementById('node-php');
+    const nodeDb = document.getElementById('node-db');
+
+    const packetClient = document.getElementById('packet-client');
+    const phpPreview = document.getElementById('php-preview');
+    const dbTbody = document.getElementById('db-tbody');
+    const simStatus = document.getElementById('sim-status');
+
+    if (!nomInput || !matSelect || !nextBtn || !resetBtn || !packetClient || !phpPreview || !dbTbody || !simStatus) return;
+
+    function escapeHtml(str: string) {
+      return str.replace(/[&<>"']/g, (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m] || m));
+    }
+
+    function render() {
+      const nom = escapeHtml(nomInput!.value.trim() || 'Anònim');
+      const materia = escapeHtml(matSelect!.value);
+
+      nodeClient?.setAttribute('data-active', step === 0 || step === 3 ? 'true' : 'false');
+      nodePhp?.setAttribute('data-active', step === 1 ? 'true' : 'false');
+      nodeDb?.setAttribute('data-active', step === 2 ? 'true' : 'false');
+
+      if (step === 0) {
+        nomInput!.disabled = false;
+        matSelect!.disabled = false;
+        packetClient!.textContent = 'Esperant que premis Enviar...';
+        phpPreview!.textContent = '// Inactiu fins que arribi la petició POST';
+        dbTbody!.innerHTML = '<tr><td>Marc</td><td>robotica</td></tr>';
+        simStatus!.innerHTML = '<strong>Pas 0 (Client):</strong> L\'usuari omple <code>formulari.html</code> al seu navegador.';
+        nextBtn!.textContent = '1. Enviar formulari (POST) →';
+      } else if (step === 1) {
+        nomInput!.disabled = true;
+        matSelect!.disabled = true;
+        packetClient!.textContent = `POST /PHP/formulari.php\nnom="${nom}" & materia="${materia}"`;
+        phpPreview!.textContent = `$nom = $_POST['nom']; // "${nom}"\n$materia = $_POST['materia']; // "${materia}"\n\n$sql = "INSERT INTO materies (nom, materia)\n        VALUES ('${nom}', '${materia}')";\nmysqli_query($conectar, $sql);`;
+        simStatus!.innerHTML = '<strong>Pas 1 (Servidor PHP):</strong> Apache rep el paquet, <code>formulari.php</code> llegeix <code>$_POST</code> i envia la consulta SQL.';
+        nextBtn!.textContent = '2. Desar a MySQL →';
+      } else if (step === 2) {
+        dbTbody!.innerHTML = `<tr><td>Marc</td><td>robotica</td></tr><tr class="new-row"><td>${nom}</td><td>${materia}</td></tr>`;
+        simStatus!.innerHTML = '<strong>Pas 2 (Base de Dades):</strong> MySQL guarda la fila al disc dur. Encara que tanquis el navegador, la dada no es perd.';
+        nextBtn!.textContent = '3. Tornar resposta HTML →';
+      } else if (step === 3) {
+        packetClient!.textContent = `Resposta HTTP 200 OK:\n"Les dades són: ${nom}... materia: ${materia}"`;
+        simStatus!.innerHTML = '<strong>Pas 3 (Retorn al Client):</strong> PHP envia HTML pur de tornada. El navegador mai veu el codi PHP original!';
+        nextBtn!.textContent = 'Tornar a provar ↺';
+      }
+    }
+
+    nextBtn.addEventListener('click', () => {
+      step = (step + 1) % 4;
+      render();
+    });
+
+    resetBtn.addEventListener('click', () => {
+      step = 0;
+      render();
+    });
+
+    render();
+  }
+
+  initSimulador();
+  document.addEventListener('astro:after-swap', initSimulador);
+</script>

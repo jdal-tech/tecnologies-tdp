@@ -1,0 +1,188 @@
+---
+title: "ACT_4: Injecció HTML dinàmica (innerHTML)"
+description: "Creació dinàmica d'etiquetes HTML, llistes acumulatives i construcció d'una To-Do List interactiva"
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import SimuladorJS from '/src/components/SimuladorJS.astro';
+import InnerHTMLvsText from '../../../../components/InnerHTMLvsText.astro';
+import SimuladorToDo from '../../../../components/SimuladorToDo.astro';
+
+A diferència de `.textContent` (que només inserta text pla), la propietat `.innerHTML` permet injectar noves etiquetes HTML reals dins de la pàgina web en temps real.
+
+---
+
+#### 4.1 Introducció a `innerHTML` (exemple senzill) <Badge text="INJECT_01" variant="caution" />
+
+1. Crea un contenidor a l'HTML amb un `id` únic (ex: `<div id="contenidor"></div>`).
+2. Demana a l'usuari el seu nom mitjançant `prompt()` i desa'l en una variable.
+3. Selecciona el `div` amb `document.getElementById("contenidor")` i modifica el seu contingut utilitzant `innerHTML` per injectar un títol personalitzat (`<h2>Benvingut/da, [nom]!</h2>`).
+
+<SimuladorJS 
+  codi={[
+    '// HTML: <div id="contenidor"></div>',
+    '',
+    'let nom = prompt("Com et dius?");',
+    'let caixa = document.getElementById("contenidor");',
+    '',
+    'caixa.innerHTML = "<h2>Benvingut/da, " + nom + "!</h2>";'
+  ]}
+  htmlInicial={`<div style="padding:12px; border:1px dashed #cbd5e1; border-radius:4px; color:#94a3b8; font-size:0.85rem;">
+  &lt;div id="contenidor"&gt; (buit)
+</div>`}
+  htmlIntermig={`<div style="border:1px solid #94a3b8; padding:10px; border-radius:6px; background:#ffffff; box-shadow:0 4px 10px rgba(0,0,0,0.12);">
+  <div style="font-size:0.75rem; color:#64748b; margin-bottom:4px;">💬 Finestra prompt():</div>
+  <div style="font-size:0.85rem; margin-bottom:6px;">Com et dius?</div>
+  <div style="border:2px solid #0082C1; padding:4px 8px; background:#f8fafc; border-radius:4px; font-family:monospace; font-weight:bold; color:#0f172a;">Carla<span style="color:#0082C1;">|</span></div>
+</div>`}
+  htmlFinal={`<div style="padding:10px; border:1px solid #0082C1; background:#f0f9ff; border-radius:4px;">
+  <h2 style="margin:0; font-size:1.15rem; color:#0f172a;">Benvingut/da, Carla!</h2>
+</div>`}
+/>
+
+<InnerHTMLvsText/>
+
+---
+
+#### 4.2 Creació d'una llista dinàmica de noms <Badge text="INJECT_02" variant="caution" />
+
+1. Crea una llista buida a l'HTML (`<ul id="llistaNoms"></ul>`) i un botó `<button id="btnAfegir">+ Afegir nom</button>`.
+2. Quan es premi el botó, demana un nom a l'usuari amb `prompt()`.
+3. Utilitza l'operador d'acumulació `+=` amb `innerHTML` per anar afegint nous elements `<li>` a la llista sense esborrar els anteriors.
+
+<SimuladorJS 
+  codi={[
+    'const boto = document.getElementById("btnAfegir");',
+    'const llista = document.getElementById("llistaNoms");',
+    '',
+    'boto.addEventListener("click", function () {',
+    '  let nom = prompt("Escriu un nom:");',
+    '  llista.innerHTML += "<li>" + nom + "</li>";',
+    '});'
+  ]}
+  htmlInicial={`<div>
+  <button style="background:#0082C1; color:white; border:none; padding:4px 10px; border-radius:4px; font-size:0.8rem; margin-bottom:8px;">+ Afegir nom</button>
+  <ul style="margin:0; padding-left:20px; color:#1e293b;">
+    <li>Marta</li>
+  </ul>
+</div>`}
+  htmlIntermig={`<div style="border:1px solid #94a3b8; padding:10px; border-radius:6px; background:#ffffff; box-shadow:0 4px 10px rgba(0,0,0,0.12);">
+  <div style="font-size:0.75rem; color:#64748b; margin-bottom:4px;">💬 Finestra prompt():</div>
+  <div style="font-size:0.85rem; margin-bottom:6px;">Escriu un nom:</div>
+  <div style="border:2px solid #0082C1; padding:4px 8px; background:#f8fafc; border-radius:4px; font-family:monospace; font-weight:bold; color:#0f172a;">Pau<span style="color:#0082C1;">|</span></div>
+</div>`}
+  htmlFinal={`<div>
+  <button style="background:#0082C1; color:white; border:none; padding:4px 10px; border-radius:4px; font-size:0.8rem; margin-bottom:8px;">+ Afegir nom</button>
+  <ul style="margin:0; padding-left:20px; color:#1e293b;">
+    <li>Marta</li>
+    <li style="color:#0082C1; font-weight:bold;">Pau</li>
+  </ul>
+</div>`}
+/>
+
+---
+
+#### 4.3 Disseny d'una aplicació To-Do List senzilla <Badge text="INJECT_03" variant="caution" />
+
+<SimuladorToDo/>
+
+1. Dissenya una interfície amb un camp d'entrada (`<input type="text" id="novaTasca">`), un botó `<button id="btnAfegirTasca">Afegir Tasca</button>` i un contenidor `<div id="llistaTasques"></div>`.
+2. Quan es faci clic al botó, llegeix el valor de l'input utilitzant `input.value`.
+3. Injecta la nova tasca dins del contenidor amb `innerHTML += ...` donant-li format de targeta o element de llista.
+4. Neteja el camp d'entrada (`input.value = ""`) un cop afegida la tasca perquè l'usuari en pugui escriure una de nova.
+
+<SimuladorJS 
+  codi={[
+    'const input = document.getElementById("novaTasca");',
+    'const boto = document.getElementById("btnAfegirTasca");',
+    'const llista = document.getElementById("llistaTasques");',
+    '',
+    'boto.addEventListener("click", function () {',
+    '  llista.innerHTML += "<div class=\'targeta\'>" + input.value + "</div>";',
+    '  input.value = "";',
+    '});'
+  ]}
+  htmlInicial={`<div>
+  <div style="display:flex; gap:6px; margin-bottom:10px;">
+    <div style="flex:1; border:1px solid #cbd5e1; padding:4px 8px; border-radius:4px; color:#94a3b8; font-size:0.8rem;">Escriu una tasca...</div>
+    <button style="background:#0082C1; color:white; border:none; padding:4px 10px; border-radius:4px; font-size:0.8rem;">Afegir Tasca</button>
+  </div>
+  <div style="padding:6px 10px; background:#f1f5f9; border-left:3px solid #64748b; border-radius:4px; font-size:0.85rem;">Estudiar JavaScript</div>
+</div>`}
+  htmlIntermig={`<div>
+  <div style="display:flex; gap:6px; margin-bottom:10px;">
+    <div style="flex:1; border:2px solid #0082C1; padding:4px 8px; border-radius:4px; color:#0f172a; font-size:0.8rem; background:#f8fafc;">Entregar pràctica DOM<span style="color:#0082C1;">|</span></div>
+    <button style="background:#006ba1; color:white; border:none; padding:4px 10px; border-radius:4px; font-size:0.8rem; box-shadow:0 0 0 2px #bae6fd;">🖱️ Afegir Tasca</button>
+  </div>
+  <div style="padding:6px 10px; background:#f1f5f9; border-left:3px solid #64748b; border-radius:4px; font-size:0.85rem;">Estudiar JavaScript</div>
+</div>`}
+  htmlFinal={`<div>
+  <div style="display:flex; gap:6px; margin-bottom:10px;">
+    <div style="flex:1; border:1px solid #cbd5e1; padding:4px 8px; border-radius:4px; color:#94a3b8; font-size:0.8rem;">Escriu una tasca...</div>
+    <button style="background:#0082C1; color:white; border:none; padding:4px 10px; border-radius:4px; font-size:0.8rem;">Afegir Tasca</button>
+  </div>
+  <div style="padding:6px 10px; background:#f1f5f9; border-left:3px solid #64748b; border-radius:4px; font-size:0.85rem; margin-bottom:6px;">Estudiar JavaScript</div>
+  <div style="padding:6px 10px; background:#e0f2fe; border-left:3px solid #0082C1; border-radius:4px; font-size:0.85rem; font-weight:bold; color:#0f172a;">Entregar pràctica DOM</div>
+</div>`}
+/>
+
+---
+
+#### 4.4 Validació de tasques buides i botó "Esborrar tot" <Badge text="INJECT_04" variant="caution" />
+
+1. Millora la To-Do List protegint l'entrada: abans d'afegir la tasca, comprova amb `if (input.value.trim() !== "")` que l'usuari no hagi deixat el camp en blanc.
+2. Afegeix un segon botó a l'HTML (`<button id="btnNetejar">Esborrar tot</button>`).
+3. Quan es faci clic a `"Esborrar tot"`, buida completament el contenidor de tasques assignant-li una cadena buida: `llista.innerHTML = ""`.
+
+<SimuladorJS 
+  codi={[
+    'const btnNetejar = document.getElementById("btnNetejar");',
+    '',
+    'boto.addEventListener("click", function () {',
+    '  if (input.value.trim() !== "") {',
+    '    llista.innerHTML += "<div class=\'targeta\'>" + input.value + "</div>";',
+    '    input.value = "";',
+    '  }',
+    '});',
+    '',
+    'btnNetejar.addEventListener("click", function () {',
+    '  llista.innerHTML = "";',
+    '});'
+  ]}
+  htmlInicial={`<div>
+  <div style="display:flex; gap:6px; margin-bottom:10px;">
+    <button style="background:#ef4444; color:white; border:none; padding:4px 10px; border-radius:4px; font-size:0.8rem;">Esborrar tot</button>
+  </div>
+  <div style="padding:6px 10px; background:#f1f5f9; border-left:3px solid #64748b; border-radius:4px; font-size:0.85rem; margin-bottom:6px;">Estudiar JavaScript</div>
+  <div style="padding:6px 10px; background:#e0f2fe; border-left:3px solid #0082C1; border-radius:4px; font-size:0.85rem;">Entregar pràctica DOM</div>
+</div>`}
+  htmlIntermig={`<div>
+  <div style="display:flex; gap:6px; margin-bottom:10px;">
+    <button style="background:#dc2626; color:white; border:none; padding:4px 10px; border-radius:4px; font-size:0.8rem; box-shadow:0 0 0 2px #fecaca;">🖱️ Esborrar tot</button>
+  </div>
+  <div style="padding:6px 10px; background:#f1f5f9; border-left:3px solid #64748b; border-radius:4px; font-size:0.85rem; margin-bottom:6px;">Estudiar JavaScript</div>
+  <div style="padding:6px 10px; background:#e0f2fe; border-left:3px solid #0082C1; border-radius:4px; font-size:0.85rem;">Entregar pràctica DOM</div>
+</div>`}
+  htmlFinal={`<div>
+  <div style="display:flex; gap:6px; margin-bottom:10px;">
+    <button style="background:#ef4444; color:white; border:none; padding:4px 10px; border-radius:4px; font-size:0.8rem;">Esborrar tot</button>
+  </div>
+  <div style="padding:10px; border:1px dashed #cbd5e1; border-radius:4px; color:#94a3b8; font-size:0.8rem; text-align:center;">
+    No hi ha cap tasca pendent
+  </div>
+</div>`}
+/>
+
+---
+
+<details style="border: 1px solid #3f3f46; padding: 12px; background: #09090b; border-radius: 6px;">
+<summary style="color: #ef4444; font-weight: bold; cursor: pointer;">[ + VEURE PISTES DE L'ACTIVITAT ]</summary>
+
+<div style="margin-top: 10px; color: #d4d4d8;">
+
+- **Substituir vs Acumular:** `element.innerHTML = "..."` esborra el contingut anterior; `element.innerHTML += "..."` manté el que hi havia i afegeix el nou element al final.
+- **Cometes dins d'strings:** Si fas servir cometes dobles per fora (`"<div class='targeta'>"`), utilitza cometes simples per als atributs HTML interiors perquè JavaScript no talli el text abans d'hora.
+- **Mètode `.trim()`:** Elimina els espais en blanc al principi i al final d'un text, evitant que un usuari afegeixi una tasca formada només per espais.
+
+</div>
+</details>

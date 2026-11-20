@@ -1,0 +1,36 @@
+name: Deploy to GitHub Pages
+
+on:
+  # Executa aquest procés automàticament cada vegada que pugis canvis a la branca 'main'
+  push:
+    branches: [ main ]
+  # Permet executar-lo també fent clic a un botó des de la web de GitHub
+  workflow_dispatch:
+
+# Permisos necessaris perquè el robot pugui publicar la web
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  # Pas 1 del robot: Agafa el teu codi d'Astro i el compila
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout your repository using git
+        uses: actions/checkout@v4
+      - name: Install, build, and upload your site
+        uses: withastro/action@v3
+
+  # Pas 2 del robot: Agafa el resultat compilat i el penja a internet
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

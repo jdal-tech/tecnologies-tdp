@@ -1,0 +1,260 @@
+---
+// src/components/SelectorsDOM.astro
+---
+<div class="js-widget not-content">
+  <div class="widget-header">
+    <span class="badge">Laboratori interactiu</span>
+    <h4>Raigs X del DOM: Què selecciona cada mètode?</h4>
+    <p class="guide">
+      <strong>Com funciona:</strong> <br>1. Fes clic als diferents selectors de dalt.<br> 
+      2. Observa en groc quines etiquetes HTML captura cada mètode i com es reflecteixen al navegador. <br>
+      3. Fixa't a la consola de sota si retorna <strong>1 únic element</strong> o una <strong>llista</strong>.
+    </p>
+  </div>
+
+  <div class="selector-btns">
+    <button type="button" class="sel-btn active" data-sel="id">
+      <code>getElementById("titol")</code>
+    </button>
+    <button type="button" class="sel-btn" data-sel="class">
+      <code>getElementsByClassName("nota")</code>
+    </button>
+    <button type="button" class="sel-btn" data-sel="qs">
+      <code>querySelector(".nota")</code>
+    </button>
+    <button type="button" class="sel-btn" data-sel="qsa">
+      <code>querySelectorAll("p")</code>
+    </button>
+  </div>
+
+  <div class="split-view">
+    <div class="pane">
+      <div class="pane-title">1. Codi HTML</div>
+      <pre class="html-code"><code><span class="line" data-node="div">&lt;div id="caixa"&gt;</span>
+<span class="line hl" data-node="h3">  &lt;h3 id="titol"&gt;Butlletí&lt;/h3&gt;</span>
+<span class="line" data-node="p1">  &lt;p class="nota"&gt;Matemàtiques: 8&lt;/p&gt;</span>
+<span class="line" data-node="p2">  &lt;p class="nota"&gt;Tecnologia: 9&lt;/p&gt;</span>
+<span class="line" data-node="p3">  &lt;p&gt;Curs: 1r Batxillerat&lt;/p&gt;</span>
+<span class="line" data-node="div">&lt;/div&gt;</span></code></pre>
+    </div>
+
+    <div class="pane">
+      <div class="pane-title">2. Vista al Navegador</div>
+      <div class="preview-box">
+        <h3 id="prev-h3" class="prev-el hl">Butlletí</h3>
+        <p id="prev-p1" class="prev-el">Matemàtiques: 8</p>
+        <p id="prev-p2" class="prev-el">Tecnologia: 9</p>
+        <p id="prev-p3" class="prev-el">Curs: 1r Batxillerat</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="console-bar">
+    <span class="console-tag">Consola retorna:</span>
+    <code id="sel-return">HTMLElement (&lt;h3 id="titol"&gt;) — 1 únic element</code>
+    <p id="sel-info">Busca l'etiqueta amb <code>id="titol"</code>. Com que els IDs són únics, retorna directament l'element.</p>
+  </div>
+</div>
+
+<script>
+  const btns = document.querySelectorAll('.sel-btn');
+  const lines = document.querySelectorAll('.html-code .line');
+  const prevEls = document.querySelectorAll('.prev-el');
+  const selReturn = document.getElementById('sel-return')!;
+  const selInfo = document.getElementById('sel-info')!;
+
+  const config: Record<string, { nodes: string[]; ret: string; info: string }> = {
+    id: {
+      nodes: ['h3'],
+      ret: 'HTMLElement (<h3 id="titol">) — 1 únic element',
+      info: 'Busca l’etiqueta amb id="titol". Retorna directament l’element llest per modificar.'
+    },
+    class: {
+      nodes: ['p1', 'p2'],
+      ret: 'HTMLCollection(2) [p.nota, p.nota] — Llista viva',
+      info: 'Retorna una llista amb TOTS els elements que tenen class="nota". Cal recórrer-la amb un bucle o índex [0].'
+    },
+    qs: {
+      nodes: ['p1'],
+      ret: 'HTMLElement (<p class="nota">) — Només el PRIMER',
+      info: 'Accepta sintaxi CSS (.nota, #titol, div p), però s’atura al PRIMER element que troba.'
+    },
+    qsa: {
+      nodes: ['p1', 'p2', 'p3'],
+      ret: 'NodeList(3) [p.nota, p.nota, p] — Llista estàtica',
+      info: 'Selecciona TOTS els paràgrafs <p> de la pàgina amb sintaxi CSS. Es pot recórrer fàcilment amb .forEach().'
+    }
+  };
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const key = (btn as HTMLElement).dataset.sel!;
+      const data = config[key];
+
+      lines.forEach(l => {
+        const node = (l as HTMLElement).dataset.node!;
+        l.classList.toggle('hl', data.nodes.includes(node));
+      });
+
+      prevEls.forEach(el => {
+        const id = el.id.replace('prev-', '');
+        el.classList.toggle('hl', data.nodes.includes(id));
+      });
+
+      selReturn.textContent = data.ret;
+      selInfo.textContent = data.info;
+    });
+  });
+</script>
+
+<style>
+  .js-widget {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    border-radius: 12px;
+    background: #0f172a;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+  }
+  .widget-header { margin-bottom: 1.25rem; }
+  .badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #facc15;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+  }
+  .widget-header h4 { margin: 0 0 0.65rem; font-size: 1.25rem; color: #f8fafc; }
+  .guide {
+    margin: 0;
+    padding: 0.65rem 0.9rem;
+    background: rgba(56, 189, 248, 0.08);
+    border-left: 3px solid #38bdf8;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #cbd5e1;
+  }
+  .guide strong { color: #f8fafc; }
+  .selector-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .sel-btn {
+    padding: 0.5rem 0.85rem;
+    border-radius: 8px;
+    background: #1e293b;
+    color: #cbd5e1;
+    border: 1px solid #334155;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.15s;
+  }
+  .sel-btn code { background: transparent; color: inherit; font-family: monospace; }
+  .sel-btn.active {
+    background: rgba(56, 189, 248, 0.18);
+    border-color: #38bdf8;
+    color: #f8fafc;
+    font-weight: 700;
+  }
+  .split-view {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  @media (max-width: 680px) {
+    .split-view { grid-template-columns: 1fr; }
+  }
+  .pane {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .pane-title {
+    background: rgba(15, 23, 42, 0.6);
+    padding: 0.5rem 0.85rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #94a3b8;
+    border-bottom: 1px solid #334155;
+  }
+  .html-code {
+    margin: 0;
+    padding: 0.85rem;
+    font-family: monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: #94a3b8;
+    overflow-x: auto;
+  }
+  .html-code .line {
+    display: block;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    border-left: 3px solid transparent;
+    transition: all 0.2s;
+  }
+  .html-code .line.hl {
+    background: rgba(250, 204, 21, 0.16);
+    color: #fef08a;
+    border-left-color: #facc15;
+    font-weight: 700;
+  }
+  .preview-box {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .prev-el {
+    margin: 0;
+    padding: 0.4rem 0.65rem;
+    border-radius: 6px;
+    border: 1px dashed #475569;
+    color: #cbd5e1;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+  }
+  .prev-el.hl {
+    background: rgba(250, 204, 21, 0.18);
+    border: 1px solid #facc15;
+    color: #ffffff;
+    box-shadow: 0 0 0 2px rgba(250, 204, 21, 0.2);
+  }
+  .console-bar {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 0.9rem 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .console-tag {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #38bdf8;
+  }
+  #sel-return {
+    font-family: monospace;
+    font-size: 0.95rem;
+    color: #f8fafc;
+    font-weight: 700;
+  }
+  #sel-info {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #cbd5e1;
+  }
+</style>

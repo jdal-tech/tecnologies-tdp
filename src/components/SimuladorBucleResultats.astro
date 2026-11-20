@@ -1,0 +1,370 @@
+---
+// src/components/SimuladorBucleResultats.astro
+---
+
+<div class="loop-wrapper not-content">
+  <div class="loop-header">
+    <div>
+      <span class="badge-lab">LABORATORI MYSQL → TAULA HTML</span>
+      <h3>Com PHP recorre la base de dades i dibuixa la taula</h3>
+    </div>
+    <button type="button" id="loop-reset" class="btn-secondary">Reiniciar bucle</button>
+  </div>
+
+  <div class="loop-guide">
+    <p><strong>Guia d'ús:</strong></p>
+    <ol>
+      <li>Prem <strong>"Següent volta del bucle →"</strong> per fer que PHP executi <code>mysqli_fetch_array($executa)</code> i llegeixi la següent fila de MySQL.</li>
+      <li>Observa al centre el codi HTML pur (<code>&lt;tr&gt;&lt;td&gt;...&lt;/td&gt;&lt;/tr&gt;</code>) que PHP va imprimint amb <code>echo</code>.</li>
+      <li>Comprova a la dreta com el navegador dibuixa la taula final sense veure ni una línia de PHP.</li>
+    </ol>
+  </div>
+
+  <div class="loop-grid">
+    <!-- COLUMNA 1: TAULA A MYSQL -->
+    <div class="panel-card">
+      <h4>1. Dades a MySQL (<code>materies</code>)</h4>
+      <p class="panel-desc">Resultat de <code>SELECT * FROM materies</code>:</p>
+      <table class="mini-db-table" id="loop-db-table">
+        <thead>
+          <tr>
+            <th>Fila</th>
+            <th>nom</th>
+            <th>materia</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-row="0">
+            <td>#1</td>
+            <td>Marc</td>
+            <td>robotica</td>
+          </tr>
+          <tr data-row="1">
+            <td>#2</td>
+            <td>Laia</td>
+            <td>programacio</td>
+          </tr>
+          <tr data-row="2">
+            <td>#3</td>
+            <td>Pol</td>
+            <td>biomedicia</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- COLUMNA 2: CODI HTML GENERAT PER PHP -->
+    <div class="panel-card">
+      <h4>2. Codi HTML que genera <code>echo</code></h4>
+      <pre class="html-gen" id="loop-html-code"><code>{'<!-- Prem "Següent volta" per iniciar la lectura -->'}</code></pre>
+    </div>
+
+    <!-- COLUMNA 3: RESULTAT AL NAVEGADOR -->
+    <div class="panel-card">
+      <h4>3. Vista final al navegador</h4>
+      <div class="browser-preview">
+        <table class="final-table">
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Matèria</th>
+            </tr>
+          </thead>
+          <tbody id="loop-final-tbody">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="loop-footer">
+    <div class="loop-status" id="loop-status">
+      <strong>Estat:</strong> Consulta <code>SELECT * FROM materies</code> executada. Punter preparat abans de la fila #1.
+    </div>
+    <button type="button" id="loop-next" class="btn-primary">Següent volta del bucle →</button>
+  </div>
+</div>
+
+<style>
+  .loop-wrapper {
+    box-sizing: border-box;
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    color: #f8fafc;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+
+  .loop-wrapper *,
+  .loop-wrapper *::before,
+  .loop-wrapper *::after {
+    box-sizing: border-box;
+  }
+
+  .loop-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .badge-lab {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #0f172a;
+    background-color: #38bdf8;
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    margin-bottom: 0.4rem;
+  }
+
+  .loop-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #f8fafc;
+  }
+
+  .loop-guide {
+    background-color: #1e293b;
+    border-left: 4px solid #facc15;
+    border-radius: 6px;
+    padding: 0.85rem 1rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+    color: #cbd5e1;
+  }
+
+  .loop-guide p {
+    margin: 0 0 0.35rem 0;
+    color: #f8fafc;
+  }
+
+  .loop-guide ol {
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+
+  .loop-guide li {
+    margin-bottom: 0.2rem;
+  }
+
+  .loop-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  @media (max-width: 880px) {
+    .loop-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .panel-card {
+    min-width: 0;
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .panel-card h4 {
+    margin: 0;
+    font-size: 0.98rem;
+    color: #f8fafc;
+  }
+
+  .panel-desc {
+    margin: 0;
+    font-size: 0.82rem;
+    color: #cbd5e1;
+  }
+
+  .mini-db-table,
+  .final-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    background-color: #0f172a;
+    border: 1px solid #334155;
+  }
+
+  .mini-db-table th,
+  .final-table th {
+    background-color: #334155;
+    color: #f8fafc;
+    padding: 0.45rem 0.55rem;
+    text-align: left;
+  }
+
+  .mini-db-table td,
+  .final-table td {
+    padding: 0.45rem 0.55rem;
+    border-top: 1px solid #1e293b;
+    color: #cbd5e1;
+  }
+
+  .mini-db-table tr.reading td {
+    background-color: rgba(250, 204, 21, 0.18);
+    color: #facc15;
+    font-weight: 700;
+  }
+
+  .mini-db-table tr.done td {
+    opacity: 0.5;
+  }
+
+  .html-gen {
+    margin: 0;
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    padding: 0.7rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.76rem;
+    line-height: 1.45;
+    color: #38bdf8;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    min-height: 120px;
+  }
+
+  .browser-preview {
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    padding: 0.5rem;
+    min-height: 120px;
+  }
+
+  .loop-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    background-color: #1e293b;
+    border-radius: 8px;
+    padding: 0.9rem 1rem;
+  }
+
+  .loop-status {
+    font-size: 0.88rem;
+    color: #cbd5e1;
+    flex: 1 1 260px;
+  }
+
+  .loop-status strong {
+    color: #facc15;
+  }
+
+  .btn-primary {
+    background-color: #38bdf8;
+    color: #0f172a;
+    border: none;
+    border-radius: 6px;
+    padding: 0.6rem 1.1rem;
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+  }
+
+  .btn-primary:hover {
+    background-color: #7dd3fc;
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    color: #cbd5e1;
+    border: 1px solid #475569;
+    border-radius: 6px;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.82rem;
+    cursor: pointer;
+  }
+
+  .loop-wrapper code {
+    background-color: rgba(15, 23, 42, 0.85);
+    color: #facc15;
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-size: 0.85em;
+  }
+</style>
+
+<script>
+  function initSimuladorBucle() {
+    const rowsData = [
+      { nom: 'Marc', materia: 'robotica' },
+      { nom: 'Laia', materia: 'programacio' },
+      { nom: 'Pol', materia: 'biomedicia' }
+    ];
+
+    let index = -1;
+    const nextBtn = document.getElementById('loop-next') as HTMLButtonElement | null;
+    const resetBtn = document.getElementById('loop-reset') as HTMLButtonElement | null;
+    const dbTable = document.getElementById('loop-db-table');
+    const htmlCode = document.getElementById('loop-html-code');
+    const finalTbody = document.getElementById('loop-final-tbody');
+    const status = document.getElementById('loop-status');
+
+    if (!nextBtn || !resetBtn || !dbTable || !htmlCode || !finalTbody || !status) return;
+
+    function renderLoop() {
+      dbTable!.querySelectorAll('tbody tr').forEach((tr, i) => {
+        tr.classList.toggle('reading', i === index);
+        tr.classList.toggle('done', i < index);
+      });
+
+      if (index === -1) {
+        htmlCode!.textContent = '<!-- Prem "Següent volta" per iniciar la lectura -->';
+        finalTbody!.innerHTML = '';
+        status!.innerHTML = '<strong>Estat:</strong> Consulta <code>SELECT * FROM materies</code> executada. Punter preparat abans de la fila #1.';
+        nextBtn!.textContent = 'Següent volta del bucle →';
+      } else if (index < rowsData.length) {
+        let generatedHtml = '';
+        let renderedRows = '';
+        for (let i = 0; i <= index; i++) {
+          generatedHtml += `<tr>\n  <td>${rowsData[i].nom}</td>\n  <td>${rowsData[i].materia}</td>\n</tr>\n`;
+          renderedRows += `<tr><td>${rowsData[i].nom}</td><td>${rowsData[i].materia}</td></tr>`;
+        }
+        htmlCode!.textContent = generatedHtml.trim();
+        finalTbody!.innerHTML = renderedRows;
+        status!.innerHTML = `<strong>Volta ${index + 1}:</strong> <code>mysqli_fetch_array()</code> llegeix la fila #${index + 1} (<strong>${rowsData[index].nom}</strong>) i imprimeix una fila <code>&lt;tr&gt;</code>.`;
+        nextBtn!.textContent = index === rowsData.length - 1 ? 'Comprovar final del bucle →' : 'Següent volta del bucle →';
+      } else {
+        status!.innerHTML = '<strong>Fi del bucle:</strong> <code>mysqli_fetch_array()</code> retorna <code>false</code> (no queden més files) i PHP tanca la taula <code>&lt;/table&gt;</code>.';
+        nextBtn!.textContent = 'Tornar a començar ↺';
+      }
+    }
+
+    nextBtn.addEventListener('click', () => {
+      if (index >= rowsData.length) {
+        index = -1;
+      } else {
+        index++;
+      }
+      renderLoop();
+    });
+
+    resetBtn.addEventListener('click', () => {
+      index = -1;
+      renderLoop();
+    });
+
+    renderLoop();
+  }
+
+  initSimuladorBucle();
+  document.addEventListener('astro:after-swap', initSimuladorBucle);
+</script>

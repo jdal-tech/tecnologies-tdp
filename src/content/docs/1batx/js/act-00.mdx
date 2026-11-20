@@ -1,0 +1,149 @@
+---
+title: "ACT 0: Què és JavaScript i com funciona?"
+description: "Introducció visual a la programació web al costat del client, el DOM, les APIs i l'entorn de desenvolupament."
+sidebar:
+  order: 0
+---
+
+import { Tabs, TabItem, Aside, Card, CardGrid, Badge } from '@astrojs/starlight/components';
+import SimuladorJS from '../../../../components/SimuladorJS.astro';
+
+**JavaScript (JS)** és un llenguatge de programació d'alt nivell i interpretat: el navegador llegeix i executa les instruccions línia per línia sense necessitat de compilar-les prèviament. És el llenguatge que converteix una pàgina web estàtica en una aplicació interactiva.
+
+---
+
+## 1. L'analogia de la construcció d'una casa
+
+Una aplicació web moderna es construeix amb **tres tecnologies que treballen en equip** dins del navegador. Imagina que estàs construint una casa:
+
+<div style="margin: 1.5rem 0; padding: 1.25rem; border-radius: 12px; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(148, 163, 184, 0.25);">
+  <svg viewBox="0 0 760 210" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama dels tres pilars del desenvolupament web: HTML, CSS i JavaScript">
+    <rect x="15" y="15" width="220" height="180" rx="10" fill="#1e293b" stroke="#f97316" stroke-width="2"/>
+    <circle cx="45" cy="45" r="14" fill="rgba(249, 115, 22, 0.2)"/>
+    <text x="45" y="50" text-anchor="middle" fill="#fb923c" font-family="monospace" font-weight="bold" font-size="13">&lt;/&gt;</text>
+    <text x="70" y="50" fill="#f8fafc" font-family="sans-serif" font-weight="bold" font-size="16">1. HTML5</text>
+    <text x="30" y="78" fill="#fdba74" font-family="sans-serif" font-weight="bold" font-size="12">L'ESTRUCTURA (Les parets)</text>
+    <text x="30" y="102" fill="#cbd5e1" font-family="sans-serif" font-size="12">Defineix què hi ha a la web:</text>
+    <text x="30" y="122" fill="#94a3b8" font-family="sans-serif" font-size="11.5">• Títols i paràgrafs</text>
+    <text x="30" y="140" fill="#94a3b8" font-family="sans-serif" font-size="11.5">• Imatges i enllaços</text>
+    <text x="30" y="158" fill="#94a3b8" font-family="sans-serif" font-size="11.5">• Botons i formularis</text>
+
+    <text x="250" y="110" text-anchor="middle" fill="#64748b" font-family="sans-serif" font-weight="bold" font-size="22">+</text>
+
+    <rect x="270" y="15" width="220" height="180" rx="10" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+    <circle cx="300" cy="45" r="14" fill="rgba(56, 189, 248, 0.2)"/>
+    <text x="300" y="50" text-anchor="middle" fill="#38bdf8" font-family="monospace" font-weight="bold" font-size="14">#</text>
+    <text x="325" y="50" fill="#f8fafc" font-family="sans-serif" font-weight="bold" font-size="16">2. CSS3</text>
+    <text x="285" y="78" fill="#7dd3fc" font-family="sans-serif" font-weight="bold" font-size="12">L'ESTÈTICA (La pintura)</text>
+    <text x="285" y="102" fill="#cbd5e1" font-family="sans-serif" font-size="12">Defineix com es veu la web:</text>
+    <text x="285" y="122" fill="#94a3b8" font-family="sans-serif" font-size="11.5">• Colors i tipografies</text>
+    <text x="285" y="140" fill="#94a3b8" font-family="sans-serif" font-size="11.5">• Mides, marges i graelles</text>
+    <text x="285" y="158" fill="#94a3b8" font-family="sans-serif" font-size="11.5">• Adaptació a mòbils</text>
+
+    <text x="505" y="110" text-anchor="middle" fill="#64748b" font-family="sans-serif" font-weight="bold" font-size="22">+</text>
+
+    <rect x="525" y="15" width="220" height="180" rx="10" fill="#1e293b" stroke="#eab308" stroke-width="2.5"/>
+    <circle cx="555" cy="45" r="14" fill="rgba(234, 179, 8, 0.2)"/>
+    <text x="555" y="50" text-anchor="middle" fill="#facc15" font-family="monospace" font-weight="bold" font-size="13">JS</text>
+    <text x="580" y="50" fill="#f8fafc" font-family="sans-serif" font-weight="bold" font-size="16">3. JavaScript</text>
+    <text x="540" y="78" fill="#fde047" font-family="sans-serif" font-weight="bold" font-size="12">EL CERVELL (L'electricitat)</text>
+    <text x="540" y="102" fill="#cbd5e1" font-family="sans-serif" font-size="12">Defineix què fa la web:</text>
+    <text x="540" y="122" fill="#94a3b8" font-family="sans-serif" font-size="11.5">• Reacciona als clics i tecles</text>
+    <text x="540" y="140" fill="#94a3b8" font-family="sans-serif" font-size="11.5">• Calcula dades en temps real</text>
+    <text x="540" y="158" fill="#94a3b8" font-family="sans-serif" font-size="11.5">• Modifica l'HTML i el CSS</text>
+  </svg>
+</div>
+
+---
+
+## 2. Com funciona? Client, DOM i Servidor
+
+Tot i que JavaScript va néixer per executar-se dins del navegador de l'usuari (**costat del client**), avui dia és un llenguatge tot terreny que també funciona als servidors (**costat del servidor**).
+
+<Tabs>
+  <TabItem label="Costat del Client (El navegador)" icon="laptop">
+    Quan obres una pàgina web, el teu navegador (Chrome, Firefox, Safari) utilitza el seu propi motor per executar el codi JavaScript en temps real. A més, connecta amb **APIs** (*Interfícies de Programació d'Aplicacions*):
+    * **API del DOM (*Document Object Model*):** Permet que JavaScript llegeixi i modifiqui qualsevol etiqueta HTML o estil CSS de la pantalla al moment.
+    * **APIs externes:** Permeten connectar la nostra web amb serveis reals com mapes (**Google Maps**), dades meteorològiques (**OpenWeather**) o reproducció multimèdia (**Spotify**).
+
+    <div style="margin: 1rem 0 0.5rem 0; padding: 1rem; border-radius: 10px; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(148, 163, 184, 0.25);">
+      <svg viewBox="0 0 760 135" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cicle d'execució al client">
+        <rect x="15" y="18" width="205" height="98" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="1.8"/>
+        <text x="117" y="45" text-anchor="middle" fill="#38bdf8" font-family="sans-serif" font-weight="bold" font-size="13">1. ESDEVENIMENT</text>
+        <text x="117" y="68" text-anchor="middle" fill="#e2e8f0" font-family="sans-serif" font-size="12">L'usuari fa una acció</text>
+        <text x="117" y="88" text-anchor="middle" fill="#94a3b8" font-family="sans-serif" font-size="11">(clic, escriu text, prem tecla)</text>
+
+        <line x1="225" y1="67" x2="270" y2="67" stroke="#eab308" stroke-width="2.5"/>
+        <polygon points="270,62 280,67 270,72" fill="#eab308"/>
+
+        <rect x="285" y="18" width="205" height="98" rx="10" fill="#0f172a" stroke="#eab308" stroke-width="2"/>
+        <text x="387" y="45" text-anchor="middle" fill="#facc15" font-family="sans-serif" font-weight="bold" font-size="13">2. CODI JAVASCRIPT</text>
+        <text x="387" y="68" text-anchor="middle" fill="#e2e8f0" font-family="sans-serif" font-size="12">El navegador processa la lògica</text>
+        <text x="387" y="88" text-anchor="middle" fill="#94a3b8" font-family="sans-serif" font-size="11">(càlculs, condicions, bucles)</text>
+
+        <line x1="495" y1="67" x2="540" y2="67" stroke="#22c55e" stroke-width="2.5"/>
+        <polygon points="540,62 550,67 540,72" fill="#22c55e"/>
+
+        <rect x="555" y="18" width="190" height="98" rx="10" fill="#0f172a" stroke="#22c55e" stroke-width="1.8"/>
+        <text x="650" y="45" text-anchor="middle" fill="#4ade80" font-family="sans-serif" font-weight="bold" font-size="13">3. CANVI AL DOM</text>
+        <text x="650" y="68" text-anchor="middle" fill="#e2e8f0" font-family="sans-serif" font-size="12">S'actualitza la pantalla</text>
+        <text x="650" y="88" text-anchor="middle" fill="#94a3b8" font-family="sans-serif" font-size="11">(sense recarregar la web)</text>
+      </svg>
+    </div>
+  </TabItem>
+
+  <TabItem label="Costat del Servidor (Node.js)" icon="server">
+    JavaScript també pot treballar fora del navegador per gestionar bases de dades, usuaris o fitxers:
+    * Per fer-ho s'utilitza un entorn d'execució anomenat **Node.js**.
+    * Incorpora milers de llibreries gratuïtes (paquets `npm`) per crear aplicacions completes —de fet, **aquest mateix portal educatiu** està construït amb Astro i Node.js (i el treballaràs a l'últim mòdul del curs!).
+  </TabItem>
+</Tabs>
+
+<Aside type="caution" title="Java no és JavaScript!">
+  Tot i compartir quatre lletres al nom per una decisió comercial de l'any 1995, **Java** i **JavaScript** són dos llenguatges completament diferents. JavaScript és el llenguatge natiu del web, mentre que Java s'utilitza principalment per a aplicacions empresarials o Android.
+</Aside>
+
+---
+
+## 3. Tres regles d'or de la sintaxi de JavaScript
+
+Abans de començar a programar, recorda aquestes tres característiques fonamentals del llenguatge:
+
+| Característica | Què significa? | Exemple correcte | Exemple erroni |
+| :--- | :--- | :--- | :--- |
+| **Tipat dinàmic i dèbil** | No cal indicar si una variable és un número (`int`), decimal (`float`) o text (`string`); JS ho detecta sol. | `let edat = 16;`<br/>`let nom = "Laia";` | `int edat = 16;` *(error de sintaxi)* |
+| **Case-sensitive** | Distingeix estrictament entre majúscules i minúscules. Dues paraules amb una majúscula diferent són variables diferents. | `let puntuacio = 10;`<br/>`console.log(puntuacio);` | `let puntuacio = 10;`<br/>`console.log(Puntuacio);` *(ReferenceError)* |
+| **Estil `camelCase`** | Bona pràctica per anomenar variables de diverses paraules: la primera en minúscula i cada paraula següent en majúscula, sense espais ni accents. | `notaMitjanaCurs`<br/>`preuFinalAmbIva` | `nota mitjana curs` *(espais prohibits)*<br/>`notamitjanacurs` *(difícil de llegir)* |
+
+---
+
+## 4. El nostre entorn de treball: Visual Studio Code
+
+Per desenvolupar les activitats d'aquest mòdul treballarem amb **Visual Studio Code (VS Code)**. Ja disposeu de **Live Server** (per previsualitzar pàgines web en directe) i **Prettier** (per mantenir el codi ben endreçat), però per a JavaScript afegirem una extensió clau:
+
+<Aside type="tip" title="Nova extensió: Quokka.js">
+  Permet executar codi JavaScript en temps real dins del mateix editor i veure el resultat de cada operació o `console.log()` al costat de la línia, sense necessitat de crear un fitxer HTML.
+
+  * **Drecera per activar-lo:** `Cmd + K, Q` (Mac) o `Ctrl + K, Q` (Windows) → *New JavaScript File*.
+</Aside>
+
+<Aside type="note" title="Consola del navegador (F12)">
+  **Quokka.js** és ideal per practicar variables, condicionals, bucles i funcions (ACT 1 a 5). Quan connectem JavaScript amb botons i formularis HTML (ACT 6), utilitzarem **Live Server** juntament amb la pestanya **Console** de les eines de desenvolupador del navegador (`F12`).
+</Aside>
+
+## 5. Presentació PDF d'introducció a JS
+
+<div style="margin: 1.5rem 0; border-radius: 12px; overflow: hidden; border: 1px solid rgba(148, 163, 184, 0.3); background: #0f172a;">
+  <iframe 
+    src="/pdfs/Introduccio_JS.pdf#view=FitH" 
+    style="width: 100%; height: 450px; min-height: 450px; border: none; display: block;"
+    title="Presentació Introducció a JavaScript"
+  >
+  </iframe>
+  <div style="padding: 0.75rem 1rem; background: rgba(30, 41, 59, 0.9); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; font-size: 0.85rem;">
+    <span style="color: #94a3b8;">No veus bé la presentació al teu dispositiu?</span>
+    <a href="/pdfs/Introduccio_JS.pdf" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; font-weight: 700; text-decoration: none;">
+      Obre o descarrega el PDF en una pestanya nova ↗
+    </a>
+  </div>
+</div>

@@ -1,0 +1,204 @@
+---
+title: "ACT_1: Fonaments de JavaScript"
+description: "Introducció a JS: Variables, Operadors, Arrays, Condicionals, Bucles i Funcions"
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import SimuladorJS from '/src/components/SimuladorJS.astro';
+import VariablesJS from '../../../../components/VariablesJS.astro';
+import SumaConcatJS from '../../../../components/SumaConcatJS.astro';
+import ComparadorJS from '../../../../components/ComparadorJS.astro';
+
+Completa els següents 7 apartats pràctics al teu editor de codi per dominar les bases de la programació amb JavaScript.
+
+---
+
+#### 1.1 Declaració de variables (`let` i `const`) <Badge text="EXER_01" variant="caution" />
+
+1. Declara una variable amb `let` anomenada `nomAlumne` i assigna-li el teu nom.
+2. Declara una variable amb `const` anomenada `curs` i assigna-li el text `"Tecnologia"`.
+3. Mostra el contingut de les dues variables per la consola amb `console.log()`.
+4. **Pregunta:** Intenta reassignar un nou valor a la variable `curs`. Què passa a la consola?
+
+<SimuladorJS 
+  codi={[
+    'let nomAlumne = "Laia";',
+    'const curs = "Tecnologia";',
+    'console.log(nomAlumne);',
+    'console.log(curs);',
+    'curs = "Informàtica"; // Intent de canvi'
+  ]}
+  sortida={[
+    { text: 'Laia' },
+    { text: 'Tecnologia' },
+    { text: 'Uncaught TypeError: Assignment to constant variable.', tipus: 'error' }
+  ]}
+/>
+
+<VariablesJS/>
+---
+
+#### 1.2 Operadors matemàtics i conversió `Number()` <Badge text="EXER_02" variant="caution" />
+
+1. Declara dues variables numèriques: `base = 8` i `altura = 5`.
+2. Calcula l'àrea d'un rectangle (`base * altura`) en una tercera variable i mostra-la per consola.
+3. Demana un número a l'usuari amb `prompt()`, converteix-lo a número real amb `Number()` i suma-li `10`. Mostra el resultat per consola.
+
+<SimuladorJS 
+  codi={[
+    'let base = 8;',
+    'let altura = 5;',
+    'let area = base * altura;',
+    'console.log("Àrea:", area);',
+    '',
+    'let entrada = Number(prompt("Escriu un número:"));',
+    'console.log("Resultat + 10:", entrada + 10);'
+  ]}
+  sortida={[
+    { text: 'Àrea: 40' },
+    { text: '[Finestra prompt] Usuari escriu: "15"' },
+    { text: 'Resultat + 10: 25' }
+  ]}
+/>
+
+---
+
+#### 1.3 Concatenació de Strings i Arrays <Badge text="EXER_03" variant="caution" />
+
+1. Crea les variables `salutacio = "Hola"` i `nom = "Anna"`. Uneix-les en una tercera variable afegint un espai al mig amb l'operador `+`.
+2. Crea un array anomenat `dades` amb 3 elements: el teu nom, la teva ciutat i el teu curs.
+3. Mostra per consola una frase completa accedint a les posicions de l'array (`dades[0]`, `dades[1]`, etc.) concatenades amb text propi.
+
+<SimuladorJS 
+  codi={[
+    'let salutacio = "Hola";',
+    'let nom = "Anna";',
+    'let missatge = salutacio + " " + nom;',
+    'console.log(missatge);',
+    '',
+    'let dades = ["Marc", "Terrassa", "1r Batxillerat"];',
+    'console.log("Em dic " + dades[0] + ", visc a " + dades[1] + " i faig " + dades[2] + ".");'
+  ]}
+  sortida={[
+    { text: 'Hola Anna' },
+    { text: 'Em dic Marc, visc a Terrassa i faig 1r Batxillerat.' }
+  ]}
+/>
+
+<SumaConcatJS/>
+---
+
+#### 1.4 Comparadors (`==` vs `===`) <Badge text="EXER_04" variant="caution" />
+
+1. Executa a la consola la comparació `3 == "3"` i després `3 === "3"`. Quina diferència hi ha en el resultat?
+2. Declara una variable `let edat = 16;` i comprova per consola si és major o igual a 18 (`>=`).
+3. Comprova què retorna la combinació de dues condicions certes utilitzant l'operador lògic AND (`&&`).
+
+<SimuladorJS 
+  codi={[
+    'console.log(3 == "3");',
+    'console.log(3 === "3");',
+    '',
+    'let edat = 16;',
+    'console.log(edat >= 18);',
+    '',
+    'console.log(5 > 2 && 10 == 10);'
+  ]}
+  sortida={[
+    { text: 'true' },
+    { text: 'false' },
+    { text: 'false' },
+    { text: 'true' }
+  ]}
+/>
+
+
+<ComparadorJS />
+---
+
+#### 1.5 Condicional IF / ELSE amb Prompt <Badge text="EXER_05" variant="caution" />
+
+1. Demana a l'usuari una contrasenya utilitzant la funció `prompt()` i guarda la resposta en una variable.
+2. Escriu una estructura `if / else` per verificar si la contrasenya introduïda és igual a `"1234"`.
+3. Si és correcta mostra un `alert("Accés Concedit")`; si és incorrecta, mostra un `alert("Accés Denegat")` al bloc `else`.
+
+<SimuladorJS 
+  codi={[
+    'let clauUsuari = prompt("Introdueix la contrasenya:");',
+    '',
+    'if (clauUsuari === "1234") {',
+    '  alert("Accés Concedit");',
+    '} else {',
+    '  alert("Accés Denegat");',
+    '}'
+  ]}
+  sortida={[
+    { text: '[Finestra prompt] Usuari escriu: "1234"' },
+    { text: '[Finestra alert] Accés Concedit' }
+  ]}
+/>
+
+---
+
+#### 6. Recórrer un Array amb un bucle `for` <Badge text="EXER_06" variant="caution" />
+
+1. Crea un array anomenat `moduls` amb 4 assignatures o tecnologies (ex: `["HTML", "CSS", "JavaScript", "Arduino"]`).
+2. Escriu un bucle `for` que recorri l'array des de la posició `0` fins a `moduls.length`.
+3. Dins del bucle, mostra cada element per consola precedit del seu número de posició.
+
+<SimuladorJS 
+  codi={[
+    'const moduls = ["HTML", "CSS", "JavaScript", "Arduino"];',
+    '',
+    'for (let i = 0; i < moduls.length; i++) {',
+    '  console.log("Tema " + (i + 1) + ": " + moduls[i]);',
+    '}'
+  ]}
+  sortida={[
+    { text: 'Tema 1: HTML' },
+    { text: 'Tema 2: CSS' },
+    { text: 'Tema 3: JavaScript' },
+    { text: 'Tema 4: Arduino' }
+  ]}
+/>
+
+---
+
+#### 7. Creació de Funcions i `return` <Badge text="EXER_07" variant="caution" />
+
+1. Defineix una funció anomenada `calcularIVA` que rebi un paràmetre `preu`.
+2. Dins de la funció, calcula el preu amb el 21% d'IVA (`preu * 1.21`) i retorna el resultat amb la paraula clau `return`.
+3. Crida la funció dues vegades amb valors diferents (ex: `100` i `50`) i mostra els resultats per consola.
+
+<SimuladorJS 
+  codi={[
+    'function calcularIVA(preu) {',
+    '  let total = preu * 1.21;',
+    '  return total;',
+    '}',
+    '',
+    'console.log("Preu 100€ amb IVA:", calcularIVA(100));',
+    'console.log("Preu 50€ amb IVA:", calcularIVA(50));'
+  ]}
+  sortida={[
+    { text: 'Preu 100€ amb IVA: 121' },
+    { text: 'Preu 50€ amb IVA: 60.5' }
+  ]}
+/>
+
+---
+
+<details style="border: 1px solid #3f3f46; padding: 12px; background: #09090b; border-radius: 6px;">
+<summary style="color: #ef4444; font-weight: bold; cursor: pointer;">[ + VEURE PISTES DE L'ACTIVITAT ]</summary>
+
+<div style="margin-top: 10px; color: #d4d4d8;">
+
+- **Variables:** `let` es pot modificar; `const` és un valor fix.
+- **Matemàtiques:** `prompt()` sempre retorna un text; fes servir `Number(valor)` abans de sumar o multiplicar.
+- **Concatenar:** Cal afegir els espais manualment amb `" "`. La primera posició d'un array és `0`.
+- **Comparadors:** `==` compara valor; `===` compara valor i tipus de dada.
+- **Bucles:** `array.length` indica quants elements té la llista en total.
+- **Funcions:** `return` envia el resultat fora de la funció perquè el puguis guardar o imprimir.
+
+</div>
+</details>
